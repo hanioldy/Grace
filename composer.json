@@ -1,0 +1,19 @@
+{
+  "name": "hani221b/grace",
+  "description": "Multi-Languages App Builder and API Generator For Laravel Framework",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Hani221b\\Grace\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Hani Abdulfattah",
+      "email": "haniabdulfattah32@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4"
+  }
+}

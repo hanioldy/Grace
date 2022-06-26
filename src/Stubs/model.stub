@@ -1,0 +1,77 @@
+<?php
+
+namespace {{ namespace }};
+
+use Hani221b\Grace\Helpers\GlobalHelper;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class {{ class_name }} extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    //=========================================
+    // Table's name in database
+    //=========================================
+
+    protected $table = '{{ table_name }}';
+
+    //=========================================
+    // Fillable values
+    //=========================================
+
+    protected $fillable = [
+        'translation_of', 'translation_lang', {{ fillable_array }} , 'status', 'order'
+    ];
+
+    //=============================================================
+    // Define soft delete dates.
+    //=============================================================
+
+    protected $dates = ['deleted_at'];
+
+    //=============================================================
+    // Scopes field. We usually define Selection scope.
+    // We use this scope to return only the columns we need.
+    //=============================================================
+
+    public function scopeSelection($query)
+    {
+        return $query->select(
+            'id', 'translation_of', 'translation_lang', {{ fillable_array }} , 'status', 'order'
+        );
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    public function scopeDefaultLanguage($query)
+    {
+        return $query->where('translation_of', 0);
+    }
+
+
+    //=============================================================
+    // Mutators field. We usually define Image mutator.
+    // We use this mutator to specify images and icons path.
+    // we just include the name of the field between 'get' and
+    // 'Attribute' in camel case, then pass the value in the function
+    // parameter
+    //=============================================================
+
+    {{ mutatators }}
+
+    //=============================================================
+    // Relations field.
+    //=============================================================
+
+    //get translations for a certain record
+    public function translations()
+    {
+        return $this->hasMany(self::class, 'translation_of');
+    }
+}
