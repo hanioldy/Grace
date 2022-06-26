@@ -55,4 +55,44 @@ return [
      */
 
     'views_folder_name' => 'grace',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Namespaces
+    |--------------------------------------------------------------------------
+    |
+    | In this field, you can set desired namespaces to be the default
+    | throughout the proccess of building your app.
+    |
+     */
+
+    //==========================================
+    // Model
+    //==========================================
+
+    'model_namespace' => 'App\Models',
+
+    //==========================================
+    // Request
+    //==========================================
+
+    'request_namespace' => 'App\Http\Requests',
+
+    //==========================================
+    // Migration
+    //==========================================
+
+    'migration_namespace' => 'database\migrations',
+
+    //==========================================
+    // Resource
+    //==========================================
+
+    'resource_namespace' => 'App\Http\Resources',
+
+    //==========================================
+    // Controoller
+    //==========================================
+
+    'controller_namespace' => 'App\Http\Controllers',
 ];

@@ -7,7 +7,8 @@
                         @csrf
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field name="namespace" label="Namespace" outlined value="database\migrations">
+                                <v-text-field value="{{ config('grace.migration_namespace') }}" name="namespace"
+                                    label="Namespace" outlined value="database\migrations">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="6">

@@ -7,7 +7,8 @@
                         @csrf
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field name="namespace" label="Namespace" outlined>
+                                <v-text-field value="{{ config('grace.controller_namespace') }}" name="namespace"
+                                    label="Namespace" outlined>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="6">
@@ -18,11 +19,13 @@
                         <v-row>
 
                             <v-col cols="6">
-                                <v-text-field name="resource_path" label="Resource Path" outlined>
+                                <v-text-field value="{{ config('grace.resource_namespace') }}" name="resource_path"
+                                    label="Resource Path" outlined>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="6">
-                                <v-text-field name="model_path" label="Model Path" outlined>
+                                <v-text-field value="{{ config('grace.model_namespace') }}" name="model_path"
+                                    label="Model Path" outlined>
                                 </v-text-field>
                             </v-col>
                         </v-row>

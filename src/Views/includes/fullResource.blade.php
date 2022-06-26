@@ -48,33 +48,33 @@
                         </v-row>
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field value="App\Models" name="model_namespace" label="Model Namespace"
+                                <v-text-field value="{{ config('grace.model_namespace') }}" name="model_namespace" label="Model Namespace"
                                     outlined>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="6">
                                 </v-combobox>
-                                <v-text-field value="App\Http\Requests" name="request_namespace"
+                                <v-text-field value="{{ config('grace.request_namespace') }}" name="request_namespace"
                                     label="Request Namespace" outlined>
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field value="database\migrations" name="migration_namespace"
+                                <v-text-field value="{{ config('grace.migration_namespace') }}" name="migration_namespace"
                                     label="Migration Namespace" outlined>
                                 </v-text-field>
                             </v-col>
                             <v-col cols="6">
                                 </v-combobox>
-                                <v-text-field value="App\Http\Resources" name="resource_namespace"
+                                <v-text-field value="{{ config('grace.resource_namespace') }}" name="resource_namespace"
                                     label="Resource Namespace" outlined>
                                 </v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field value="App\Http\Controllers" name="controller_namespace"
+                                <v-text-field value="{{ config('grace.controller_namespace') }}" name="controller_namespace"
                                     label="Controller Namespace" outlined>
                                 </v-text-field>
                             </v-col>
