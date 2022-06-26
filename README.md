@@ -6,4 +6,19 @@ the main purpose for this package is not to abandon coding at all, but to start 
 
 # Instalation
 
-you can install Grace using this command
+you can install Grace using this command:
+> composer require hani221b/grace
+
+The next step is to register a service provider.
+To do so in your Laravel application, go to config/app.php and in **providers** array paste this:
+> Hani221b\Grace\Providers\GraceServiceProvider::class,
+
+Now the package is registered successfully.
+
+The last step to run the following command:
+> php artisan grace:install
+
+This one will publish config file and some other necessary files to your app. Please make sure to connent you app to a database before running this command.
+
+It is highly recommended to run this package only in development mode, so assuming you will run with **php artisan serve** vist the following route to access Grace controller panel:
+> 127.0.0.1/grace_cp
