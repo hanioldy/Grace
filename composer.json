@@ -1,6 +1,6 @@
 {
   "name": "hani221b/grace",
-  "description": "Multi-Languages App Builder and API Generator For Laravel Framework",
+  "description": "Multi Language App Builder and API Generator for Lavavel Framework.",
   "license": "MIT",
   "autoload": {
     "psr-4": {
