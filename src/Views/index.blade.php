@@ -110,7 +110,7 @@
                 ],
                 tab: null,
                 id: 1,
-                basic: [{
+                fields: [{
                     name: "",
                     time: ""
                 }]
@@ -118,10 +118,13 @@
             methods: {
                 addField() {
                     this.id += 1;
-                    this.basic.push({
+                    this.fields.push({
                         name: "",
                         time: ""
                     });
+                },
+                deleteField(fieldIndex) {
+                    this.fields.splice(fieldIndex, 1)
                 }
             },
         });

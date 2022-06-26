@@ -22,7 +22,7 @@
                                 <v-btn color="success" @click="addField">Add row</v-btn>
                             </v-col>
                         </v-row>
-                        <div v-for="item in basic" :key="item.id">
+                        <div v-for="item in fields" :key="item.id">
                             <v-row>
                                 <v-col cols="6">
                                     <v-text-field name="field_names[]" label="Field Name" outlined>
