@@ -109,11 +109,12 @@ class FileHelper
                 }
                 $path = FileHelper::UploadFile($disk, $collection_array[$fillable_value]);
                 $file_array = array_merge($file_array, [$fillable_value => $path]);
-                return $file_array;
+
             } else {
-                return $file_array = [];
+                $file_array = [];
             }
         }
+        return $file_array;
     }
 
     //=========================================
