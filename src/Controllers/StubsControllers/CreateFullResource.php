@@ -55,23 +55,23 @@ class CreateFullResource extends Controller
     public function makeFullResourceAlive()
     {
         //migration
-        // $this->makeMigration();
-        // //model
-        // $this->makeModel();
-        // // controller
-        // $this->makeController();
-        // //request
-        // $this->makeRequest();
-        // //resource
-        // $this->makeResource();
+        $this->makeMigration();
+        //model
+        $this->makeModel();
+        // controller
+        $this->makeController();
+        //request
+        $this->makeRequest();
+        //resource
+        $this->makeResource();
         //routes
         $this->makeRoutes();
         //disk
-        // $this->makeDisk();
-        // //views
-        // if (config('grace.mode') === 'blade') {
-        //     $this->makeViews();
-        // }
+        $this->makeDisk();
+        //views
+        if (config('grace.mode') === 'blade') {
+            $this->makeViews();
+        }
     }
 
     /**
