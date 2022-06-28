@@ -2,9 +2,9 @@
 
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
-use Illuminate\Filesystem\Filesystem;
 use App\Http\Controllers\Controller;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 
 class CreateMigration extends Controller
@@ -30,7 +30,7 @@ class CreateMigration extends Controller
         $this->namespace = $request->namespace;
         $this->field_names = $request->field_names;
         //filetr null values
-        $this->field_types =  array_filter($request->field_types, fn ($value) => !is_null($value) && $value !== '');
+        $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
     }
 
     /**
@@ -46,7 +46,7 @@ class CreateMigration extends Controller
             'table_name' => $this->table_name,
             'namespace' => $this->namespace,
             'field_types' => $this->field_types,
-            'field_names' => $this->field_names
+            'field_names' => $this->field_names,
         ];
     }
 
@@ -54,13 +54,13 @@ class CreateMigration extends Controller
      * Execute the file creation.
      */
     public function makeMigrationAlive()
-    {;
+    {
         $path = MakeStubsAliveHelper::getMigrationSourceFilePath($this->namespace, $this->table_name, '');
 
         MakeStubsAliveHelper::makeDirectory($this->files, dirname($path));
 
         $contents = MakeStubsAliveHelper::getMigrationSourceFile($this->getStubVariables(), 'migration');
 
-        return  MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+        MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
     }
 }

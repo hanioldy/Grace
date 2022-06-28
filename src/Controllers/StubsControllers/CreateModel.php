@@ -2,11 +2,12 @@
 
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
-use Illuminate\Support\Pluralizer;
-use Illuminate\Filesystem\Filesystem;
 use App\Http\Controllers\Controller;
+use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Pluralizer;
 
 class CreateModel extends Controller
 {
@@ -18,8 +19,9 @@ class CreateModel extends Controller
     protected $namespace;
     protected $class_name;
     protected $table_name;
-    protected $fillable_array = [];
-    protected $file_name;
+    protected $field_names;
+    protected $field_types;
+    protected $files_fields;
     protected $storage_path;
 
     /**
@@ -30,11 +32,13 @@ class CreateModel extends Controller
     {
         $this->files = $files;
         $this->namespace = $request->namespace;
-        $this->class_name = $request->class_name;
         $this->table_name = $request->table_name;
-        $this->fillable_array = strip_tags($request->fillable_array);
-        $this->file_name = $request->file_name;
-        $this->storage_path = $request->storage_path;
+        $this->class_name = $this->getSingularClassName();
+        // $this->fillable_array = strip_tags($request->fillable_array);
+        // $this->file_name = $request->file_name;
+        $this->field_names = $request->field_names;
+        $this->files_fields = $request->files_fields;
+        $this->files_fields = MakeStubsAliveHelper::isFileValues($request);
     }
 
     /**
@@ -44,7 +48,7 @@ class CreateModel extends Controller
      */
     public function getSingularClassName()
     {
-        return ucwords(Pluralizer::singular($this->class_name));
+        return ucwords(Pluralizer::singular($this->table_name));
     }
 
     /**
@@ -58,11 +62,10 @@ class CreateModel extends Controller
     {
         return [
             'namespace' => $this->namespace,
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->class_name),
+            'class_name' => $this->class_name,
             'table_name' => $this->table_name,
-            'fillable_array' => "'" . str_replace(",", "', '", $this->fillable_array) . "'",
-            'file_name' => ucwords($this->file_name),
-            'storage_path' => $this->storage_path,
+            'fillable_array' => makeModelAliveHelper::model_fillable_array($this->field_names),
+            'files_fields' => MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields),
         ];
     }
 
@@ -71,12 +74,12 @@ class CreateModel extends Controller
      */
     public function makeModelAlive()
     {
-        $path = MakeStubsAliveHelper::getSourceFilePath($this->namespace, $this->class_name, '');
+        $model_path = MakeStubsAliveHelper::getSourceFilePath($this->namespace, $this->table_name, '');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($path));
+        MakeStubsAliveHelper::makeDirectory($this->files, dirname($model_path));
 
-        $contents = MakeStubsAliveHelper::getSourceFile($this->getStubVariables(), 'model');
+        $model_contents = MakeStubsAliveHelper::getModelSourceFile($this->getStubVariables(), 'model');
 
-        return  MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+        MakeStubsAliveHelper::putFilesContent($this->files, $model_path, $model_contents);
     }
 }
