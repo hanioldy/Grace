@@ -210,6 +210,56 @@ class MakeStubsAliveHelper
     }
 
     /**
+     * Combine fields names and files fileds value to return files fillable array
+     * @return array
+     */
+    public static function files_fillable_array($field_names, $files_fields)
+    {
+        $files_fillable_array = [];
+        $files_array = array_combine($field_names, $files_fields);
+        foreach ($files_array as $field_name => $file_filed) {
+            if ($file_filed === '1') {
+                array_push($files_fillable_array, $field_name);
+            }
+        }
+        return implode(",", $files_fillable_array);
+    }
+
+    /**
+     * Mapping the value of field names and filter files fields
+     * @return string
+     */
+
+    public static function fillable_array($field_names, $files_fields)
+    {
+        $fillable_array = [];
+        $all_fields = array_combine($field_names, $files_fields);
+        foreach ($all_fields as $name => $value) {
+            if ($value === "0") {
+                array_push($fillable_array, $name);
+            }
+        }
+        return "'" . str_replace(",", "', '", implode(",", $fillable_array)) . "'";
+    }
+
+
+    /**
+     * Map the values of isFile checkbox
+     * @param Illuminate\Http\Request
+     * @return array
+     */
+    public static function isFileValues($request)
+    {
+        $files_fields = $request->isFile;
+        foreach ($files_fields as $key => $value) {
+            if ($value === '1') {
+                unset($files_fields[$key + 1]);
+            }
+        }
+        return $files_fields;
+    }
+
+    /**
      * Put the requested data inside the files have just created
      *
      * @param $files

@@ -10,10 +10,6 @@
                                 <v-text-field name="table_name" label="Table Name" outlined>
                                 </v-text-field>
                             </v-col>
-                            {{-- <v-col cols="6">
-                                <v-text-field value="storage\path\" name="storage_path" label="Storage Path" outlined>
-                                </v-text-field>
-                            </v-col> --}}
                         </v-row>
                         <div v-for="(item, index) in fields" :key="item.id">
                             <v-row>
@@ -93,7 +89,6 @@
                         <v-row>
                             <v-col cols="12">
                                 <v-btn type="submit" color="primary">Make Alive</v-btn>
-
                             </v-col>
                         </v-row>
                     </form>

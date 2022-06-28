@@ -18,7 +18,7 @@ class makeModelAliveHelper
         foreach ($files_array as $value) {
             $mutators_names = "get" . ucwords($value) . "Attribute";
 
-    $mutator_template = "public function $mutators_names(\$value)
+            $mutator_template = "public function $mutators_names(\$value)
     {
         return (\$value !== null) ? asset('/storage/'. config('grace.storage_path') . '/$table_name/' . \$value) : '';
     }
@@ -32,5 +32,15 @@ class makeModelAliveHelper
 
         }
         return $string_mutators_template;
+    }
+
+    /**
+     * Mapping the value of field names and files fields
+     * @return string
+     */
+
+    public static function model_fillable_array($field_names)
+    {
+        return "'" . str_replace(",", "', '", implode(",", $field_names)) . "'";
     }
 }
