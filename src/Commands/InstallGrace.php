@@ -32,10 +32,13 @@ class InstallGrace extends Command
         Artisan::call('vendor:publish', ['--tag' => 'grace']);
         $this->line('<fg=green> Publishing stuff:</>
         <fg=blue> Config files </>
-        <fg=green><fg=yellow>[</>Hani221b\Grace\Config\grace.php <fg=yellow>]</> =><fg=yellow>[</>config.grace.php<fg=yellow>]</></>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Config\grace.php <fg=yellow>]</> =><fg=yellow>[</>config\grace.php<fg=yellow>]</></>
         <fg=blue> Migration files </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Database\Migrations\2022_06_23_053830_create_languages_table.php<fg=yellow>]</>
         => <fg=yellow>[</>database\migrations\2022_06_23_053830_create_languages_table.php<fg=yellow>]</></>
+        <fg=blue> Views files </>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Views\Grace <fg=yellow>]</> =><fg=yellow>[</>resources\views\grace<fg=yellow>]</></>
+        <fg=blue> Migration files </>
       ');
         // run migrate
         Artisan::call('migrate');

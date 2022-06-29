@@ -50,6 +50,9 @@ class GraceServiceProvider extends ServiceProvider
             __DIR__ . '..\\..\\Config\\grace.php' => config_path('grace.php'),
             //migrations
             __DIR__ . '..\\..\\Database\\Migrations\\2022_06_23_053830_create_languages_table.php' => base_path('database\\migrations\\2022_06_23_053830_create_languages_table.php'),
+            //views
+            __DIR__ . '..\\..\\Views\\Grace' => base_path('resources\\views\grace'),
         ], 'grace');
+
     }
 }
