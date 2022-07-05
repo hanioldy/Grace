@@ -93,7 +93,6 @@
                         <v-row>
                             <v-col cols="12">
                                 <v-btn type="submit" color="primary">Make Alive</v-btn>
-
                             </v-col>
                         </v-row>
                     </form>
