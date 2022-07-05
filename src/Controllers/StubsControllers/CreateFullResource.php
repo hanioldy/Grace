@@ -26,6 +26,7 @@ class CreateFullResource extends Controller
     protected $field_names;
     protected $field_types;
     protected $storage_path;
+    protected $single_record_table;
 
     /**
      * Create a new command instance.
@@ -33,7 +34,6 @@ class CreateFullResource extends Controller
      */
     public function __construct(Filesystem $files, Request $request)
     {
-
         $this->files = $files;
         $this->table_name = $request->table_name;
         $this->controller_namespace = $request->controller_namespace;
@@ -47,7 +47,7 @@ class CreateFullResource extends Controller
         //filetr null values
         $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
         $this->storage_path = $request->storage_path;
-
+        $this->single_record_table = $request->single_record_table;
     }
 
     /**
@@ -217,7 +217,12 @@ class CreateFullResource extends Controller
 
         MakeStubsAliveHelper::makeDirectory($this->files, dirname($controller_path));
 
-        $controller_contents = MakeStubsAliveHelper::getSourceFile($this->getControllerVariables(), 'controller');
+        if ($this->single_record_table === null) {
+            $type = 'controller';
+        } else if ($this->single_record_table === "1") {
+            $type = 'controller.single.record';
+        }
+        $controller_contents = MakeStubsAliveHelper::getSourceFile($this->getControllerVariables(), $type);
 
         MakeStubsAliveHelper::putFilesContent($this->files, $controller_path, $controller_contents);
     }
