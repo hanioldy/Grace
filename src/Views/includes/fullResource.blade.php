@@ -10,10 +10,10 @@
                                 <v-text-field name="table_name" label="Table Name" outlined>
                                 </v-text-field>
                             </v-col>
-                            {{-- <v-col cols="6">
-                                <v-text-field value="storage\path\" name="storage_path" label="Storage Path" outlined>
-                                </v-text-field>
-                            </v-col> --}}
+                            <v-col cols="6">
+                                <v-checkbox name="single_record_table" label="Single Record Table?" value="1">
+                                </v-checkbox>
+                            </v-col>
                         </v-row>
                         <div v-for="(item, index) in fields" :key="item.id">
                             <v-row>
