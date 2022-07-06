@@ -108,6 +108,7 @@
                     'unsignedMediumInteger', 'unsignedSmallInteger', 'unsignedTinyInteger',
                     'uuidMorphs', 'uuid', 'year'
                 ],
+                inputTypes: ['text', 'select', 'textarea', 'file'],
                 tab: null,
                 id: 1,
                 fields: [{

@@ -22,13 +22,17 @@
                                 </v-col>
                             </v-row>
                             <v-row>
-                                <v-col cols="5">
+                                <v-col cols="3">
                                     <v-text-field name="field_names[]" label="Field Name" outlined>
                                     </v-text-field>
                                 </v-col>
-                                <v-col cols="5">
+                                <v-col cols="3">
                                     <v-autocomplete name="field_types[]" label="Field Type" small-chips
                                         :items="columnTypes"></v-autocomplete>
+                                </v-col>
+                                <v-col cols="3">
+                                    <v-autocomplete name="input_types[]" label="Input Type" small-chips
+                                        :items="inputTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
                                     <v-checkbox name="isFile[]" label="File?" value="1"></v-checkbox>
