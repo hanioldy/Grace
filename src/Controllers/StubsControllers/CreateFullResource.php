@@ -7,6 +7,7 @@ use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 
@@ -46,6 +47,7 @@ class CreateFullResource extends Controller
         $this->fillable_files_array = MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields);
         //filetr null values
         $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
+        $this->input_types = array_filter($request->input_types, fn($value) => !is_null($value) && $value !== '');
         $this->storage_path = $request->storage_path;
         $this->single_record_table = $request->single_record_table;
     }
@@ -175,6 +177,19 @@ class CreateFullResource extends Controller
     }
 
     /**
+     * Mapping the value of create view stubs variables
+     * @return array
+     */
+    public function getCreateViewVariables()
+    {
+        return [
+            'field_names' => $this->field_names,
+            'input_types' => $this->input_types,
+            'url' => "{{ asset('$this->table_name\create') }}",
+        ];
+    }
+
+    /**
      * Create Migration
      * @return viod
      */
@@ -286,6 +301,6 @@ class CreateFullResource extends Controller
 
     public function makeViews()
     {
-        return MakeStubsAliveHelper::makeViews($this->table_name);
+        return MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
     }
 }

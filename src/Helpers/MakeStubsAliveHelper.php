@@ -189,27 +189,6 @@ class MakeStubsAliveHelper
     }
 
     /**
-     **
-     * Make view for blade mode
-     *
-     * @return array
-     *
-     */
-    public static function makeViews($folder_name)
-    {
-        $path = base_path() . '/resources/views/' . config('grace.views_folder_name') . '/' . $folder_name;
-        mkdir($path, 0700, true);
-        $index = $path . "/index.blade.php";
-        $create = $path . "/create.blade.php";
-        $edit = $path . "/edit.blade.php";
-        $sort = $path . "/sort.blade.php";
-        file_put_contents($index, '');
-        file_put_contents($create, '');
-        file_put_contents($edit, '');
-        file_put_contents($sort, '');
-    }
-
-    /**
      * Combine fields names and files fileds value to return files fillable array
      * @return array
      */
