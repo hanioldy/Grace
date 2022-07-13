@@ -25,7 +25,7 @@ class MakeCreateViewHelper
     public static function makeCreate($folder_name, $stubVariables)
     {
         $field_names = $stubVariables['field_names'];
-        $inputs_types = $stubVariables['field_names'];
+        $inputs_types = $stubVariables['input_types'];
         $names_types_array = array_combine($field_names, $inputs_types);
         $template = array();
         foreach ($names_types_array as $key => $value) {

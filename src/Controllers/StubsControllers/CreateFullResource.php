@@ -8,6 +8,7 @@ use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
+use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 
@@ -57,20 +58,20 @@ class CreateFullResource extends Controller
      */
     public function makeFullResourceAlive()
     {
-        //migration
-        $this->makeMigration();
-        //model
-        $this->makeModel();
-        // controller
-        $this->makeController();
-        //request
-        $this->makeRequest();
-        //resource
-        $this->makeResource();
-        //routes
-        $this->makeRoutes();
-        //disk
-        $this->makeDisk();
+        // //migration
+        // $this->makeMigration();
+        // //model
+        // $this->makeModel();
+        // // controller
+        // $this->makeController();
+        // //request
+        // $this->makeRequest();
+        // //resource
+        // $this->makeResource();
+        // //routes
+        // $this->makeRoutes();
+        // //disk
+        // $this->makeDisk();
         //views
         if (config('grace.mode') === 'blade') {
             $this->makeViews();
@@ -301,6 +302,7 @@ class CreateFullResource extends Controller
 
     public function makeViews()
     {
-        return MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
+        //  MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
+        return MakeIndexViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
     }
 }

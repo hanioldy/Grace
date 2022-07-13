@@ -1,0 +1,43 @@
+@extends('grace.grace_layout')
+
+@section('content')
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h4>Blogs</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            {{ th_fields }}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($blogs as $blog)
+                                            <tr>
+                                                {{ td_fields }}
+                                                <td>
+                                                    <a href="{{ route('dashboard.blogs.edit', $blog->id) }}">
+                                                        <button type="button" class="btn mb-1 btn-warning">Edit</button>
+                                                    </a>
+                                                    <a href="{{ route('dashboard.blogs.delete', $blog->id) }}">
+                                                        <button type="button" class="btn mb-1 btn-danger">Delete</button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
