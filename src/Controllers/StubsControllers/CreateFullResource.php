@@ -7,10 +7,10 @@ use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
-use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CreateFullResource extends Controller
 {
@@ -191,6 +191,21 @@ class CreateFullResource extends Controller
     }
 
     /**
+     * Mapping the value of create index stubs variables
+     * @return array
+     */
+    public function getIndexViewVariables()
+    {
+        return [
+            'field_names' => $this->field_names,
+            'input_types' => $this->input_types,
+            'table_name' => $this->table_name,
+            'title' => Str::ucfirst($this->table_name),
+            'key' => Str::singular($this->table_name),
+        ];
+    }
+
+    /**
      * Create Migration
      * @return viod
      */
@@ -303,6 +318,6 @@ class CreateFullResource extends Controller
     public function makeViews()
     {
         //  MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
-        return MakeIndexViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
+        return MakeIndexViewHelper::makeCreate($this->table_name, $this->getIndexViewVariables());
     }
 }

@@ -8,7 +8,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
-                                <h4>Blogs</h4>
+                                <h4>{{ title }}</h4>
                             </div>
                             <div class="table-responsive">
                                 <table class="table">
@@ -18,14 +18,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($blogs as $blog)
+                                        @foreach (${{ table_name }} as ${{ key }})
                                             <tr>
                                                 {{ td_fields }}
                                                 <td>
-                                                    <a href="{{ route('dashboard.blogs.edit', $blog->id) }}">
+                                                    <a href="{{ route('dashboard.{{ table_name }}.edit', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-warning">Edit</button>
                                                     </a>
-                                                    <a href="{{ route('dashboard.blogs.delete', $blog->id) }}">
+                                                    <a href="{{ route('dashboard.{{ table_name }}.delete', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
                                                     </a>
                                                 </td>

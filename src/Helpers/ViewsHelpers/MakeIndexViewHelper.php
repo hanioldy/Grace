@@ -42,17 +42,17 @@ class MakeIndexViewHelper
 
         foreach ($names_types_array as $name => $type) {
             $label = Str::ucfirst($name);
-            $th_fields_template = " <th>$label</th>";
+            $th_fields_template = "<th>$label</th>";
             array_push($th_template, $th_fields_template);
         }
 
         $string_th_fields_template = '';
-        foreach ($tr_template as $index => $tem) {
-            $string_th_fields_template .= $tr_template[$index] . "\n";
+        foreach ($th_template as $index => $tem) {
+            $string_th_fields_template .= $th_template[$index] . "\n";
         }
 
         $contents = str_replace('{{ th_fields }}', $string_th_fields_template, $contents);
-
+        
         //===============================================================
         // Tr fields
         //===============================================================
