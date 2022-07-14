@@ -2,7 +2,7 @@
 
 namespace Hani221b\Grace\Helpers\ViewsHelpers;
 
-class MakeCreateViewHelper
+class MakeEditViewHelper
 {
 
     /**
@@ -12,7 +12,7 @@ class MakeCreateViewHelper
      */
     public static function getStubPath()
     {
-        return __DIR__ . "/../../Stubs/views/create.stub";
+        return __DIR__ . "/../../Stubs/views/edit.stub";
     }
 
     /**
@@ -31,15 +31,15 @@ class MakeCreateViewHelper
         foreach ($names_types_array as $field => $value) {
             switch ($value) {
                 case 'text':
-                    $input_template = self::input($field);
+                    $input_template = self::input($folder_name, $field);
                     break;
 
                 case 'file':
-                    $input_template = self::file($field);
+                    $input_template = self::file($folder_name, $field);
                     break;
 
                 case 'textarea':
-                    $input_template = self::textarea($field);
+                    $input_template = self::textarea($folder_name, $field);
                     break;
             }
             array_push($template, $input_template);
@@ -64,59 +64,60 @@ class MakeCreateViewHelper
         if (!file_exists($path)) {
             mkdir($path, 0700, true);
         }
-        $file_name = $path . '\\create.blade.php';
+        $file_name = $path . '\\edit.blade.php';
         file_put_contents($file_name, $contents);
     }
 
     /**
      * defining text input template
-     * @param String $field
+     * @param String $key
      * @return String
      */
 
-    public static function input($field)
+    public static function input($key, $field)
     {
         $title = ucfirst($field);
         return "<div class='form-group'>
-    <label for='{$field}'>
+        <label for='{$field}'>
         <h5>{$title}</h5>
-    </label>
-    <input type='text' class='form-control input-default' placeholder='{$field}'
-        name='{$field}'>
-    </div>";
+        </label>
+        <input type='text' class='form-control input-default' value='{{ $$key->$field }}' name='{$field}'>
+        </div>";
     }
 
     /**
      * defining textarea input template
-     * @param String $field
+     * @param String $key
      * @return String
      */
 
-    public static function textarea($field)
+    public static function textarea($key, $field)
     {
         $title = ucfirst($field);
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
-        <textarea class='form-control summernote' name='{$field}'></textarea>
-    </div>";
+        <textarea class='form-control summernote' name='{$field}'>{{ $$key->$field }}</textarea>
+        </div>";
     }
 
     /**
      * defining file input template
-     * @param String $field
+     * @param String $key
      * @return String
      */
 
-    public static function file($field)
+    public static function file($key, $field)
     {
-        $title = ucfirst($field);
+        $title = ucfirst($key);
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
+        <img src='{{ $$key->$field }}'  width='200px'>
         <input type='file' class='form-control' name='{$field}'>
-    </div> ";
+        </div>";
+
     }
 }

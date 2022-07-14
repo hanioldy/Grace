@@ -7,6 +7,8 @@ use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
+use Hani221b\Grace\Helpers\ViewsHelpers\MakeEditViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
@@ -58,20 +60,20 @@ class CreateFullResource extends Controller
      */
     public function makeFullResourceAlive()
     {
-        // //migration
-        // $this->makeMigration();
-        // //model
-        // $this->makeModel();
-        // // controller
-        // $this->makeController();
-        // //request
-        // $this->makeRequest();
-        // //resource
-        // $this->makeResource();
-        // //routes
-        // $this->makeRoutes();
-        // //disk
-        // $this->makeDisk();
+        //migration
+        $this->makeMigration();
+        //model
+        $this->makeModel();
+        // controller
+        $this->makeController();
+        //request
+        $this->makeRequest();
+        //resource
+        $this->makeResource();
+        //routes
+        $this->makeRoutes();
+        //disk
+        $this->makeDisk();
         //views
         if (config('grace.mode') === 'blade') {
             $this->makeViews();
@@ -186,7 +188,20 @@ class CreateFullResource extends Controller
         return [
             'field_names' => $this->field_names,
             'input_types' => $this->input_types,
-            'url' => "{{ asset('$this->table_name\create') }}",
+            'url' => "{{ asset('$this->table_name\store') }}",
+        ];
+    }
+
+    /**
+     * Mapping the value of edit view stubs variables
+     * @return array
+     */
+    public function getEditViewVariables()
+    {
+        return [
+            'field_names' => $this->field_names,
+            'input_types' => $this->input_types,
+            'url' => "{{ asset('$this->table_name/update/'" . "." . "$" . Str::singular($this->table_name) . "->id) }}",
         ];
     }
 
@@ -317,7 +332,8 @@ class CreateFullResource extends Controller
 
     public function makeViews()
     {
-        //  MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
-        return MakeIndexViewHelper::makeCreate($this->table_name, $this->getIndexViewVariables());
+        MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
+        MakeEditViewHelper::makeCreate($this->table_name, $this->getEditViewVariables());
+        MakeIndexViewHelper::makeCreate($this->table_name, $this->getIndexViewVariables());
     }
 }
