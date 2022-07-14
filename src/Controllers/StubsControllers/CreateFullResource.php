@@ -188,7 +188,7 @@ class CreateFullResource extends Controller
         return [
             'field_names' => $this->field_names,
             'input_types' => $this->input_types,
-            'url' => "{{ asset('$this->table_name\store') }}",
+            'url' => "{{ asset('$this->table_name') }}",
         ];
     }
 
