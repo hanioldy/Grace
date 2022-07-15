@@ -12,6 +12,7 @@ use Hani221b\Grace\Helpers\ViewsHelpers\MakeEditViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class CreateFullResource extends Controller
@@ -234,6 +235,14 @@ class CreateFullResource extends Controller
         $contents = MakeStubsAliveHelper::getMigrationSourceFile($this->getMigrationVariables(), 'migration');
 
         MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+
+        if(config('grace.auto_migrate') === true){
+            $base_path = base_path();
+
+            $file_name = str_replace($base_path, '', $path);
+
+            Artisan::call('migrate', ['--path' => $file_name]);
+        }
     }
 
     /**
