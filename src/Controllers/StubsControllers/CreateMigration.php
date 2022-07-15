@@ -29,8 +29,10 @@ class CreateMigration extends Controller
         $this->table_name = $request->table_name;
         $this->namespace = $request->namespace;
         $this->field_names = $request->field_names;
-        //filetr null values
-        $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
+        //filtering null values
+        if ($request->field_types !== null) {
+            $this->field_types = array_filter($request->field_types, fn ($value) => !is_null($value) && $value !== '');
+        }
     }
 
     /**

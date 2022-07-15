@@ -49,9 +49,14 @@ class CreateFullResource extends Controller
         $this->files_fields = MakeStubsAliveHelper::isFileValues($request);
         $this->field_names = $request->field_names;
         $this->fillable_files_array = MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields);
-        //filetr null values
-        $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
-        $this->input_types = array_filter($request->input_types, fn($value) => !is_null($value) && $value !== '');
+        //filtering null values
+        if($request->field_types !== null){
+            $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
+        }
+         //filtering null values
+        if($request->input_types !== null){
+            $this->input_types = array_filter($request->input_types, fn($value) => !is_null($value) && $value !== '');
+        }
         $this->storage_path = $request->storage_path;
         $this->single_record_table = $request->single_record_table;
     }

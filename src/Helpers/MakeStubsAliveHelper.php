@@ -195,10 +195,12 @@ class MakeStubsAliveHelper
     public static function files_fillable_array($field_names, $files_fields)
     {
         $files_fillable_array = [];
-        $files_array = array_combine($field_names, $files_fields);
-        foreach ($files_array as $field_name => $file_filed) {
-            if ($file_filed === '1') {
-                array_push($files_fillable_array, $field_name);
+        if($field_names !== null && $files_fields !== null){
+            $files_array = array_combine($field_names, $files_fields);
+            foreach ($files_array as $field_name => $file_filed) {
+                if ($file_filed === '1') {
+                    array_push($files_fillable_array, $field_name);
+                }
             }
         }
         return implode(",", $files_fillable_array);
@@ -230,9 +232,11 @@ class MakeStubsAliveHelper
     public static function isFileValues($request)
     {
         $files_fields = $request->isFile;
-        foreach ($files_fields as $key => $value) {
-            if ($value === '1') {
-                unset($files_fields[$key + 1]);
+        if($files_fields !== null){
+            foreach ($files_fields as $key => $value) {
+                if ($value === '1') {
+                    unset($files_fields[$key + 1]);
+                }
             }
         }
         return $files_fields;

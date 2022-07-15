@@ -48,7 +48,7 @@ class CreateModel extends Controller
      */
     public function getSingularClassName()
     {
-        return ucwords(Pluralizer::singular($this->table_name));
+        return $this->table_name !== null ? ucwords(Pluralizer::singular($this->table_name)) : "";
     }
 
     /**
