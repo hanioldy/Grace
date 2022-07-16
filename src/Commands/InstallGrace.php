@@ -38,7 +38,10 @@ class InstallGrace extends Command
         => <fg=yellow>[</>database\migrations\2022_06_23_053830_create_languages_table.php<fg=yellow>]</></>
         <fg=blue> Views files </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Views\Grace <fg=yellow>]</> =><fg=yellow>[</>resources\views\grace<fg=yellow>]</></>
-        <fg=blue> Migration files </>
+        <fg=blue> Assets files </>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Assets <fg=yellow>]</> =><fg=yellow>[</>public\grace<fg=yellow>]</></>
+        <fg=blue> Models </>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Models\Language.php <fg=yellow>]</> =><fg=yellow>[</>app\Models\Language.php<fg=yellow>]</></>
       ');
         // run migrate
         Artisan::call('migrate');
