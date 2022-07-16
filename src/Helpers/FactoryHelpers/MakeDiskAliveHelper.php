@@ -15,7 +15,7 @@ class MakeDiskAliveHelper
 
             '$table_name' => [
                 'driver' => 'local',
-                'root' => storage_path() . '/'. config('grace.storage_path') .'/'. '$table_name' ,
+                'root' => public_path() . '/'. config('grace.storage_path) . '/$table_name' ,
                 'url' => env('APP_URL') . '/',
                 'visibility' => 'public',
             ],";

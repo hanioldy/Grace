@@ -8,7 +8,14 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
-                                <h4>{{ title }}</h4>
+                               <div class="row">
+                                    <div class="col-6">
+                                        <h4>{{ title }}</h4>
+                                    </div>
+                                    <div class="col-6" style="text-align:end">
+                                        <a href="{{ asset('{{ table_name }}/create') }}" type="button" class="btn mb-1 btn-primary">Add</a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table">
@@ -22,10 +29,10 @@
                                             <tr>
                                                 {{ td_fields }}
                                                 <td>
-                                                    <a href="{{ route('dashboard.{{ table_name }}.edit', ${{ key }}->id) }}">
+                                                    <a href="{{ asset('{{ table_name }}/edit'. ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-warning">Edit</button>
                                                     </a>
-                                                    <a href="{{ route('dashboard.{{ table_name }}.delete', ${{ key }}->id) }}">
+                                                    <a href="{{ asset('{{ table_name }}/delete'. ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
                                                     </a>
                                                 </td>

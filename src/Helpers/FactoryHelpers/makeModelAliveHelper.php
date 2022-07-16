@@ -20,7 +20,7 @@ class makeModelAliveHelper
 
             $mutator_template = "public function $mutators_names(\$value)
     {
-        return (\$value !== null) ? asset('/storage/'. config('grace.storage_path') . '/$table_name/' . \$value) : '';
+        return (\$value !== null) ? asset(config('grace.storage_path').'/$table_name/' . \$value) : '';
     }
     ";
             array_push($template, $mutator_template);

@@ -66,7 +66,7 @@ class CreateFullResource extends Controller
      */
     public function makeFullResourceAlive()
     {
-        //migration
+        // migration
         $this->makeMigration();
         //model
         $this->makeModel();
@@ -194,6 +194,7 @@ class CreateFullResource extends Controller
         return [
             'field_names' => $this->field_names,
             'input_types' => $this->input_types,
+            'table_name' => $this->table_name,
             'url' => "{{ asset('$this->table_name') }}",
         ];
     }

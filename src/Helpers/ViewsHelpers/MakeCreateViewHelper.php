@@ -26,20 +26,21 @@ class MakeCreateViewHelper
     {
         $field_names = $stubVariables['field_names'];
         $inputs_types = $stubVariables['input_types'];
+        $table_name = $stubVariables['table_name'];
         $names_types_array = array_combine($field_names, $inputs_types);
         $template = array();
         foreach ($names_types_array as $field => $value) {
             switch ($value) {
                 case 'text':
-                    $input_template = self::input($field);
+                    $input_template = self::input($field, $table_name);
                     break;
 
                 case 'file':
-                    $input_template = self::file($field);
+                    $input_template = self::file($field, $table_name);
                     break;
 
                 case 'textarea':
-                    $input_template = self::textarea($field);
+                    $input_template = self::textarea($field, $table_name);
                     break;
             }
             array_push($template, $input_template);
@@ -74,7 +75,7 @@ class MakeCreateViewHelper
      * @return String
      */
 
-    public static function input($field)
+    public static function input($field, $table_name)
     {
         $title = ucfirst($field);
         return "<div class='form-group'>
@@ -82,7 +83,7 @@ class MakeCreateViewHelper
         <h5>{$title}</h5>
     </label>
     <input type='text' class='form-control input-default' placeholder='{$field}'
-        name='{$field}'>
+        name='{$table_name}[{{ \$index }}][{$field}]'>
     </div>";
     }
 
@@ -92,14 +93,14 @@ class MakeCreateViewHelper
      * @return String
      */
 
-    public static function textarea($field)
+    public static function textarea($field, $table_name)
     {
         $title = ucfirst($field);
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
-        <textarea class='form-control summernote' name='{$field}'></textarea>
+        <textarea class='form-control summernote' name='{$table_name}[{{ \$index }}][{$field}]'></textarea>
     </div>";
     }
 
@@ -109,14 +110,14 @@ class MakeCreateViewHelper
      * @return String
      */
 
-    public static function file($field)
+    public static function file($field, $table_name)
     {
         $title = ucfirst($field);
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
-        <input type='file' class='form-control' name='{$field}'>
+        <input type='file' class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
     </div> ";
     }
 }
