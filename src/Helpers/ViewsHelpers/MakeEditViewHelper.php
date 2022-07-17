@@ -2,6 +2,8 @@
 
 namespace Hani221b\Grace\Helpers\ViewsHelpers;
 
+use Illuminate\Support\Str;
+
 class MakeEditViewHelper
 {
 
@@ -22,24 +24,29 @@ class MakeEditViewHelper
      * @return array
      *
      */
-    public static function makeCreate($folder_name, $stubVariables)
+    public static function makeEdit($folder_name, $stubVariables)
     {
         $field_names = $stubVariables['field_names'];
         $inputs_types = $stubVariables['input_types'];
         $names_types_array = array_combine($field_names, $inputs_types);
+        $contents = file_get_contents(self::getStubPath());
+        //================================================================
+        // Default language inputs
+        //================================================================
+
         $template = array();
         foreach ($names_types_array as $field => $value) {
             switch ($value) {
                 case 'text':
-                    $input_template = self::input($folder_name, $field);
+                    $input_template = self::input($folder_name, $field, Str::singular($folder_name));
                     break;
 
                 case 'file':
-                    $input_template = self::file($folder_name, $field);
+                    $input_template = self::file($folder_name, $field, Str::singular($folder_name));
                     break;
 
                 case 'textarea':
-                    $input_template = self::textarea($folder_name, $field);
+                    $input_template = self::textarea($folder_name, $field, Str::singular($folder_name));
                     break;
             }
             array_push($template, $input_template);
@@ -50,9 +57,36 @@ class MakeEditViewHelper
             $string_input_template .= $template[$index] . "\n";
         }
 
-        $contents = file_get_contents(self::getStubPath());
-
         $contents = str_replace('{{ inputs }}', $string_input_template, $contents);
+
+        //================================================================
+        // Translations inputs
+        //================================================================
+
+        $translations_template = array();
+        foreach ($names_types_array as $field => $value) {
+            switch ($value) {
+                case 'text':
+                    $transltion_input_template = self::input($folder_name, $field, 'transltion');
+                    break;
+
+                case 'file':
+                    $transltion_input_template = self::file($folder_name, $field, 'transltion');
+                    break;
+
+                case 'textarea':
+                    $transltion_input_template = self::textarea($folder_name, $field, 'transltion');
+                    break;
+            }
+            array_push($translations_template, $transltion_input_template);
+        }
+
+        $translations_string_input_template = '';
+        foreach ($translations_template as $index => $tem) {
+            $translations_string_input_template .= $translations_template[$index] . "\n";
+        }
+
+        $contents = str_replace('{{ translations_inputs }}', $translations_string_input_template, $contents);
         // dd($contents);
         foreach ($stubVariables as $search => $replace) {
 
@@ -74,14 +108,16 @@ class MakeEditViewHelper
      * @return String
      */
 
-    public static function input($key, $field)
+    public static function input($folder_name, $field, $key)
     {
         $title = ucfirst($field);
+
+        $name = $folder_name . '[0]' . '[' . $field . ']';
         return "<div class='form-group'>
         <label for='{$field}'>
         <h5>{$title}</h5>
         </label>
-        <input type='text' class='form-control input-default' value='{{ $$key->$field }}' name='{$field}'>
+        <input type='text' class='form-control input-default' value='{{ $$key->$field }}' name='$name'>
         </div>";
     }
 
@@ -91,14 +127,15 @@ class MakeEditViewHelper
      * @return String
      */
 
-    public static function textarea($key, $field)
+    public static function textarea($folder_name, $field, $key)
     {
         $title = ucfirst($field);
+        $name = $folder_name . '[0]' . '[' . $field . ']';
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
-        <textarea class='form-control summernote' name='{$field}'>{{ $$key->$field }}</textarea>
+        <textarea class='form-control summernote' name='$name'>{{ $$key->$field }}</textarea>
         </div>";
     }
 
@@ -108,15 +145,16 @@ class MakeEditViewHelper
      * @return String
      */
 
-    public static function file($key, $field)
+    public static function file($folder_name, $field, $key)
     {
-        $title = ucfirst($key);
+        $title = ucfirst($field);
+        $name = $folder_name . '[0]' . '[' . $field . ']';
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
         <img src='{{ $$key->$field }}'  width='200px'>
-        <input type='file' class='form-control' name='{$field}'>
+        <input type='file' class='form-control' name='$name'>
         </div>";
 
     }

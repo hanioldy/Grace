@@ -50,11 +50,11 @@ class CreateFullResource extends Controller
         $this->field_names = $request->field_names;
         $this->fillable_files_array = MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields);
         //filtering null values
-        if($request->field_types !== null){
+        if ($request->field_types !== null) {
             $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
         }
-         //filtering null values
-        if($request->input_types !== null){
+        //filtering null values
+        if ($request->input_types !== null) {
             $this->input_types = array_filter($request->input_types, fn($value) => !is_null($value) && $value !== '');
         }
         $this->storage_path = $request->storage_path;
@@ -208,6 +208,8 @@ class CreateFullResource extends Controller
         return [
             'field_names' => $this->field_names,
             'input_types' => $this->input_types,
+            'table_name' => $this->table_name,
+            'key' => Str::singular($this->table_name),
             'url' => "{{ asset('$this->table_name/update/'" . "." . "$" . Str::singular($this->table_name) . "->id) }}",
         ];
     }
@@ -242,7 +244,7 @@ class CreateFullResource extends Controller
 
         MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
 
-        if(config('grace.auto_migrate') === true){
+        if (config('grace.auto_migrate') === true) {
             $base_path = base_path();
 
             $file_name = str_replace($base_path, '', $path);
@@ -348,7 +350,7 @@ class CreateFullResource extends Controller
     public function makeViews()
     {
         MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
-        MakeEditViewHelper::makeCreate($this->table_name, $this->getEditViewVariables());
+        MakeEditViewHelper::makeEdit($this->table_name, $this->getEditViewVariables());
         MakeIndexViewHelper::makeCreate($this->table_name, $this->getIndexViewVariables());
     }
 }

@@ -8,10 +8,17 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="basic-form">
-                                  <form method="POST" action="{{ url }}"
+                                <form method="POST" action="{{ url }}"
                                     enctype="multipart/form-data">
                                     @csrf
+
+                                    <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
+                                        value="{{ ${{ key }}->translation_lang }}">
+                                    <input type="hidden" name="{{ table_name }}[0][id]" class="form-control"
+                                        value="{{ ${{ key }}->id }}">
+
                                     {{ inputs }}
+
                                     <div class="form-group">
                                         <button type="submit" class="btn mb-1 btn-primary">Save</button>
                                     </div>
@@ -20,6 +27,56 @@
                         </div>
                     </div>
                 </div>
+                @isset(${{ key }}->translations)
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Translations</h4>
+                                <!-- Show translations -->
+                                <div class="custom-tab-1">
+                                    <ul class="nav nav-tabs mb-3">
+                                        @foreach (${{ key }}->translations as $index => $translation)
+                                            <li class="nav-item @if ($index == 0) active @endif"><a
+                                                    class="nav-link @if ($index == 0) active @endif"
+                                                    data-toggle="tab" href="#translation{{ $index }}"
+                                                    aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">{{ $translation->translation_lang }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <form method="POST" action="{{ url }}"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @isset(${{ key }}->translations)
+                                                @foreach (${{ key }}->translations as $index => $translation)
+                                                    <div class="tab-pane @if ($index == 0) active @endif"
+                                                        id="translation{{ $index }}" role="tabpanel"
+                                                        aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">
+                                                        <div class="basic-form">
+
+                                                            <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
+                                                                value="{{ $translation->translation_lang }}">
+                                                            <input type="hidden" name="shops[0][id]" class="form-control"
+                                                                value="{{ $translation->id }}">
+
+                                                            {{ translations_inputs }}
+
+                                                            <div class="form-group">
+                                                                <button type="submit" class="btn mb-1 btn-primary">Save</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                            </form>
+                                            @endforeach
+                                        @endisset
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endisset
             </div>
         </div>
     </div>

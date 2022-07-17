@@ -29,10 +29,10 @@
                                             <tr>
                                                 {{ td_fields }}
                                                 <td>
-                                                    <a href="{{ asset('{{ table_name }}/edit'. ${{ key }}->id) }}">
+                                                    <a href="{{ asset('{{ table_name }}/' .${{ key }}->id .'/edit/') }}">
                                                         <button type="button" class="btn mb-1 btn-warning">Edit</button>
                                                     </a>
-                                                    <a href="{{ asset('{{ table_name }}/delete'. ${{ key }}->id) }}">
+                                                    <a href="{{ asset('{{ table_name }}/'. ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
                                                     </a>
                                                 </td>
