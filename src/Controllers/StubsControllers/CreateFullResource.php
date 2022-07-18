@@ -10,6 +10,7 @@ use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeEditViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
+use Hani221b\Grace\Helpers\ViewsHelpers\SidebarViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -241,6 +242,18 @@ class CreateFullResource extends Controller
     }
 
     /**
+     * Mapping the value of create side stubs variables
+     * @return array
+     */
+    public function getSidebarViewVariables()
+    {
+        return [
+            'table_name' => $this->table_name,
+            'single_record_table' => $this->single_record_table,
+        ];
+    }
+
+    /**
      * Create Migration
      * @return viod
      */
@@ -363,5 +376,6 @@ class CreateFullResource extends Controller
         MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
         MakeEditViewHelper::makeEdit($this->table_name, $this->getEditViewVariables());
         MakeIndexViewHelper::makeCreate($this->table_name, $this->getIndexViewVariables());
+        SidebarViewHelper::appendSidebarRow($this->getSidebarViewVariables());
     }
 }
