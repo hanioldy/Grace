@@ -57,7 +57,7 @@
 
                                                             <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
                                                                 value="{{ $translation->translation_lang }}">
-                                                            <input type="hidden" name="shops[0][id]" class="form-control"
+                                                            <input type="hidden" name="{{ table_name }}[0][id]" class="form-control"
                                                                 value="{{ $translation->id }}">
 
                                                             {{ translations_inputs }}

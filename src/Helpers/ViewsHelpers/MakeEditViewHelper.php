@@ -67,18 +67,18 @@ class MakeEditViewHelper
         foreach ($names_types_array as $field => $value) {
             switch ($value) {
                 case 'text':
-                    $transltion_input_template = self::input($folder_name, $field, 'transltion');
+                    $translation_input_template = self::input($folder_name, $field, 'translation');
                     break;
 
                 case 'file':
-                    $transltion_input_template = self::file($folder_name, $field, 'transltion');
+                    $translation_input_template = self::file($folder_name, $field, 'translation');
                     break;
 
                 case 'textarea':
-                    $transltion_input_template = self::textarea($folder_name, $field, 'transltion');
+                    $translation_input_template = self::textarea($folder_name, $field, 'translation');
                     break;
             }
-            array_push($translations_template, $transltion_input_template);
+            array_push($translations_template, $translation_input_template);
         }
 
         $translations_string_input_template = '';
