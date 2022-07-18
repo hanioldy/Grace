@@ -36,6 +36,8 @@ class InstallGrace extends Command
         <fg=blue> Migration files </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Database\Migrations\2022_06_23_053830_create_languages_table.php<fg=yellow>]</>
         => <fg=yellow>[</>database\migrations\2022_06_23_053830_create_languages_table.php<fg=yellow>]</></>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Database\Migrations\2022_07_18_045909_create_tables_table.php<fg=yellow>]</>
+        => <fg=yellow>[</>database\migrations\2022_07_18_045909_create_tables_table.php<fg=yellow>]</></>
         <fg=blue> Views files </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Views\Grace <fg=yellow>]</> =><fg=yellow>[</>resources\views\grace<fg=yellow>]</></>
         <fg=blue> Assets files </>

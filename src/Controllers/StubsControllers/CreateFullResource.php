@@ -13,6 +13,7 @@ use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CreateFullResource extends Controller
@@ -66,24 +67,34 @@ class CreateFullResource extends Controller
      */
     public function makeFullResourceAlive()
     {
-        // migration
-        $this->makeMigration();
-        //model
-        $this->makeModel();
-        // controller
-        $this->makeController();
-        //request
-        $this->makeRequest();
-        //resource
-        $this->makeResource();
-        //routes
-        $this->makeRoutes();
-        //disk
-        $this->makeDisk();
-        //views
-        if (config('grace.mode') === 'blade') {
-            $this->makeViews();
+        $new_table_to_be_registered = DB::table('tables')->where('table', $this->table_name)->first();
+        if ($new_table_to_be_registered !== null) {
+            return 'Table already exist';
+        } else {
+            // migration
+            $this->makeMigration();
+            //model
+            $this->makeModel();
+            // controller
+            $this->makeController();
+            //request
+            $this->makeRequest();
+            //resource
+            $this->makeResource();
+            //routes
+            $this->makeRoutes();
+            //disk
+            $this->makeDisk();
+            //views
+            if (config('grace.mode') === 'blade') {
+                $this->makeViews();
+            }
+            DB::table('tables')->insert([
+                'table' => $this->table_name,
+            ]);
+            return 'Resource has been created successfully';
         }
+
     }
 
     /**
