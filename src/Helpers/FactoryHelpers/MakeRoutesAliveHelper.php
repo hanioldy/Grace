@@ -15,7 +15,7 @@ class MakeRoutesAliveHelper
         if (config('grace.mode') === 'api') {
             $filename = base_path() . '\routes\api.php';
         } else if (config('grace.mode') === 'blade') {
-            $filename = base_path() . '\routes\web.php';
+            $filename = base_path() . '\routes\grace.php';
         }
         return $filename;
     }
