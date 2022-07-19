@@ -10,6 +10,7 @@ use Hani221b\Grace\Controllers\StubsControllers\CreateResource;
 use Illuminate\Support\Facades\Route;
 
 Route::get('grace_cp', [DashboardController::class, 'grace_cp']);
+Route::get('dashboard', [DashboardController::class, 'get_dashboard']);
 
 Route::post('create_model', [CreateModel::class, 'makeModelAlive'])->name('makeModelAlive');
 Route::post('create_controller', [CreateController::class, 'makeControllerAlive'])->name('makeControllerAlive');

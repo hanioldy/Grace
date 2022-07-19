@@ -34,9 +34,9 @@ class SidebarViewHelper
              <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
          </a>
          <ul aria-expanded='false'>
-             <li><a href='$table_name'>Index</a></li>
-             <li><a href='$table_name/create'>Create</a></li>
-             <li><a href='$table_name/sort'>Sort</a></li>
+             <li><a href='dashboard/$table_name'>Index</a></li>
+             <li><a href='dashboard/$table_name/create'>Create</a></li>
+             <li><a href='dashboard/$table_name/sort'>Sort</a></li>
          </ul>
      </li>";
     }
@@ -49,7 +49,7 @@ class SidebarViewHelper
     {
         $label = ucfirst($table_name);
         return "<li>
-         <a class='has-arrow' href='$table_name' aria-expanded='false'>
+         <a class='has-arrow' href='dashboard/$table_name' aria-expanded='false'>
              <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
          </a>
      </li>";

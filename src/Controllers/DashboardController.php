@@ -10,4 +10,12 @@ class DashboardController
         return view('Grace::index');
     }
 
+    /**
+     * get user dashboard
+     */
+
+     public function get_dashboard(){
+         return view('grace.dashboard');
+     }
+
 }
