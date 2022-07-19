@@ -99,7 +99,6 @@ class CreateFullResource extends Controller
                 DB::commit();
                 return 'Resource has been created successfully';
             } catch (Exception $exception) {
-                DB::rollBack();
                 return 'Something went worng please try again later!';
             }
         }
