@@ -20,7 +20,7 @@ class Language extends Model
     //=========================================
 
     protected $fillable = [
-         'abbr', 'name', 'direction', 'status'
+        'abbr', 'name', 'direction', 'status',
     ];
 
     //=============================================================
@@ -54,12 +54,12 @@ class Language extends Model
 
     public function getStatus()
     {
-        return $this->status == 1 ? __('messages.Active') : __('messages.Inactive');
+        return $this->status == 1 ? 'Active' : 'Inactive';
     }
 
     public function getDirectionAttribute($val)
     {
-        return $val == 0 ? __('messages.Left to Right') : __('messages.Right to Left');
+        return $val == 0 ? 'Left to Right' : 'Right to Left';
     }
 
 }

@@ -8,6 +8,7 @@
     <title>GRACE</title>
     <link href="{{ asset('grace/assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('grace/assets/css/metisMenu.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('grace/assets/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -54,6 +55,9 @@
     <script src="{{ asset('grace/assets/js/gleek.js') }}"></script>
     <script src="{{ asset('grace/assets/js/styleSwitcher.js') }}}"></script>
     <script src="{{ asset('grace/assets/js/circle-progress.min.js') }}"></script>
+    <script src="{{ asset('grace/assets/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('grace/assets/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('grace/assets/js/datatable-basic.min.js') }}"></script>
 </body>
 
 </html>

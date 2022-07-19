@@ -18,3 +18,9 @@ Route::post('create_migration', [CreateMigration::class, 'makeMigrationAlive'])-
 Route::post('create_request', [CreateRequest::class, 'makeRequestAlive'])->name('makeRequestAlive');
 Route::post('create_resource', [CreateResource::class, 'makeResourceAlive'])->name('makeResourceAlive');
 Route::post('create_full_resource', [CreateFullResource::class, 'makeFullResourceAlive'])->name('makeFullResourceAlive');
+
+//===========================================================
+// Langauges
+//===========================================================
+
+Route::get('dashboard/languages', [DashboardController::class, 'get_languages']);
