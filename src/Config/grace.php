@@ -32,7 +32,7 @@ return [
     |
      */
 
-    'storage_path' => 'grace',
+    'views_folder_name' => 'grace\resources',
 
     /*
     |--------------------------------------------------------------------------
