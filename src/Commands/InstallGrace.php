@@ -4,6 +4,8 @@ namespace Hani221b\Grace\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+
 class InstallGrace extends Command
 {
 
@@ -50,9 +52,11 @@ class InstallGrace extends Command
      */
     public function handle()
     {
-        // publish stuff
-        Artisan::call('vendor:publish', ['--tag' => 'grace']);
-        $this->line('<fg=green> Publishing stuff:</>
+        try {
+            DB::connection()->getPdo();
+            // publish stuff
+            Artisan::call('vendor:publish', ['--tag' => 'grace']);
+            $this->line('<fg=green> Publishing stuff:</>
         <fg=blue> Config files </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Config\grace.php <fg=yellow>]</> =><fg=yellow>[</>config\grace.php<fg=yellow>]</></>
         <fg=blue> Migration files </>
@@ -71,17 +75,22 @@ class InstallGrace extends Command
         <fg=blue> Seeders </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Database\Seeders\LanguageSeeder.php <fg=yellow>]</> =><fg=yellow>[</>database\seeders\LanguageSeeder.php<fg=yellow>]</></>
       ');
-        //register route file
-        $this->register_route_file();
-        $this->line('<fg=blue>Adding route file registration to RouteServiceProvider</>
+            //register route file
+            $this->register_route_file();
+            $this->line('<fg=blue>Adding route file registration to RouteServiceProvider</>
         ');
-        // run migrate
-        Artisan::call('migrate');
-        $this->info("<fg=yellow>Migrating: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
-        $this->info("<fg=green>Migrated: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
-        // seeding languages
-        Artisan::call('db:seed', ['--class' => 'Database\Seeders\LanguageSeeder']);
-        $this->line('<fg=blue>Seeding Langauges</>
+            // run migrate
+            Artisan::call('migrate');
+            $this->info("<fg=yellow>Migrating: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
+            $this->info("<fg=green>Migrated: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
+            // seeding languages
+            Artisan::call('db:seed', ['--class' => 'Database\Seeders\LanguageSeeder']);
+            $this->line('<fg=blue>Seeding Langauges</>
         ');
+        } catch (\Exception $excecption) {
+            $db = config('database.connections.mysql.database');
+            $this->info("<fg=red>Database $db was not found. Please create it before installing Grace</>");
+        }
+
     }
 }
