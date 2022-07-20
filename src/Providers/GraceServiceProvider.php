@@ -58,6 +58,8 @@ class GraceServiceProvider extends ServiceProvider
             __DIR__ . '..\\..\\Models\\Language.php' => base_path('app\\Models\\Language.php'),
             //routes
             __DIR__ . '..\\..\\Routes\\grace.php' => base_path('routes\\grace.php'),
+            //seeders
+            __DIR__ . '..\\..\\Database\Seeders\LanguageSeeder.php' => base_path('database\seeders\LanguageSeeder.php'),
         ], 'grace');
 
     }

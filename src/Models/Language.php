@@ -20,7 +20,7 @@ class Language extends Model
     //=========================================
 
     protected $fillable = [
-        'abbr', 'name', 'direction', 'status',
+        'abbr', 'name', 'direction', 'status', 'default',
     ];
 
     //=============================================================
@@ -36,7 +36,7 @@ class Language extends Model
 
     public function scopeSelection($query)
     {
-        return $query->select('id', 'abbr', 'name', 'direction', 'status');
+        return $query->select('id', 'abbr', 'name', 'direction', 'status', 'default');
     }
 
     public function scopeActive($query)
@@ -59,7 +59,7 @@ class Language extends Model
 
     public function getDirectionAttribute($val)
     {
-        return $val == 0 ? 'Left to Right' : 'Right to Left';
+        return $val == 1 ? 'Left to Right' : 'Right to Left';
     }
 
 }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->tinyInteger('direction')->default(1);
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('default');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,10 +2,8 @@
 
 namespace Hani221b\Grace\Helpers;
 
-// use App\Models\Central\Language;
-use Illuminate\Support\Facades\Config;
+use App\Models\Language;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Str;
 
 class GlobalHelper extends Facade
 {
@@ -17,7 +15,7 @@ class GlobalHelper extends Facade
 
     public static function GetDefaultLanguage()
     {
-        return Config::get('app.locale');
+        return Language::where('default', 1)->select('abbr')->first();
     }
 
     //=========================================
@@ -25,33 +23,9 @@ class GlobalHelper extends Facade
     // in the application.
     //=========================================
 
-    // public static function GetActivatedLanguage()
-    // {
-    //     return Language::Selection()->where('status', 1)->get();
-    // }
-
-    //=========================================
-    // Get current tenant storage folder name
-    //=========================================
-
-    public static function CurrentTenantId()
+    public static function GetActivatedLanguage()
     {
-
-        if (str_contains($_SERVER['SERVER_NAME'], 'almotkamel')) {
-            // get tenant id in production
-            $tenant_name = Str::before($_SERVER['SERVER_NAME'], '.almotkamel.com');
-            // get tenant id in development environment
-        } else if (str_contains($_SERVER['SERVER_NAME'], 'test')) {
-            $tenant_name = Str::before($_SERVER['SERVER_NAME'], '.test');
-        }
-
-        $tenant_id = 'tenant_' . $tenant_name;
-        return $tenant_id;
+        return Language::Selection()->where('status', 1)->get();
     }
 
-    //=========================================
-    // Constants
-    //=========================================
-
-    const PAGINATION_COUNT = 10;
 }

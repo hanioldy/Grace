@@ -68,6 +68,8 @@ class InstallGrace extends Command
         <fg=green><fg=yellow>[</>Hani221b\Grace\Models\Language.php <fg=yellow>]</> =><fg=yellow>[</>app\Models\Language.php<fg=yellow>]</></>
         <fg=blue> Routes </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Routes\grace.php <fg=yellow>]</> =><fg=yellow>[</>routes\grace.php<fg=yellow>]</></>
+        <fg=blue> Seeders </>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Database\Seeders\LanguageSeeder.php <fg=yellow>]</> =><fg=yellow>[</>database\seeders\LanguageSeeder.php<fg=yellow>]</></>
       ');
         //register route file
         $this->register_route_file();
@@ -77,5 +79,9 @@ class InstallGrace extends Command
         Artisan::call('migrate');
         $this->info("<fg=yellow>Migrating: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
         $this->info("<fg=green>Migrated: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
+        // seeding languages
+        Artisan::call('db:seed', ['--class' => 'Database\Seeders\LanguageSeeder']);
+        $this->line('<fg=blue>Seeding Langauges</>
+        ');
     }
 }

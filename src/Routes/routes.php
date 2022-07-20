@@ -24,3 +24,7 @@ Route::post('create_full_resource', [CreateFullResource::class, 'makeFullResourc
 //===========================================================
 
 Route::get('dashboard/languages', [DashboardController::class, 'get_languages']);
+Route::get('dashboard/languages/change_status/{id}', [DashboardController::class, 'change_status_for_language']);
+Route::get('dashboard/languages/set_to_default/{id}', [DashboardController::class, 'set_language_to_default']);
+
+
