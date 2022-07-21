@@ -73,7 +73,6 @@ class CreateFullResource extends Controller
         if ($new_table_to_be_registered !== null) {
             return 'Table already exist';
         } else {
-            DB::beginTransaction();
             try {
                 // migration
                 $this->makeMigration();
@@ -96,7 +95,6 @@ class CreateFullResource extends Controller
                 DB::table('tables')->insert([
                     'table' => $this->table_name,
                 ]);
-                DB::commit();
                 return 'Resource has been created successfully';
             } catch (Exception $exception) {
                 return 'Something went worng please try again later!';
