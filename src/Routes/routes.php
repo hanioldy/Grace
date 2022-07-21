@@ -28,3 +28,8 @@ Route::get('dashboard/languages/change_status/{id}', [DashboardController::class
 Route::get('dashboard/languages/set_to_default/{id}', [DashboardController::class, 'set_language_to_default']);
 
 
+//===========================================================
+// tables
+//===========================================================
+
+Route::get('dashboard/tables', [DashboardController::class, 'get_tables']);

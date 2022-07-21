@@ -4,6 +4,7 @@ namespace Hani221b\Grace\Controllers;
 
 use App\Models\Language;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController
 {
@@ -69,6 +70,20 @@ class DashboardController
             return \redirect()->back();
         } catch (Exception $exception) {
             return $exception;
+            return 'something went wrong. please try again later';
+        }
+    }
+
+    /**
+     * get all tables
+     */
+
+    public function get_tables()
+    {
+        try {
+            $tables = DB::table('tables')->get();
+            return view('grace.tables.index', compact('tables'));
+        } catch (Exception $exception) {
             return 'something went wrong. please try again later';
         }
     }
