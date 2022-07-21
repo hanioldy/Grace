@@ -29,20 +29,16 @@ class InstallGrace extends Command
 
     public function register_route_file()
     {
-        $web_registeration = "Route::middleware('web')
-        ->group(base_path('routes/web.php'));";
-        $grace_web_registeration = "            Route::middleware('web')
-        ->group(base_path('routes/web.php'));
-
-    Route::middleware('web')
-        ->prefix('dashboard')
-        ->group(base_path('routes/grace.php'));";
-
-        $route_service_provider = file_get_contents('app\Providers\RouteServiceProvider.php');
-
-        $route_service_provider = str_replace($web_registeration, $grace_web_registeration, $route_service_provider);
-
-        file_put_contents('app\Providers\RouteServiceProvider.php', $route_service_provider);
+        $grace_web_registeration = "
+        Route::middleware('web')
+            ->prefix('dashboard')
+            ->group(base_path('routes/grace.php'));
+        ";
+        $route_service_provider = base_path() . '\app\Providers\RouteServiceProvider.php';
+        $line_i_am_looking_for = 34;
+        $lines = file($route_service_provider, FILE_IGNORE_NEW_LINES);
+        $lines[$line_i_am_looking_for] = "\n" . $grace_web_registeration;
+        file_put_contents($route_service_provider, implode("\n", $lines));
     }
 
     /**
