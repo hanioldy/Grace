@@ -76,14 +76,14 @@ class UpdateMultiLanguageRecord
 
             $all_records = $requested_record->with('translations')->first();
         }
-        if (config('grace.mode') === 'api'){
-        return JsonResponse::successResponse(
-            $all_records,
-            'The record has been updated successfully',
-            200
-        );
-    } else if (config('grace.mode') === 'blade') {
-        return redirect('/' . $disk);
-    }
+        if (config('grace.mode') === 'api') {
+            return JsonResponse::successResponse(
+                $all_records,
+                'The record has been updated successfully',
+                200
+            );
+        } else if (config('grace.mode') === 'blade') {
+            return redirect()->route('grace.' . $disk . '.index');
+        }
     }
 }

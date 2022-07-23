@@ -227,7 +227,7 @@ class CreateFullResource extends Controller
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
             'key' => Str::singular($this->table_name),
-            'url' => "{{ route('grace.$this->table_name.update', " . "$" . "Str::singular($this->table_name)->id) }}",
+            'url' => "{{ route('grace.$this->table_name.update', ". "$". ". Str::singular($this->table_name)->id) }}",
         ];
     }
 

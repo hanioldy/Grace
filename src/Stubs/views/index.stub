@@ -32,7 +32,7 @@
                                                     <a href="{{ route('grace.{{ table_name }}.edit', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-warning">Edit</button>
                                                     </a>
-                                                    <a href="{{ route('grace.{{ table_name }}.delete', ${{ key }}->id) }}">
+                                                    <a href="{{ route('grace.{{ table_name }}.destroy', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
                                                     </a>
                                                 </td>
