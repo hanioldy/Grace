@@ -3,7 +3,6 @@
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
-use Exception;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
@@ -35,6 +34,7 @@ class CreateFullResource extends Controller
     protected $field_types;
     protected $storage_path;
     protected $single_record_table;
+    protected $select_options;
 
     /**
      * Create a new command instance.
@@ -62,6 +62,7 @@ class CreateFullResource extends Controller
         }
         $this->storage_path = $request->storage_path;
         $this->single_record_table = $request->single_record_table;
+        $this->select_options = $request->select_options;
     }
 
     /**
