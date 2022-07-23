@@ -82,10 +82,25 @@ class DashboardController
     {
         try {
             $tables = DB::table('tables')->get();
-            return view('grace.tables.index', compact('tables'));
+            return view('Grace::includes.tables', compact('tables'));
         } catch (Exception $exception) {
             return 'something went wrong. please try again later';
         }
+    }
+
+    /**
+     * delete table with all its files and classes
+     */
+
+    public function delete_table($id)
+    {
+        // try {
+            $table = DB::table('tables')->where('id', $id)->first();
+            $table_name = $table->table;
+            unlink(base_path(). '\\App\\Http\\Requests\\PostRequest.php');
+        // } catch (Exception $exception) {
+        //     return 'something went wrong. please try again later';
+        // }
     }
 
 }

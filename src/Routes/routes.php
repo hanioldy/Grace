@@ -24,11 +24,12 @@ Route::post('create_full_resource', [CreateFullResource::class, 'makeFullResourc
 //===========================================================
 
 Route::get('dashboard/languages', [DashboardController::class, 'get_languages'])->name('grace.languages');
-Route::get('dashboard/languages/change_status/{id}', [DashboardController::class, 'change_status_for_language'])->name('grace.languages.create');
-Route::get('dashboard/languages/set_to_default/{id}', [DashboardController::class, 'set_language_to_default'])->name('grace.languages.create');
+Route::get('dashboard/languages/change_status/{id}', [DashboardController::class, 'change_status_for_language'])->name('grace.languages.change_status');
+Route::get('dashboard/languages/set_to_default/{id}', [DashboardController::class, 'set_language_to_default'])->name('grace.languages.set_to_default');
 
 //===========================================================
 // tables
 //===========================================================
 
-Route::get('dashboard/tables', [DashboardController::class, 'get_tables']);
+Route::get('grace_tables', [DashboardController::class, 'get_tables'])->name('grace_tables');
+Route::get('delete_table/{id}', [DashboardController::class, 'delete_table'])->name('delete_table');

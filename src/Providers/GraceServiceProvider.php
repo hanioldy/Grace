@@ -28,6 +28,7 @@ class GraceServiceProvider extends ServiceProvider
         $this->app->bind('Illuminate\Routing\ResourceRegistrar', function () use ($registrar) {
             return $registrar;
         });
+
         //resgister commands
         $this->commands($this->commands);
     }
