@@ -50,7 +50,7 @@ class MakeRoutesAliveHelper
         $table_name = $stubVariables['table_name'];
         $routes_template = "
 // $table_name
-Route::resource('$table_name', $controller_name::class);
+Route::resource('$table_name', $controller_name::class, ['as' => 'grace']);
         ";
 
         self::appendUseController($stubVariables, $controller_name);

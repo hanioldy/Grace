@@ -8,7 +8,7 @@ class SidebarViewHelper
     {
         $table_name = $stubVariables['table_name'];
         $single_record_table = $stubVariables['single_record_table'];
-        if($single_record_table === null){
+        if ($single_record_table === null) {
             $row = self::regualr_table($table_name);
         } else if ($single_record_table === "1") {
             $row = self::single_record_table($table_name);
@@ -34,9 +34,9 @@ class SidebarViewHelper
              <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
          </a>
          <ul aria-expanded='false'>
-             <li><a href='$table_name'>Index</a></li>
-             <li><a href='$table_name/create'>Create</a></li>
-             <li><a href='$table_name/sort'>Sort</a></li>
+             <li><a href='{{ route('grace.$table_name.index') }}'>Index</a></li>
+             <li><a href='{{ route('grace.$table_name.create') }}'>Create</a></li>
+             <li><a href='{{ route('grace.$table_name.sort') }}'>Sort</a></li>
          </ul>
      </li>";
     }
@@ -49,7 +49,7 @@ class SidebarViewHelper
     {
         $label = ucfirst($table_name);
         return "<li>
-         <a class='has-arrow' href='$table_name' aria-expanded='false'>
+         <a class='has-arrow' href='{{ route('grace.$table_name.index') }}' aria-expanded='false'>
              <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
          </a>
      </li>";
