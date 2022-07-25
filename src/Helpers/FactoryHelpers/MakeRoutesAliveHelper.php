@@ -33,7 +33,7 @@ class MakeRoutesAliveHelper
         $use_controller = "
 //======== $table_name controller ===========
 use $controller_namespace\\$controller_name;
-//======================================
+//====== end $table_name controller =========
 ";
         $filename = self::getRouteFileName();
         $line_i_am_looking_for = 1;
@@ -56,7 +56,7 @@ use $controller_namespace\\$controller_name;
         $routes_template = "
 //========================= $table_name routes =========================
 Route::resource('$table_name', $controller_name::class, ['as' => 'grace']);
-//================================================================
+//======================= end $table_name routes =======================
         ";
 
         self::appendUseController($stubVariables, $controller_name);

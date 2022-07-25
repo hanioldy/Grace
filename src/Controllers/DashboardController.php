@@ -122,7 +122,7 @@ class DashboardController
         }
         // removing route
         $route_start = "//========================= $table->table_name routes =========================";
-        $route_end = "//================================================================";
+        $route_end = "//======================= end $table->table_name routes =======================";
         $route_file_name = base_path() . '\routes\grace.php';
         $route_file = file_get_contents($route_file_name);
         $route = MakeStubsAliveHelper::getStringBetween($route_file, $route_start, $route_end);
@@ -133,11 +133,24 @@ class DashboardController
         //remove route controlle use statement
 
         $use_statement_start = "//======== $table->table_name controller ===========";
-        $use_statement_end = "//======================================";
+        $use_statement_end = "//====== end $table->table_name controller =========";
         $use_statement = MakeStubsAliveHelper::getStringBetween($route_file, $use_statement_start, $use_statement_end);
         $full_use_statement = $use_statement_start . $use_statement . $use_statement_end;
         $new_route_file = str_replace($full_use_statement, '', $new_route_file);
         file_put_contents($route_file_name, $new_route_file);
+
+        //remove disk
+
+        $disk_start = "//============================= $table->table_name disk ===============================";
+        $disk_end = "//========================= end $table->table_name disk ==============================";
+        $file_system = base_path() . '\config\filesystems.php';
+        $file_system_content = file_get_contents($file_system);
+        $disk = MakeStubsAliveHelper::getStringBetween($file_system_content, $disk_start, $disk_end);
+        $full_disk = $disk_start . $disk . $disk_end;
+        $new_file_system = str_replace($full_disk, '', $file_system_content);
+        file_put_contents($file_system, $new_file_system);
+
+        // $table->delete();
     }
 
 }
