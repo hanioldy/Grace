@@ -6,7 +6,7 @@ use App\Models\Language;
 use App\Models\Table;
 use Exception;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController
 {
@@ -83,7 +83,7 @@ class DashboardController
     public function get_tables()
     {
         try {
-            $tables = DB::table('tables')->get();
+            $tables = Table::get();
             return view('Grace::includes.tables', compact('tables'));
         } catch (Exception $exception) {
             return 'something went wrong. please try again later';
@@ -150,7 +150,17 @@ class DashboardController
         $new_file_system = str_replace($full_disk, '', $file_system_content);
         file_put_contents($file_system, $new_file_system);
 
-        // $table->delete();
-    }
+        //remove views
 
+        MakeStubsAliveHelper::deleteDir(base_path() . '\\resources\\views\\' . config('grace.views_folder_name') . '\\' . $table->table_name);
+
+        //remove table
+
+        Schema::dropIfExists($table->table_name);
+
+        //delete from table's table
+
+        $table->delete();
+
+    }
 }

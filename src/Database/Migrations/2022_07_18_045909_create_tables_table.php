@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('migration')->unique();
             $table->string('views')->unique();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -98,12 +98,11 @@ class CreateFullResource extends Controller
     public function makeFullResourceAlive()
     {
 
-        $new_table_to_be_registered = DB::table('tables')->where('table_name', $this->table_name)->first();
+        $new_table_to_be_registered = Table::where('table_name', $this->table_name)->first();
         if ($new_table_to_be_registered !== null) {
             return 'Table already exist';
         } else {
             try {
-
                 $this->excuteFileCreation();
 
                 Table::create([

@@ -57,7 +57,7 @@ use $controller_namespace\\$controller_name;
 //========================= $table_name routes =========================
 Route::resource('$table_name', $controller_name::class, ['as' => 'grace']);
 //======================= end $table_name routes =======================
-        ";
+";
 
         self::appendUseController($stubVariables, $controller_name);
         fwrite($opened_file, $routes_template);
