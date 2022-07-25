@@ -3,6 +3,7 @@
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Table;
 use Exception;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
@@ -96,7 +97,8 @@ class CreateFullResource extends Controller
 
     public function makeFullResourceAlive()
     {
-        $new_table_to_be_registered = DB::table('tables')->where('table', $this->table_name)->first();
+
+        $new_table_to_be_registered = DB::table('tables')->where('table_name', $this->table_name)->first();
         if ($new_table_to_be_registered !== null) {
             return 'Table already exist';
         } else {
@@ -104,11 +106,8 @@ class CreateFullResource extends Controller
 
                 $this->excuteFileCreation();
 
-                $table_id = DB::table('tables')->insertGetId([
-                    'table' => $this->table_name,
-                ]);
-
-                DB::table('resource_data')->insert([
+                Table::create([
+                    'table_name' => $this->table_name,
                     'controller' => $this->controller_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
                     'model' => $this->model_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name),
                     'request' => $this->request_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
@@ -116,7 +115,6 @@ class CreateFullResource extends Controller
                     'migration' => $this->migration_namespace . '\\' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
                     . "_create_" . MakeStubsAliveHelper::getPluralLowerName($this->table_name) . "_table",
                     'views' => config('grace.views_folder_name') . '\\' . $this->table_name,
-                    'table_id' => $table_id,
                 ]);
                 return 'Resource has been created successfully';
             } catch (Exception $exception) {

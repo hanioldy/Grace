@@ -15,8 +15,15 @@ return new class extends Migration
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
-            $table->string('table')->unique();
+            $table->string('name_name')->unique();
+            $table->string('controller')->unique();
+            $table->string('model')->unique();
+            $table->string('request')->unique();
+            $table->string('resource')->unique();
+            $table->string('migration')->unique();
+            $table->string('views')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

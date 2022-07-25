@@ -195,7 +195,7 @@ class MakeStubsAliveHelper
     public static function files_fillable_array($field_names, $files_fields)
     {
         $files_fillable_array = [];
-        if($field_names !== null && $files_fields !== null){
+        if ($field_names !== null && $files_fields !== null) {
             $files_array = array_combine($field_names, $files_fields);
             foreach ($files_array as $field_name => $file_filed) {
                 if ($file_filed === '1') {
@@ -223,7 +223,6 @@ class MakeStubsAliveHelper
         return "'" . str_replace(",", "', '", implode(",", $fillable_array)) . "'";
     }
 
-
     /**
      * Map the values of isFile checkbox
      * @param Illuminate\Http\Request
@@ -232,7 +231,7 @@ class MakeStubsAliveHelper
     public static function isFileValues($request)
     {
         $files_fields = $request->isFile;
-        if($files_fields !== null){
+        if ($files_fields !== null) {
             foreach ($files_fields as $key => $value) {
                 if ($value === '1') {
                     unset($files_fields[$key + 1]);
@@ -240,6 +239,27 @@ class MakeStubsAliveHelper
             }
         }
         return $files_fields;
+    }
+
+    /**
+     * Gets a string between two characters. Used to delete or modefiy the code
+     * @param String string
+     * @param String start
+     * @param String end
+     * @return String
+     */
+
+    public static function getStringBetween($string, $start, $end)
+    {
+        $string = " " . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) {
+            return "";
+        }
+
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
 
     /**

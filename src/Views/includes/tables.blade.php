@@ -36,7 +36,7 @@
                     <tbody>
                         @foreach ($tables as $table)
                             <tr>
-                                <td>{{ $table->table }}</td>
+                                <td>{{ $table->table_name }}</td>
                                 <td>
                                     <a href="{{ route('delete_table', $table->id) }}">
                                         <v-btn class="btn btn-error">Delete</v-btn>

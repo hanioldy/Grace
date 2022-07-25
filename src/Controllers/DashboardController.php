@@ -3,7 +3,9 @@
 namespace Hani221b\Grace\Controllers;
 
 use App\Models\Language;
+use App\Models\Table;
 use Exception;
+use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController
@@ -91,16 +93,51 @@ class DashboardController
     /**
      * delete table with all its files and classes
      */
-
     public function delete_table($id)
     {
-        // try {
-            $table = DB::table('tables')->where('id', $id)->first();
-            $table_name = $table->table;
-            unlink(base_path(). '\\App\\Http\\Requests\\PostRequest.php');
-        // } catch (Exception $exception) {
-        //     return 'something went wrong. please try again later';
-        // }
+        $table = Table::where('id', $id)->first();
+        $controller = base_path() . '\\' . $table->controller . '.php';
+        $model = base_path() . '\\' . $table->model . '.php';
+        $request = base_path() . '\\' . $table->request . '.php';
+        $resource = base_path() . '\\' . $table->resource . '.php';
+        $migration = base_path() . '\\' . $table->migration . '.php';
+        $views = base_path() . '\\' . $table->views . '.php';
+        if (file_exists($controller)) {
+            unlink($controller);
+        }
+        if (file_exists($model)) {
+            unlink($model);
+        }
+        if (file_exists($request)) {
+            unlink($request);
+        }
+        if (file_exists($resource)) {
+            unlink($resource);
+        }
+        if (file_exists($migration)) {
+            unlink($migration);
+        }
+        if (file_exists($views)) {
+            unlink($views);
+        }
+        // removing route
+        $route_start = "//========================= $table->table_name routes =========================";
+        $route_end = "//================================================================";
+        $route_file_name = base_path() . '\routes\grace.php';
+        $route_file = file_get_contents($route_file_name);
+        $route = MakeStubsAliveHelper::getStringBetween($route_file, $route_start, $route_end);
+        $full_route = $route_start . $route . $route_end;
+        $new_route_file = str_replace($full_route, '', $route_file);
+        file_put_contents($route_file_name, $new_route_file);
+
+        //remove route controlle use statement
+
+        $use_statement_start = "//======== $table->table_name controller ===========";
+        $use_statement_end = "//======================================";
+        $use_statement = MakeStubsAliveHelper::getStringBetween($route_file, $use_statement_start, $use_statement_end);
+        $full_use_statement = $use_statement_start . $use_statement . $use_statement_end;
+        $new_route_file = str_replace($full_use_statement, '', $new_route_file);
+        file_put_contents($route_file_name, $new_route_file);
     }
 
 }

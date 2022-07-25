@@ -29,11 +29,16 @@ class MakeRoutesAliveHelper
     public static function appendUseController($stubVariables = [], $controller_name)
     {
         $controller_namespace = $stubVariables['controller_namespace'];
-        $use_controller = "use $controller_namespace\\$controller_name;";
+        $table_name = $stubVariables['table_name'];
+        $use_controller = "
+//======== $table_name controller ===========
+use $controller_namespace\\$controller_name;
+//======================================
+";
         $filename = self::getRouteFileName();
         $line_i_am_looking_for = 1;
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
-        $lines[$line_i_am_looking_for] = "\n" . $use_controller;
+        $lines[$line_i_am_looking_for] = $use_controller;
         file_put_contents($filename, implode("\n", $lines));
     }
     /**
@@ -49,8 +54,9 @@ class MakeRoutesAliveHelper
         $controller_name = MakeStubsAliveHelper::getSingularClassName($stubVariables['table_name']) . "Controller";
         $table_name = $stubVariables['table_name'];
         $routes_template = "
-// $table_name
+//========================= $table_name routes =========================
 Route::resource('$table_name', $controller_name::class, ['as' => 'grace']);
+//================================================================
         ";
 
         self::appendUseController($stubVariables, $controller_name);
