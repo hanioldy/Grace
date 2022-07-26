@@ -116,7 +116,8 @@
                 fields: [{
                     name: "",
                     time: ""
-                }]
+                }],
+                isSelect: false,
             }),
             methods: {
                 addField() {
@@ -128,6 +129,13 @@
                 },
                 deleteField(fieldIndex) {
                     this.fields.splice(fieldIndex, 1)
+                },
+                inputType(event) {
+                    if (event == 'select') {
+                        return this.isSelect = true;
+                    } else {
+                        return this.isSelect = false;
+                    }
                 }
             },
         });
