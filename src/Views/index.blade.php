@@ -24,11 +24,13 @@
             <v-app>
                 <v-card>
                     <v-card-title class="text-center justify-center py-6">
+                        <a href="{{ route('grace_tables') }}">
+                            <v-btn>Show tables</v-btn>
+                        </a>
                         <h3 class="font-weight-bold text-h2 basil--text">
                             GRACE
                         </h3>
                     </v-card-title>
-
                     <v-tabs v-model="tab" background-color="transparent" grow>
                         <v-tab>
                             Create Full Resource

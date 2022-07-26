@@ -94,7 +94,8 @@ class StoreMultiLanguageRecord
                 'translations' => $translations_fillable_array,
             ], 'The record has been stored successfully', 200);
         } else if (config('grace.mode') === 'blade') {
-            return redirect('/' . $disk);
+            return redirect()->route('grace.' . $disk. '.index');
+            redirect('/' . $disk);
         }
     }
 }

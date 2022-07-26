@@ -3,6 +3,8 @@
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Table;
+use Exception;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
@@ -68,33 +70,52 @@ class CreateFullResource extends Controller
     /**
      * Execute the file creation.
      */
+
+    public function excuteFileCreation()
+    {
+        // migration
+        $this->makeMigration();
+        //model
+        $this->makeModel();
+        // controller
+        $this->makeController();
+        //request
+        $this->makeRequest();
+        //resource
+        $this->makeResource();
+        //routes
+        $this->makeRoutes();
+        //disk
+        $this->makeDisk();
+        //views
+        if (config('grace.mode') === 'blade') {
+            $this->makeViews();
+        }
+    }
+
+    /**
+     * Execute the file creation.
+     */
+
     public function makeFullResourceAlive()
     {
-        $new_table_to_be_registered = DB::table('tables')->where('table', $this->table_name)->first();
+
+        $new_table_to_be_registered = Table::where('table_name', $this->table_name)->first();
         if ($new_table_to_be_registered !== null) {
             return 'Table already exist';
         } else {
             try {
-                // migration
-                $this->makeMigration();
-                //model
-                $this->makeModel();
-                // controller
-                $this->makeController();
-                //request
-                $this->makeRequest();
-                //resource
-                $this->makeResource();
-                //routes
-                $this->makeRoutes();
-                //disk
-                $this->makeDisk();
-                //views
-                if (config('grace.mode') === 'blade') {
-                    $this->makeViews();
-                }
-                DB::table('tables')->insert([
-                    'table' => $this->table_name,
+                $this->excuteFileCreation();
+
+                Table::create([
+                    'table_name' => $this->table_name,
+                    'controller' => $this->controller_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
+                    'model' => $this->model_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name),
+                    'request' => $this->request_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
+                    'resource' => $this->resource_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
+                    'migration' => $this->migration_namespace . '\\' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
+                    . "_create_" . MakeStubsAliveHelper::getPluralLowerName($this->table_name) . "_table",
+                    'views' => config('grace.views_folder_name') . '\\' . $this->table_name,
                 ]);
                 return 'Resource has been created successfully';
             } catch (Exception $exception) {
@@ -213,7 +234,7 @@ class CreateFullResource extends Controller
             'field_names' => $this->field_names,
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
-            'url' => "{{ asset('dashboard/$this->table_name') }}",
+            'url' => "{{ route('grace.$this->table_name.store') }}",
         ];
     }
 
@@ -228,7 +249,7 @@ class CreateFullResource extends Controller
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
             'key' => Str::singular($this->table_name),
-            'url' => "{{ asset('dashboard/$this->table_name/update/'" . "." . "$" . Str::singular($this->table_name) . "->id) }}",
+            'url' => "{{ route('grace.$this->table_name.update', " . "$" . ". Str::singular($this->table_name)->id) }}",
         ];
     }
 

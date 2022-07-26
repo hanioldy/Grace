@@ -33,7 +33,7 @@ class RestoreRecycledMultiLanguageRecord
                 'Translations' => $translations,
             ], 'The record has been restored successfully', 200);
         } else if (config('grace.mode') === 'blade') {
-            return redirect('/' . $table_name);
+            return redirect()->route('grace.' . $table_name . '.index');
         }
     }
 }

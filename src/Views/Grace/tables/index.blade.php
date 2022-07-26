@@ -25,7 +25,7 @@
                                     <tbody>
                                         @foreach ($tables as $table)
                                             <tr>
-                                                <td>{{ $table->table }}</td>
+                                                <td>{{ $table->table_name }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

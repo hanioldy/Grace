@@ -13,7 +13,7 @@
                                         <h4>{{ title }}</h4>
                                     </div>
                                     <div class="col-6" style="text-align:end">
-                                        <a href="{{ asset('dashboard/{{ table_name }}/create') }}" type="button" class="btn mb-1 btn-primary">Add</a>
+                                        <a href="{{ route('grace.{{ table_name }}.create') }}" type="button" class="btn mb-1 btn-primary">Add</a>
                                     </div>
                                 </div>
                             </div>
@@ -29,10 +29,10 @@
                                             <tr>
                                                 {{ td_fields }}
                                                 <td>
-                                                    <a href="{{ asset('dashboard/{{ table_name }}/' .${{ key }}->id .'/edit/') }}">
+                                                    <a href="{{ route('grace.{{ table_name }}.edit', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-warning">Edit</button>
                                                     </a>
-                                                    <a href="{{ asset('dashboard/{{ table_name }}/'. ${{ key }}->id) }}">
+                                                    <a href="{{ route('grace.{{ table_name }}.destroy', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
                                                     </a>
                                                 </td>

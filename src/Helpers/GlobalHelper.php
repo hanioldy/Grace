@@ -15,7 +15,8 @@ class GlobalHelper extends Facade
 
     public static function GetDefaultLanguage()
     {
-        return Language::where('default', 1)->select('abbr')->first();
+        $default_language = Language::where('default', 1)->select('abbr')->first();
+        return $default_language->abbr;
     }
 
     //=========================================
