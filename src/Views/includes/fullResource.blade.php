@@ -32,7 +32,7 @@
                                 </v-col>
                                 <v-col cols="3">
                                     <v-autocomplete name="input_types[]" label="Input Type" small-chips
-                                        :items="inputTypes"></v-autocomplete>
+                                        v-on:change="inputType" :items="inputTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
                                     <v-checkbox name="isFile[]" label="File?" value="1"></v-checkbox>
@@ -48,6 +48,13 @@
                                                 d="M9 3v1H4v2h1v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1V4h-5V3H9m0 5h2v9H9V8m4 0h2v9h-2V8Z" />
                                         </svg>
                                     </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row v-if="isSelect">
+                                <v-col cols="6">
+                                    <v-combobox clearable deletable-chips chips label="Options" name="select_options"
+                                        multiple outlined dense>
+                                    </v-combobox>
                                 </v-col>
                             </v-row>
                         </div>
@@ -82,8 +89,8 @@
                             </v-col>
                             <v-col cols="6">
                                 </v-combobox>
-                                <v-text-field value="{{ config('grace.resource_namespace') }}"
-                                    name="resource_namespace" label="Resource Namespace" outlined>
+                                <v-text-field value="{{ config('grace.resource_namespace') }}" name="resource_namespace"
+                                    label="Resource Namespace" outlined>
                                 </v-text-field>
                             </v-col>
                         </v-row>
