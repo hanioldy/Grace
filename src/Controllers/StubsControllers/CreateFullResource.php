@@ -235,6 +235,7 @@ class CreateFullResource extends Controller
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
             'url' => "{{ route('grace.$this->table_name.store') }}",
+            'select_options'=>$this->select_options,
         ];
     }
 

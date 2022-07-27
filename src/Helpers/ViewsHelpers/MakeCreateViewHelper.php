@@ -27,6 +27,7 @@ class MakeCreateViewHelper
         $field_names = $stubVariables['field_names'];
         $inputs_types = $stubVariables['input_types'];
         $table_name = $stubVariables['table_name'];
+        $select_options = $stubVariables['select_options'];
         $names_types_array = array_combine($field_names, $inputs_types);
         $template = array();
         foreach ($names_types_array as $field => $value) {
@@ -42,6 +43,10 @@ class MakeCreateViewHelper
                 case 'textarea':
                     $input_template = self::textarea($field, $table_name);
                     break;
+
+                case 'select':
+                    $input_template = self::select($field, $table_name, $select_options);
+                    break;
             }
             array_push($template, $input_template);
         }
@@ -50,7 +55,6 @@ class MakeCreateViewHelper
         foreach ($template as $index => $tem) {
             $string_input_template .= $template[$index] . "\n";
         }
-
         $contents = file_get_contents(self::getStubPath());
 
         $contents = str_replace('{{ inputs }}', $string_input_template, $contents);
@@ -119,5 +123,27 @@ class MakeCreateViewHelper
         </label>
         <input type='file' class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
     </div> ";
+    }
+
+    /**
+     * defining file input template
+     * @param String $field
+     * @return String
+     */
+
+    public static function select($field, $table_name, $select_options)
+    {
+        $list_of_options = '';
+        $options = explode(',', $select_options);
+        foreach ($options as $option) {
+            $list_of_options .= '<option>' . $option . '</option>'. "\n";
+        }
+        $title = ucfirst($field);
+        return "<div class='form-group'>
+        <label>{$title}</label>
+        <select class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
+          {$list_of_options}
+        </select>
+    </div>";
     }
 }
