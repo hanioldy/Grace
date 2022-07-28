@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="tables">
         <v-container>
             <v-simple-table dark>
                 <template v-slot:default>
@@ -39,7 +39,16 @@
                                 <td>{{ $table->table_name }}</td>
                                 <td>
                                     <a href="{{ route('delete_table', $table->id) }}">
-                                        <v-btn class="btn btn-error">Delete</v-btn>
+                                        <v-btn color="error">
+                                            Delete
+                                        </v-btn>
+
+                                    </a>
+                                    <a href="{{ route('add_validation', $table->id) }}">
+                                        <v-btn color="error">
+                                            Add Validation
+                                        </v-btn>
+
                                     </a>
                                 </td>
                             </tr>
@@ -54,7 +63,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script>
         new Vue({
-            el: "#app",
+            el: "#tables",
             vuetify: new Vuetify(),
         });
     </script>

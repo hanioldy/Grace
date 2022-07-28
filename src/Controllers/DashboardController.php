@@ -163,4 +163,15 @@ class DashboardController
         $table->delete();
 
     }
+
+    /**
+     * Adding validation ruls on the fields of spesefic table
+     */
+    public function add_validation($id)
+    {
+        $table = Table::where('id', $id)->first();
+        $result = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
+        dd($result);
+
+    }
 }
