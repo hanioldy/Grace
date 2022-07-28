@@ -34,3 +34,4 @@ Route::get('dashboard/languages/set_to_default/{id}', [DashboardController::clas
 Route::get('grace_tables', [DashboardController::class, 'get_tables'])->name('grace_tables');
 Route::get('delete_table/{id}', [DashboardController::class, 'delete_table'])->name('delete_table');
 Route::get('add_validation/{id}', [DashboardController::class, 'add_validation'])->name('add_validation');
+Route::post('submit_validation', [DashboardController::class, 'submit_validation'])->name('submit_validation');

@@ -6,6 +6,7 @@ use App\Models\Language;
 use App\Models\Table;
 use Exception;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
 class DashboardController
@@ -170,8 +171,20 @@ class DashboardController
     public function add_validation($id)
     {
         $table = Table::where('id', $id)->first();
-        $result = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
-        dd($result);
+        $fields = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
+        return view('Grace::includes.add_validation', compact('fields'));
+
+    }
+
+    /**
+     * Adding validation ruls on the fields of spesefic table
+     */
+    public function submit_validation(Request $request)
+    {
+        return $request;
+        // $table = Table::where('id', $id)->first();
+        // $fields = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
+        // return view('Grace::includes.add_validation', compact('fields'));
 
     }
 }
