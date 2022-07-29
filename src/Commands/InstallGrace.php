@@ -66,6 +66,7 @@ class InstallGrace extends Command
         <fg=green><fg=yellow>[</>Hani221b\Grace\Assets <fg=yellow>]</> =><fg=yellow>[</>public\grace<fg=yellow>]</></>
         <fg=blue> Models </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Models\Language.php <fg=yellow>]</> =><fg=yellow>[</>app\Models\Language.php<fg=yellow>]</></>
+        <fg=green><fg=yellow>[</>Hani221b\Grace\Models\Table.php <fg=yellow>]</> =><fg=yellow>[</>app\Models\Table.php<fg=yellow>]</></>
         <fg=blue> Routes </>
         <fg=green><fg=yellow>[</>Hani221b\Grace\Routes\grace.php <fg=yellow>]</> =><fg=yellow>[</>routes\grace.php<fg=yellow>]</></>
         <fg=blue> Seeders </>
@@ -80,7 +81,7 @@ class InstallGrace extends Command
             $this->info("<fg=yellow>Migrating: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
             $this->info("<fg=green>Migrated: </> <fg=white>2022_06_23_053830_create_languages_table.php</>");
             // seeding languages
-            Artisan::call('db:seed', ['--class' => 'Database\Seeders\LanguageSeeder']);
+            Artisan::call('db:seed', ['--class' => 'LanguageSeeder']);
             $this->line('<fg=blue>Seeding Langauges</>
         ');
         } catch (\Exception $excecption) {

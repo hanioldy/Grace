@@ -17,7 +17,6 @@ class Table extends Model
     //=========================================
 
     protected $fillable = [
-        'table_name ', ''
+        'table_name ', 'controller', 'model', 'request', 'resource', 'migration', 'views'
     ];
-
 }
