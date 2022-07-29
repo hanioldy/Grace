@@ -162,7 +162,7 @@ class DashboardController
         //delete from table's table
 
         $table->delete();
-
+        
     }
 
     /**
@@ -172,8 +172,8 @@ class DashboardController
     {
         $table = Table::where('id', $id)->first();
         $fields = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
+        $fields = array_values($fields);
         return view('Grace::includes.add_validation', compact('fields'));
-
     }
 
     /**
@@ -181,10 +181,19 @@ class DashboardController
      */
     public function submit_validation(Request $request)
     {
-        return $request;
-        // $table = Table::where('id', $id)->first();
-        // $fields = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
-        // return view('Grace::includes.add_validation', compact('fields'));
-
+        $validations = array_values($request->validation);
+        $template = array();
+        foreach ($validations as $validation) {
+            $field = $validation['field'];
+            $rules = array_unique($validation['rules']);
+            foreach($rules as $rule){
+                echo $rule . "<br>";
+            }
+            array_push($template, "'$field' => ''");
+        }
+        $validation_template = '';
+        foreach ($template as $line) {
+            $validation_template .= $line . "\n";
+        }
     }
 }

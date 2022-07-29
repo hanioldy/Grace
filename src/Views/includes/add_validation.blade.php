@@ -35,23 +35,27 @@
                         <v-form>
                             <v-container>
                                 <form method="POST" action="{{ route('submit_validation') }}">
-                                    @foreach ($fields as $field)
+                                    @foreach ($fields as $index =>  $field)                               
                                         <v-card>
                                             <v-container>
                                                 <v-card-title>
                                                     {{ $field }}
                                                 </v-card-title>
-
                                                 <v-row v-for="(rule, index) in rules" :key="rule.id">
-                                                    <v-col cols="12" md="6">
-                                                        <v-autocomplete :items="rulesList" outlined name="rule[]">
-                                                        </v-autocomplete>
-                                                    </v-col>
+                                                    <v-row v-if="rule.field === {{json_encode($field)}}">
+                                                        <input type="hidden" name="validation[{{$index}}][field]" value="{{$field}}">
+                                                        <v-col cols="12" md="6">
+                                                            <v-autocomplete :items="rulesList" outlined name="validation[{{$index}}][rules][]">
+                                                            </v-autocomplete>
+                                                        </v-col>
+                                                        <v-col cols="12" md="3">
+                                                            <v-btn color="error" v-on:click="deleteRule(index)">Remove Rule</v-btn>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-row>
+                                                <v-row>
                                                     <v-col cols="12" md="3">
-                                                        <v-btn color="success" @click="addRule">Add Rule</v-btn>
-                                                    </v-col>
-                                                    <v-col cols="12" md="3">
-                                                        <v-btn color="error" @click="deleteRule">Remove Rule</v-btn>
+                                                        <v-btn color="success" v-on:click="addRule({{json_encode($field)}})">Add Rule</v-btn>
                                                     </v-col>
                                                 </v-row>
                                             </v-container>
@@ -82,22 +86,25 @@
                 'rule2',
                 'rule3',
             ],
-            rules: [{
-                name: "",
-                time: ""
-            }],
+            rules: [],
         }),
         methods: {
-            addRule() {
-                this.id += 1;
+            addRule(field) {
+                console.log('rules',field);
                 this.rules.push({
-                    name: "",
-                    time: ""
+                    field: field,
+                    time: Date.now()
                 });
             },
             deleteRule(fieldIndex) {
-                this.rules.splice(fieldIndex, 1)
+                 this.rules.splice(fieldIndex, 1)
             },
         },
+        created(){
+           let fields = <?php echo json_encode($fields, JSON_HEX_TAG);  ?>; 
+          for (const [key, value] of Object.entries(fields)) {
+                this.rules.push({field:value, time:Date.now()});
+          }
+        }
     });
 </script>
