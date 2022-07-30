@@ -35,7 +35,7 @@
                         <v-form>
                             <v-container>
                                 <form method="POST" action="{{ route('submit_validation') }}">
-                                    @foreach ($fields as $index =>  $field)                               
+                                    @foreach ($fields as $index =>  $field)
                                         <v-card>
                                             <v-container>
                                                 <v-card-title>
@@ -101,7 +101,7 @@
             },
         },
         created(){
-           let fields = <?php echo json_encode($fields, JSON_HEX_TAG);  ?>; 
+           let fields = <?php echo json_encode($fields, JSON_HEX_TAG);  ?>;
           for (const [key, value] of Object.entries(fields)) {
                 this.rules.push({field:value, time:Date.now()});
           }

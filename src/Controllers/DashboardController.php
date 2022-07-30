@@ -162,7 +162,6 @@ class DashboardController
         //delete from table's table
 
         $table->delete();
-        
     }
 
     /**
@@ -182,18 +181,19 @@ class DashboardController
     public function submit_validation(Request $request)
     {
         $validations = array_values($request->validation);
-        $template = array();
+        $fields_array = array();
+        $rules_array = array();
+        $validation_template  = '';
         foreach ($validations as $validation) {
             $field = $validation['field'];
             $rules = array_unique($validation['rules']);
-            foreach($rules as $rule){
-                echo $rule . "<br>";
-            }
-            array_push($template, "'$field' => ''");
+            array_push($fields_array, $field);
+            array_push($rules_array, implode('|', $rules));
+            $validation_array =   array_combine($fields_array, $rules_array);
         }
-        $validation_template = '';
-        foreach ($template as $line) {
-            $validation_template .= $line . "\n";
+        foreach ($validation_array as  $field => $rules) {
+            $validation_template .= "'$field' => '$rules'" . "\n";
         }
+        dd($validation_template);
     }
 }
