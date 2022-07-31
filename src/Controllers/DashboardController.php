@@ -172,7 +172,7 @@ class DashboardController
         $table = Table::where('id', $id)->first();
         $fields = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
         $fields = array_values($fields);
-        return view('Grace::includes.add_validation', compact('fields'));
+        return view('Grace::includes.add_validation', compact('fields', 'id'));
     }
 
     /**
@@ -180,20 +180,25 @@ class DashboardController
      */
     public function submit_validation(Request $request)
     {
+        $table = Table::where('id', $request->table_id)->select('request')->first();
+        $request_file = file_get_contents(base_path() . '\\' . $table->request . '.php');
         $validations = array_values($request->validation);
         $fields_array = array();
         $rules_array = array();
-        $validation_template  = '';
+        $validation_template = '';
         foreach ($validations as $validation) {
             $field = $validation['field'];
             $rules = array_unique($validation['rules']);
             array_push($fields_array, $field);
             array_push($rules_array, implode('|', $rules));
-            $validation_array =   array_combine($fields_array, $rules_array);
+            $validation_array = array_combine($fields_array, $rules_array);
         }
-        foreach ($validation_array as  $field => $rules) {
-            $validation_template .= "'$field' => '$rules'" . "\n";
+        foreach ($validation_array as $field => $rules) {
+            $validation_template .= "'$field' => '$rules'," . "\n";
         }
-        dd($validation_template);
+
+        $contents = str_replace('//rules go here [DO NOT REMOVE THIS COMMENT]', $validation_template, $request_file);
+        file_put_contents(base_path() . '\\' . $table->request . '.php', $contents);
+        return "Validation has been added successfully to file: $table->request.php";
     }
 }

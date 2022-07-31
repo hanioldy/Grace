@@ -24,7 +24,7 @@ class {{ class_name }} extends FormRequest
     public function rules()
     {
         return [
-
+            //rules go here [DO NOT REMOVE THIS COMMENT]
         ];
     }
 
