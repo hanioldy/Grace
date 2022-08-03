@@ -15,7 +15,7 @@
                                 </v-checkbox>
                             </v-col>
                         </v-row>
-                        <div v-for="(item, index) in fields" :key="item.id">
+                        <div v-for="(item, index) in fields" :key="index" id="fields">
                             <v-row>
                                 <v-col>
                                     <h3>Field #<span v-html="index + 1"></span></h3>
@@ -32,7 +32,7 @@
                                 </v-col>
                                 <v-col cols="3">
                                     <v-autocomplete name="input_types[]" label="Input Type" small-chips
-                                        v-on:change="inputType" :items="inputTypes"></v-autocomplete>
+                                        v-on:change="inputType($event, index)" :items="inputTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
                                     <v-checkbox name="isFile[]" label="File?" value="1"></v-checkbox>

@@ -112,32 +112,47 @@
                 ],
                 inputTypes: ['text', 'select', 'textarea', 'file'],
                 tab: null,
-                id: 1,
-                fields: [{
-                    name: "",
-                    time: ""
-                }],
+                id: 0,
+                fields: [],
                 isSelect: false,
             }),
             methods: {
-                addField() {
+                addField(index) {
                     this.id += 1;
                     this.fields.push({
-                        name: "",
-                        time: ""
+                        id: this.id,
+                        time: Date.now()
                     });
+                    // console.log('this.$refs.fields', this.$refs.fields);
+                    // this.$refs.fields.appendChild('<h1>TEst</h1>');
+                    let x = document.getElementById('fields');
+                    let element = document.createElement('h1');
+                    element.innerHTML = 'TEST'
+                    x.appendChild(element);
+
                 },
                 deleteField(fieldIndex) {
                     this.fields.splice(fieldIndex, 1)
                 },
-                inputType(event) {
-                    if (event == 'select') {
-                        return this.isSelect = true;
-                    } else {
-                        return this.isSelect = false;
-                    }
+                inputType(event, index) {
+                    this.fields.forEach(field => {
+                        console.log('field.id', field.id);
+                        console.log('index', index + 1);
+                        if (event == 'select' && field.id === index + 1) {
+                            return this.isSelect = true;
+                        } else {
+                            return this.isSelect = false;
+                        }
+                    })
                 }
             },
+            created() {
+                this.id += 1;
+                this.fields.push({
+                    id: this.id,
+                    time: Date.now()
+                });
+            }
         });
     </script>
 </body>
