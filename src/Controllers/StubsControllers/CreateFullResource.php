@@ -16,7 +16,6 @@ use Hani221b\Grace\Helpers\ViewsHelpers\SidebarViewHelper;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CreateFullResource extends Controller
@@ -235,7 +234,7 @@ class CreateFullResource extends Controller
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
             'url' => "{{ route('grace.$this->table_name.store') }}",
-            'select_options'=>$this->select_options,
+            'select_options' => $this->select_options,
         ];
     }
 

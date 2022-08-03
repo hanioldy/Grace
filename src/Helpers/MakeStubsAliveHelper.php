@@ -5,6 +5,7 @@ namespace Hani221b\Grace\Helpers;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Illuminate\Support\Pluralizer;
 use InvalidArgumentException;
+use ReflectionMethod;
 
 class MakeStubsAliveHelper
 {
@@ -286,6 +287,26 @@ class MakeStubsAliveHelper
             }
         }
         rmdir($dirPath);
+    }
+
+    /**
+     * Searching a class for a method an returns its code as string
+     * @param $class
+     * @param $method
+     * @return String
+     */
+
+    public static function getMethodSourceCode($class, $method)
+    {
+        $func = new ReflectionMethod($class, $method);
+        $filename = $func->getFileName();
+        $start_line = $func->getStartLine() - 1; // it's actually - 1, otherwise you wont get the function() block
+        $end_line = $func->getEndLine();
+        $length = $end_line - $start_line;
+        $source = file($filename);
+        $body = implode("", array_slice($source, $start_line, $length));
+        $source_code = self::getStringBetween($body, "{\n", "}\n");
+        return $source_code;
     }
 
     /**

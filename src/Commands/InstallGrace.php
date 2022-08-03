@@ -2,6 +2,8 @@
 
 namespace Hani221b\Grace\Commands;
 
+use App\Providers\RouteServiceProvider;
+use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -29,16 +31,24 @@ class InstallGrace extends Command
 
     public function register_route_file()
     {
-        $grace_web_registeration = "
-        Route::middleware('web')
-            ->prefix('dashboard')
-            ->group(base_path('routes/grace.php'));
-        ";
-        $route_service_provider = base_path() . '\app\Providers\RouteServiceProvider.php';
-        $line_i_am_looking_for = 34;
-        $lines = file($route_service_provider, FILE_IGNORE_NEW_LINES);
-        $lines[$line_i_am_looking_for] = "\n" . $grace_web_registeration;
-        file_put_contents($route_service_provider, implode("\n", $lines));
+        $body = MakeStubsAliveHelper::getMethodSourceCode(RouteServiceProvider::class, 'boot');
+        $routes_function = MakeStubsAliveHelper::getStringBetween($body, "{", "}");
+        $routes_function_array = explode("\n", $routes_function);
+        $grace_route_registration_arrry = explode("\n", "
+            Route::middleware('web')
+                ->prefix('dashboard')
+                ->group(base_path('routes/grace.php'));");
+        foreach ($grace_route_registration_arrry as $template) {
+            array_push($routes_function_array, $template);
+        }
+
+        $grace_route_registration_template = '';
+        foreach ($routes_function_array as $index => $tem) {
+            $grace_route_registration_template .= $routes_function_array[$index] . "\n";
+        }
+        $route_service_provider = \file_get_contents(base_path() . '\\app\\Providers\\RouteServiceProvider.php');
+        $route_service_provider = str_replace($routes_function, $grace_route_registration_template, $route_service_provider);
+        file_put_contents(base_path() . '\\app\\Providers\\RouteServiceProvider.php', $route_service_provider);
     }
 
     /**
