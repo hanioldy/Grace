@@ -189,8 +189,18 @@ class DashboardController
         foreach ($validations as $validation) {
             $field = $validation['field'];
             $rules = array_unique($validation['rules']);
+            $options = $validation['options'];
+            $rules_and_options = [];
+            $combine_rules_with_options = array_combine($rules, $options);
+            foreach ($combine_rules_with_options as $rule => $option) {
+                if ($option !== null) {
+                    array_push($rules_and_options, "$rule:$option");
+                } else if ($option === null) {
+                    array_push($rules_and_options, "$rule");
+                }
+            }
             array_push($fields_array, $field);
-            array_push($rules_array, implode('|', $rules));
+            array_push($rules_array, implode('|', $rules_and_options));
             $validation_array = array_combine($fields_array, $rules_array);
         }
         foreach ($validation_array as $field => $rules) {

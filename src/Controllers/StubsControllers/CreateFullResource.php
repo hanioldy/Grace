@@ -165,6 +165,8 @@ class CreateFullResource extends Controller
             'namespace' => $this->controller_namespace,
             'model_path' => $this->model_namespace . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
             'resource_path' => $this->resource_namespace . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
+            'request_path' => $this->request_namespace . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
+            'request_class' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
             'fillable_array' => MakeStubsAliveHelper::fillable_array($this->field_names, $this->files_fields),

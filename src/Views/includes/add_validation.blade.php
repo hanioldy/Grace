@@ -47,12 +47,17 @@
                                                         <input type="hidden"
                                                             name="validation[{{ $index }}][field]"
                                                             value="{{ $field }}">
-                                                        <v-col cols="6">
+                                                        <v-col cols="5">
                                                             <v-autocomplete :items="rulesList" outlined
-                                                                name="validation[{{ $index }}][rules][]">
+                                                            label="Rules" name="validation[{{ $index }}][rules][]">
                                                             </v-autocomplete>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="5">
+                                                            <v-text-field outlined label="Options"
+                                                            name="validation[{{ $index }}][options][]">
+                                                        </v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="">
                                                             <v-btn color="error" v-on:click="deleteRule(index)">Remove
                                                                 Rule</v-btn>
                                                         </v-col>
