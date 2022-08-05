@@ -115,26 +115,27 @@
                 id: 1,
                 fields: [{
                     name: "",
-                    time: ""
+                    time: Date.now(),
+                    isSelect:false,
                 }],
-                isSelect: false,
             }),
             methods: {
                 addField() {
                     this.id += 1;
                     this.fields.push({
                         name: "",
-                        time: ""
+                        time: Date.now(),
+                        isSelect:false,
                     });
                 },
                 deleteField(fieldIndex) {
                     this.fields.splice(fieldIndex, 1)
                 },
-                inputType(event) {
+                inputType(index, event) {
                     if (event == 'select') {
-                        return this.isSelect = true;
+                        this.fields[index].isSelect = true;
                     } else {
-                        return this.isSelect = false;
+                        this.fields[index].isSelect = false;
                     }
                 }
             },

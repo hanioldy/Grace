@@ -32,7 +32,7 @@
                                 </v-col>
                                 <v-col cols="3">
                                     <v-autocomplete name="input_types[]" label="Input Type" small-chips
-                                        v-on:change="inputType" :items="inputTypes"></v-autocomplete>
+                                        v-on:change="inputType(index, $event)" :items="inputTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
                                     <v-checkbox name="isFile[]" label="File?" value="1"></v-checkbox>
@@ -50,7 +50,7 @@
                                     </v-btn>
                                 </v-col>
                             </v-row>
-                            <v-row v-if="isSelect">
+                            <v-row v-if="item.isSelect === true">
                                 <v-col cols="6">
                                     <v-combobox clearable deletable-chips chips label="Options" name="select_options"
                                         multiple outlined dense>
