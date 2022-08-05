@@ -47,13 +47,13 @@
                                                         <input type="hidden"
                                                             name="validation[{{ $index }}][field]"
                                                             value="{{ $field }}">
-                                                        <v-col cols="5">
+                                                        <v-col   cols="5">
                                                             <v-autocomplete :items="rulesList" outlined
-                                                            label="Rules" name="validation[{{ $index }}][rules][]">
+                                                            label="Rules" name="validation[{{ $index }}][rules][]" v-on:change="addOptions(index, $event)">
                                                             </v-autocomplete>
                                                         </v-col>
                                                         <v-col cols="5">
-                                                            <v-text-field outlined label="Options"
+                                                            <v-text-field v-show="rule.hasOptions === true" outlined label="Options" :value="null"
                                                             name="validation[{{ $index }}][options][]">
                                                         </v-text-field>
                                                         </v-col>
@@ -119,19 +119,36 @@
             addRule(field) {
                 this.rules.push({
                     field: field,
-                    time: Date.now()
+                    time: Date.now(),
+                    hasOptions:false
                 });
             },
             deleteRule(fieldIndex) {
                 this.rules.splice(fieldIndex, 1)
             },
+            addOptions(index, event){
+                let rulesWithOptions = [
+                    'accepted_if', 'after','after_or_equal','before','before_or_equal','between','date_equals','date_format',
+                    'declined_if','different','digits','digits_between','ends_with','exclude_if','exclude_unless','exclude_with',
+                    'exclude_without','exists','gt','gte','in','in_array','lt','lte','max','mimetypes','mimes','min','multiple_of',
+                    'not_in','prohibited_if','prohibited_unless','prohibits','regex','required_if','required_unless','required_with',
+                    'required_with_all','required_without','required_without_all','required_array_keys','same','size','starts_with',
+                    'unique',
+                    ];
+                if(rulesWithOptions.includes(event)){
+                    this.rules[index].hasOptions = true;
+                } else {
+                this.rules[index].hasOptions = false;
+                }
+            }
         },
         created() {
             let fields = <?php echo json_encode($fields, JSON_HEX_TAG); ?>;
             for (const [key, value] of Object.entries(fields)) {
                 this.rules.push({
                     field: value,
-                    time: Date.now()
+                    time: Date.now(),
+                    hasOptions:false
                 });
             }
         }
