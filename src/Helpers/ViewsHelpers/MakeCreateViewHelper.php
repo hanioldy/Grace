@@ -88,6 +88,9 @@ class MakeCreateViewHelper
     </label>
     <input type='text' class='form-control input-default' placeholder='{$field}'
         name='{$table_name}[{{ \$index }}][{$field}]'>
+        @error(\"$table_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
     </div>";
     }
 
@@ -105,6 +108,9 @@ class MakeCreateViewHelper
             <h5>{$title}</h5>
         </label>
         <textarea class='form-control summernote' name='{$table_name}[{{ \$index }}][{$field}]'></textarea>
+        @error(\"$table_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
     </div>";
     }
 
@@ -122,6 +128,9 @@ class MakeCreateViewHelper
             <h5>{$title}</h5>
         </label>
         <input type='file' class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
+        @error(\"$table_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
     </div> ";
     }
 
@@ -144,6 +153,9 @@ class MakeCreateViewHelper
         <select class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
           {$list_of_options}
         </select>
+        @error(\"$table_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
     </div>";
     }
 }

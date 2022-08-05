@@ -24,6 +24,7 @@ class {{ class_name }} extends FormRequest
     public function rules()
     {
         return [
+            '{{ table_name }}' => 'required|array|min:1',
             //rules go here [DO NOT REMOVE THIS COMMENT]
         ];
     }

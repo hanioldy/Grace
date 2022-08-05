@@ -53,7 +53,7 @@
     <script src="{{ asset('grace/assets/js/custom.min.js') }}"></script>
     <script src="{{ asset('grace/assets/js/settings.js') }}"></script>
     <script src="{{ asset('grace/assets/js/gleek.js') }}"></script>
-    <script src="{{ asset('grace/assets/js/styleSwitcher.js') }}}"></script>
+    <script src="{{ asset('grace/assets/js/styleSwitcher.js') }}"></script>
     <script src="{{ asset('grace/assets/js/circle-progress.min.js') }}"></script>
     <script src="{{ asset('grace/assets/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('grace/assets/js/dataTables.bootstrap4.min.js') }}"></script>

@@ -183,6 +183,7 @@ class CreateFullResource extends Controller
         return [
             'namespace' => $this->request_namespace,
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
+            'table_name' => $this->table_name
 
         ];
     }

@@ -180,7 +180,7 @@ class DashboardController
      */
     public function submit_validation(Request $request)
     {
-        $table = Table::where('id', $request->table_id)->select('request')->first();
+        $table = Table::where('id', $request->table_id)->select('request', 'table_name')->first();
         $request_file = file_get_contents(base_path() . '\\' . $table->request . '.php');
         $validations = array_values($request->validation);
         $fields_array = array();
@@ -204,7 +204,7 @@ class DashboardController
             $validation_array = array_combine($fields_array, $rules_array);
         }
         foreach ($validation_array as $field => $rules) {
-            $validation_template .= "'$field' => '$rules'," . "\n";
+            $validation_template .= "'$table->table_name.*.$field' => '$rules'," . "\n";
         }
 
         $contents = str_replace('//rules go here [DO NOT REMOVE THIS COMMENT]', $validation_template, $request_file);

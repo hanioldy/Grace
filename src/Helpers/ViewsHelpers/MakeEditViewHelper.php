@@ -118,6 +118,9 @@ class MakeEditViewHelper
         <h5>{$title}</h5>
         </label>
         <input type='text' class='form-control input-default' value='{{ $$key->$field }}' name='$name'>
+        @error(\"$folder_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
         </div>";
     }
 
@@ -136,6 +139,9 @@ class MakeEditViewHelper
             <h5>{$title}</h5>
         </label>
         <textarea class='form-control summernote' name='$name'>{{ $$key->$field }}</textarea>
+        @error(\"$folder_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
         </div>";
     }
 
@@ -155,6 +161,9 @@ class MakeEditViewHelper
         </label>
         <img src='{{ $$key->$field }}'  width='200px'>
         <input type='file' class='form-control' name='$name'>
+        @error(\"$folder_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
         </div>";
 
     }
