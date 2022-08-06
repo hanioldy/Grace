@@ -183,7 +183,7 @@ class CreateFullResource extends Controller
         return [
             'namespace' => $this->request_namespace,
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
-            'table_name' => $this->table_name
+            'table_name' => $this->table_name,
 
         ];
     }
@@ -253,6 +253,7 @@ class CreateFullResource extends Controller
             'table_name' => $this->table_name,
             'key' => Str::singular($this->table_name),
             'url' => "{{ route('grace.$this->table_name.update', " . "$" . ". Str::singular($this->table_name)->id) }}",
+            'select_options' => $this->select_options,
         ];
     }
 

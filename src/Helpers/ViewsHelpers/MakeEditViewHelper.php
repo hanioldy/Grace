@@ -28,6 +28,7 @@ class MakeEditViewHelper
     {
         $field_names = $stubVariables['field_names'];
         $inputs_types = $stubVariables['input_types'];
+        $select_options = $stubVariables['select_options'];
         $names_types_array = array_combine($field_names, $inputs_types);
         $contents = file_get_contents(self::getStubPath());
         //================================================================
@@ -47,6 +48,12 @@ class MakeEditViewHelper
 
                 case 'textarea':
                     $input_template = self::textarea($folder_name, $field, Str::singular($folder_name));
+                    break;
+
+                case 'select':
+                    foreach ($select_options as $options) {;
+                        $input_template = self::select($field, $folder_name, $options);
+                    }
                     break;
             }
             array_push($template, $input_template);
@@ -166,5 +173,30 @@ class MakeEditViewHelper
         @enderror
         </div>";
 
+    }
+
+    /**
+     * defining file input template
+     * @param String $field
+     * @return String
+     */
+
+    public static function select($field, $table_name, $select_options)
+    {
+        $list_of_options = '';
+        $options = explode(',', $select_options);
+        foreach ($options as $option) {
+            $list_of_options .= "<option value='$option'>" . $option . '</option>' . "\n";
+        }
+        $title = ucfirst($field);
+        return "<div class='form-group'>
+        <label>{$title}</label>
+        <select class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
+          {$list_of_options}
+        </select>
+        @error(\"$table_name.\$index.$field\")
+        <p class='text-danger'>{{ \$message }}</p>
+        @enderror
+    </div>";
     }
 }
