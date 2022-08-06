@@ -151,6 +151,17 @@ class DashboardController
         $new_file_system = str_replace($full_disk, '', $file_system_content);
         file_put_contents($file_system, $new_file_system);
 
+        //remove sidebar list item
+
+        $sidebar_item_start = "{{-- ================================= $table->table_name ================================= --}}";
+        $sidebar_item_end = "{{-- ============================= end $table->table_name ============================= --}}";
+        $sidebar_file = base_path() . '\resources\views\grace\includes\sidebar.blade.php';
+        $sidebar_file_content = file_get_contents($sidebar_file);
+        $item = MakeStubsAliveHelper::getStringBetween($sidebar_file_content, $sidebar_item_start, $sidebar_item_end);
+        $full_item = $sidebar_item_start . $item . $sidebar_item_end;
+        $new_sidebar_file = str_replace($full_item, '', $sidebar_file_content);
+        file_put_contents($sidebar_file, $new_sidebar_file);
+
         //remove views
 
         MakeStubsAliveHelper::deleteDir(base_path() . '\\resources\\views\\' . config('grace.views_folder_name') . '\\' . $table->table_name);
@@ -162,6 +173,8 @@ class DashboardController
         //delete from table's table
 
         $table->delete();
+
+        return redirect()->back();
     }
 
     /**

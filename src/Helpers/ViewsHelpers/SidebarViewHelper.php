@@ -29,16 +29,20 @@ class SidebarViewHelper
     public static function regualr_table($table_name)
     {
         $label = ucfirst($table_name);
-        return "<li>
-         <a class='has-arrow' href='javascript:void()' aria-expanded='false'>
-             <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
-         </a>
-         <ul aria-expanded='false'>
-             <li><a href='{{ route('grace.$table_name.index') }}'>Index</a></li>
-             <li><a href='{{ route('grace.$table_name.create') }}'>Create</a></li>
-             <li><a href='{{ route('grace.$table_name.sort') }}'>Sort</a></li>
-         </ul>
-     </li>";
+        return "
+        {{-- ================================= $table_name ================================= --}}
+        <li>
+            <a class='has-arrow' href='javascript:void()' aria-expanded='false'>
+                <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
+            </a>
+            <ul aria-expanded='false'>
+                <li><a href='{{ route('grace.$table_name.index') }}'>Index</a></li>
+                <li><a href='{{ route('grace.$table_name.create') }}'>Create</a></li>
+                <li><a href='{{ route('grace.$table_name.sort') }}'>Sort</a></li>
+            </ul>
+        </li>
+        {{-- ============================= end $table_name ============================= --}}
+     ";
     }
 
     /**
@@ -48,10 +52,14 @@ class SidebarViewHelper
     public static function single_record_table($table_name)
     {
         $label = ucfirst($table_name);
-        return "<li>
-         <a class='has-arrow' href='{{ route('grace.$table_name.index') }}' aria-expanded='false'>
-             <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
-         </a>
-     </li>";
+        return "
+        {{-- ================================= $table_name ================================= --}}
+        <li>
+            <a class='has-arrow' href='{{ route('grace.$table_name.index') }}' aria-expanded='false'>
+                <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
+            </a>
+        </li>
+        {{-- ============================= end $table_name ============================= --}}
+     ";
     }
 }

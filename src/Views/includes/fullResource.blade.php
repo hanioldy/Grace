@@ -52,7 +52,7 @@
                             </v-row>
                             <v-row v-if="item.isSelect === true">
                                 <v-col cols="6">
-                                    <v-combobox clearable deletable-chips chips label="Options" name="select_options"
+                                    <v-combobox clearable deletable-chips chips label="Options" name="select_options[]"
                                         multiple outlined dense>
                                     </v-combobox>
                                 </v-col>

@@ -45,12 +45,13 @@ class MakeCreateViewHelper
                     break;
 
                 case 'select':
-                    $input_template = self::select($field, $table_name, $select_options);
+                    foreach($select_options as $options){;
+                        $input_template = self::select($field, $table_name, $options);
+                    }
                     break;
             }
             array_push($template, $input_template);
         }
-
         $string_input_template = '';
         foreach ($template as $index => $tem) {
             $string_input_template .= $template[$index] . "\n";
@@ -145,7 +146,7 @@ class MakeCreateViewHelper
         $list_of_options = '';
         $options = explode(',', $select_options);
         foreach ($options as $option) {
-            $list_of_options .= '<option>' . $option . '</option>'. "\n";
+            $list_of_options .= "<option value='$option'>" . $option . '</option>'. "\n";
         }
         $title = ucfirst($field);
         return "<div class='form-group'>
