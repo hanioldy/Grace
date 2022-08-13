@@ -7,6 +7,7 @@ use App\Models\Table;
 use Exception;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class DashboardController
@@ -223,5 +224,38 @@ class DashboardController
         $contents = str_replace('//rules go here [DO NOT REMOVE THIS COMMENT]', $validation_template, $request_file);
         file_put_contents(base_path() . '\\' . $table->request . '.php', $contents);
         return "Validation has been added successfully to file: $table->request.php";
+    }
+
+    /**
+     * retuns the view for adding relations for for models
+     */
+    public function add_relation($id)
+    {
+        $table = Table::where('id', $id)->first();
+        $db_tables = [];
+        $db_fields = [];
+        $property = 'Tables_in_' . config('database.connections.mysql.database');
+        foreach (DB::select('SHOW TABLES') as $db_table) {
+            array_push($db_tables, $db_table->$property);
+        }
+
+        $db_tables = array_diff($db_tables, ['failed_jobs', 'languages', 'migrations', 'password_resets', 'personal_access_tokens', 'tables', $table->table_name]);
+        $db_tables = array_values($db_tables);
+        foreach ($db_tables as $db_table) {
+            $fields = array_diff(Schema::getColumnListing($db_table), ['translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at', 'email_verified_at', 'password', 'remember_token']);
+            array_push($db_fields, $fields);
+        }
+        $db_fields = array_combine($db_tables, $db_fields);
+        $fields = array_diff(Schema::getColumnListing($table->table_name), ['translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
+        $fields = array_values($fields);
+        return view('Grace::includes.relations', compact('fields', 'table', 'db_tables', 'db_fields'));
+    }
+
+    /**
+     * adding relations for for the spesific models
+     */
+    public function submit_relation(Request $request)
+    {
+        return $request;
     }
 }

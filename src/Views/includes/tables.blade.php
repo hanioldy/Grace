@@ -50,6 +50,12 @@
                                         </v-btn>
 
                                     </a>
+                                    <a href="{{ route('add_relation', $table->id) }}">
+                                        <v-btn color="error">
+                                            Add Relation
+                                        </v-btn>
+
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

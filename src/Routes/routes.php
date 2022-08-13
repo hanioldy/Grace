@@ -35,3 +35,5 @@ Route::get('grace_tables', [DashboardController::class, 'get_tables'])->name('gr
 Route::get('delete_table/{id}', [DashboardController::class, 'delete_table'])->name('delete_table');
 Route::get('add_validation/{id}', [DashboardController::class, 'add_validation'])->name('add_validation');
 Route::post('submit_validation', [DashboardController::class, 'submit_validation'])->name('submit_validation');
+Route::get('add_relation/{id}', [DashboardController::class, 'add_relation'])->name('add_relation');
+Route::post('submit_relation', [DashboardController::class, 'submit_relation'])->name('submit_relation');
