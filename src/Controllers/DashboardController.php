@@ -250,12 +250,4 @@ class DashboardController
         $fields = array_values($fields);
         return view('Grace::includes.relations', compact('fields', 'table', 'db_tables', 'db_fields'));
     }
-
-    /**
-     * adding relations for for the spesific models
-     */
-    public function submit_relation(Request $request)
-    {
-        return $request;
-    }
 }

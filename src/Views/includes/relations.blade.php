@@ -34,35 +34,60 @@
                     <v-container>
                         <v-form>
                             <v-container>
-                                <form method="POST" action="{{ route('submit_relation') }}">
+                                <form method="POST" action="{{ route('submit_relations') }}">
+                                    <v-container v-for="(relation, index) in relations">
+                                        <v-row>
+                                            <v-col cols="4">
+                                                <h1>Table {{ $table->table_name }}</h1>
+                                            </v-col>
+                                            <input type="hidden" name="local_table" value="{{ $table->table_name }}">
+                                            <v-col cols="4">
+                                                <v-autocomplete outlined label="Relatoin Type" :items="relationTypes"
+                                                    item-value="key" item-text="label" name="relation_type[]">
+                                                </v-autocomplete>
+                                            </v-col>
+                                            <v-col cols="4">
+                                                <v-autocomplete outlined label="Foreign Table" :items="dbTables"
+                                                    v-on:change="ForeignTable" name="foreign_table[]">
+                                                </v-autocomplete>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="4">
+                                                <v-autocomplete outlined label="Local Key" :items="localFields"
+                                                    item-value="key" item-text="label" name="local_key[]">
+                                                </v-autocomplete>
+                                            </v-col>
+                                            <v-col cols="4">
+                                                <v-autocomplete outlined label="Foreign Key" :items="foriegnKey"
+                                                    name="foriegn_key[]">
+                                                </v-autocomplete>
+                                            </v-col>
+                                            <v-col cols="3">
+                                                <v-btn color="error" v-on:click="deleteRelation(index)">
+                                                    Remove
+                                                    Relation</v-btn>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
                                     <v-row>
-                                        <v-col cols="4">
-                                            <h1>Table {{ $table->table_name }}</h1>
-                                        </v-col>
-                                        <v-col cols="4">
-                                            <v-autocomplete outlined label="Relatoin Type" :items="relationTypes"
-                                                item-value="key" item-text="label" name="relation_type">
-                                            </v-autocomplete>
-                                        </v-col>
-                                        <v-col cols="4">
-                                            <v-autocomplete outlined label="Foreign Table" :items="dbTables"
-                                                v-on:change="ForeignTable" name="foreign_table">
-                                            </v-autocomplete>
+                                        <v-col cols="3">
+                                            <v-btn color="success" v-on:click="addRelation">
+                                                Add
+                                                Relation</v-btn>
                                         </v-col>
                                     </v-row>
                                     <v-row>
-                                        <v-col cols="4">
-                                            <v-autocomplete outlined label="Local Key" :items="localFields"
-                                                item-value="key" item-text="label" name="local_key">
-                                            </v-autocomplete>
-                                        </v-col>
-                                        <v-col cols="4">
-                                            <v-autocomplete outlined label="Foreign Key" :items="foriegnKey"
-                                                name="foriegn_key">
-                                            </v-autocomplete>
+                                        <v-col cols="12">
+                                            <hr>
                                         </v-col>
                                     </v-row>
-                                    <v-btn type="submit" color="primary">Make Relations Alive</v-btn>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-btn type="submit" color="primary" v-on:click="addRelation">Add Relations
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
                                 </form>
                             </v-container>
                         </v-form>
@@ -83,6 +108,11 @@
         el: "#relations",
         data() {
             return {
+                relations: [{
+                    name: "",
+                    time: Date.now(),
+                }],
+                id: 1,
                 relationTypes: [{
                     label: 'Has One',
                     key: 'HasOne'
@@ -106,7 +136,18 @@
         methods: {
             ForeignTable(event) {
                 this.foriegnKey = Object.values(this.dbFields[event]);
-            }
+                console.log(this.foriegnKey);
+            },
+            addRelation() {
+                this.id += 1;
+                this.relations.push({
+                    name: "",
+                    time: Date.now(),
+                });
+            },
+            deleteRelation(relationIndex) {
+                this.relations.splice(relationIndex, 1)
+            },
         },
         created() {
             this.dbTables = <?php echo json_encode($db_tables, JSON_HEX_TAG); ?>;

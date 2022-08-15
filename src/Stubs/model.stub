@@ -73,4 +73,6 @@ class {{ class_name }} extends Model
     {
         return $this->hasMany(self::class, 'translation_of');
     }
+
+    // The end of the class [DO NOT REMOVE THIS COMMENT]
 }

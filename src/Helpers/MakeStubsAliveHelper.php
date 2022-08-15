@@ -5,6 +5,7 @@ namespace Hani221b\Grace\Helpers;
 use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
 use Illuminate\Support\Pluralizer;
 use InvalidArgumentException;
+use ReflectionClass;
 use ReflectionMethod;
 
 class MakeStubsAliveHelper
@@ -307,6 +308,39 @@ class MakeStubsAliveHelper
         $body = implode("", array_slice($source, $start_line, $length));
         $source_code = self::getStringBetween($body, "{\n", "}\n");
         return $source_code;
+    }
+
+    /**
+     * Searching a class for a method an returns its code as string
+     * @param $class
+     * @param $method
+     * @return String
+     */
+
+    public static function getClassSourceCode($class)
+    {
+        $func = new ReflectionClass($class);
+        $filename = $func->getFileName();
+        $start_line = $func->getStartLine() - 1; // it's actually - 1, otherwise you wont get the function() block
+        $end_line = $func->getEndLine();
+        $length = $end_line - $start_line;
+        $source = file($filename);
+        $body = implode("", array_slice($source, $start_line, $length));
+        $source_code = self::getStringBetween($body, "{", "// The end of the class [DO NOT REMOVE THIS COMMENT]");
+        return $source_code;
+    }
+
+    /**
+     * Filtering out the null and duplicted values out of the array
+     * @param $array
+     * @return Array
+     */
+
+    public static function filteringArray($array)
+    {
+        if ($array !== null) {
+            return array_filter($array, fn($value) => !is_null($value) && $value !== '');
+        }
     }
 
     /**

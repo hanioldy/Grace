@@ -1,6 +1,7 @@
 <?php
 
 use Hani221b\Grace\Controllers\DashboardController;
+use Hani221b\Grace\Controllers\RelationControllers\SubmitRelationController;
 use Hani221b\Grace\Controllers\StubsControllers\CreateController;
 use Hani221b\Grace\Controllers\StubsControllers\CreateFullResource;
 use Hani221b\Grace\Controllers\StubsControllers\CreateMigration;
@@ -36,4 +37,4 @@ Route::get('delete_table/{id}', [DashboardController::class, 'delete_table'])->n
 Route::get('add_validation/{id}', [DashboardController::class, 'add_validation'])->name('add_validation');
 Route::post('submit_validation', [DashboardController::class, 'submit_validation'])->name('submit_validation');
 Route::get('add_relation/{id}', [DashboardController::class, 'add_relation'])->name('add_relation');
-Route::post('submit_relation', [DashboardController::class, 'submit_relation'])->name('submit_relation');
+Route::post('submit_relations', [SubmitRelationController::class, 'submit_relations'])->name('submit_relations');
