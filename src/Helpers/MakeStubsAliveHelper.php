@@ -330,18 +330,6 @@ class MakeStubsAliveHelper
         return $source_code;
     }
 
-    /**
-     * Filtering out the null and duplicted values out of the array
-     * @param $array
-     * @return Array
-     */
-
-    public static function filteringArray($array)
-    {
-        if ($array !== null) {
-            return array_filter($array, fn($value) => !is_null($value) && $value !== '');
-        }
-    }
 
     /**
      * Put the requested data inside the files have just created

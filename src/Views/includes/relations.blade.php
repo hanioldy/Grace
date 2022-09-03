@@ -42,26 +42,27 @@
                                             </v-col>
                                             <input type="hidden" name="local_table" value="{{ $table->table_name }}">
                                             <v-col cols="4">
-                                                <v-autocomplete outlined label="Relatoin Type" :items="relationTypes"
-                                                    item-value="key" item-text="label" name="relation_type[]">
-                                                </v-autocomplete>
+                                                <v-select counter-value outlined label="Relatoin Type"
+                                                    :items="relationTypes" item-value="key" item-text="label"
+                                                    name="relation_type[]">
+                                                </v-select>
                                             </v-col>
                                             <v-col cols="4">
-                                                <v-autocomplete outlined label="Foreign Table" :items="dbTables"
-                                                    v-on:change="ForeignTable" name="foreign_table[]">
-                                                </v-autocomplete>
+                                                <v-select outlined label="Foreign Table" :items="dbTables"
+                                                    v-on:change="ForeignTable(index, $event)" name="foreign_table[]">
+                                                </v-select>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col cols="4">
-                                                <v-autocomplete outlined label="Local Key" :items="localFields"
+                                                <v-select outlined label="Local Key" :items="localFields"
                                                     item-value="key" item-text="label" name="local_key[]">
-                                                </v-autocomplete>
+                                                </v-select>
                                             </v-col>
                                             <v-col cols="4">
-                                                <v-autocomplete outlined label="Foreign Key" :items="foriegnKey"
+                                                <v-select outlined label="Foreign Key" :items="relation.foriegnKey"
                                                     name="foriegn_key[]">
-                                                </v-autocomplete>
+                                                </v-select>
                                             </v-col>
                                             <v-col cols="3">
                                                 <v-btn color="error" v-on:click="deleteRelation(index)">
@@ -84,7 +85,7 @@
                                     </v-row>
                                     <v-row>
                                         <v-col cols="12">
-                                            <v-btn type="submit" color="primary" v-on:click="addRelation">Add Relations
+                                            <v-btn type="submit" color="primary">Add Relations
                                             </v-btn>
                                         </v-col>
                                     </v-row>
@@ -109,7 +110,7 @@
         data() {
             return {
                 relations: [{
-                    name: "",
+                    foriegnKey: [],
                     time: Date.now(),
                 }],
                 id: 1,
@@ -129,19 +130,17 @@
                 localFields: [],
                 dbTables: [],
                 localKey: [],
-                foriegnKey: [],
                 dbFields: [],
             }
         },
         methods: {
-            ForeignTable(event) {
-                this.foriegnKey = Object.values(this.dbFields[event]);
-                console.log(this.foriegnKey);
+            ForeignTable(index, event) {
+                this.relations[index].foriegnKey = Object.values(this.dbFields[event]);
             },
             addRelation() {
                 this.id += 1;
                 this.relations.push({
-                    name: "",
+                    foriegnKey: [],
                     time: Date.now(),
                 });
             },
