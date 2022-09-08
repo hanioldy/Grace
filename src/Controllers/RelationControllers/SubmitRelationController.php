@@ -19,6 +19,7 @@ class SubmitRelationController
 
     public function __construct(Request $request)
     {
+        // dd($request);
         $this->relation_type = $request->relation_type;
         $this->local_table = $request->local_table;
         $this->foreign_table = $request->foreign_table;
@@ -31,29 +32,50 @@ class SubmitRelationController
      */
     public function submit_relations()
     {
+        $relations_array = array();
         $template = array();
         $relation_template = '';
-        $relation_type_foriegn_table = array_combine($this->relation_type, $this->foreign_table);
-        $local_key_foriegn_key = array_combine($this->local_key, $this->foriegn_key );
-        foreach($relation_type_foriegn_table as $relation_type => $foriegn_table){
-            foreach($local_key_foriegn_key as $local_key => $foriegn_key){
-                echo "$relation_type". "<br>";
-            switch ($relation_type) {
+        foreach($this->relation_type as $type){
+            array_push($relations_array, "rt__".$type."__rt");
+        }
+        foreach($this->foreign_table as $index => $foreign_table){
+            $relations_array[$index] = $relations_array[$index]. "__ft__". $foreign_table."__ft";
+        }
+        foreach($this->foriegn_key as $index => $foriegn_key){
+            $relations_array[$index] = $relations_array[$index]. "__fk__". $foriegn_key."__fk";
+        }
+        foreach($this->local_key as $index => $local_key){
+            $relations_array[$index] = $relations_array[$index]. "__lk__". $local_key."__lk";
+        }
+        // dd($relations_array);
+        foreach($relations_array as $arr){
+            $single_relation = [
+                'realtion_type'=>MakeStubsAliveHelper::getStringBetween($arr, "rt__", "__rt"),
+                'foreign_table'=>MakeStubsAliveHelper::getStringBetween($arr, "ft__", "__ft"),
+                'foreign_key'=>MakeStubsAliveHelper::getStringBetween($arr, "fk__", "__fk"),
+                'local_key'=>MakeStubsAliveHelper::getStringBetween($arr, "lk__", "__lk"),
+            ];
+            echo $single_relation['realtion_type'] . "<br>";
+            switch ($single_relation['realtion_type']) {
                 case 'HasOne':
-                    $relation_template = self::has_one($foriegn_table, $foriegn_key, $local_key);
+                    $relation_template = self::has_one($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
                     break;
 
                 case 'BelongsTo':
-                    $relation_template = self::belongs_to($foriegn_table, $foriegn_key, $local_key);
+                    $relation_template = self::belongs_to($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
                     break;
 
-                case 'hasMany':
-                    $relation_template = self::has_many($foriegn_table, $foriegn_key, $local_key);
+                case 'HasMany':
+                    $relation_template = self::has_many($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
+                    break;
+
+                case 'BelongsToMany':
+                    $relation_template = self::belongs_to_many($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
                     break;
             }
             array_push($template, $relation_template);
-            }
         }
+
         $string_relation_template = '';
         foreach ($template as $index => $tem) {
             $string_relation_template .= $template[$index] . "\n";
@@ -91,7 +113,7 @@ class SubmitRelationController
         // $single_foreign_table_name = Str::singular($foreign_table);
         return "
         //============= $this->local_table - $foreign_table relation =============
-        public function $this->foreign_table()
+        public function $foreign_table()
         {
             return \$this->hasMany($foriegn_model::class, '$foriegn_key', '$local_key');
         }
@@ -113,6 +135,25 @@ class SubmitRelationController
         public function $this->single_foreign_table_name()
         {
             return \$this->belongsTo($foriegn_model::class, '$foriegn_key', '$local_key');
+        }
+        //========================================================
+        ";
+    }
+
+    /**
+     * Defining the template of belongsToMany relation
+     * @param $foriegn_table
+     * @return String
+     */
+    public function belongs_to_many($foreign_table, $foriegn_key, $local_key)
+    {
+        $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
+        $single_foreign_table_name = Str::singular($foreign_table);
+        return "
+        //============= $this->local_table - $single_foreign_table_name relation =============
+        public function $this->single_foreign_table_name()
+        {
+            return \$this->belongsToMany($foriegn_model::class, 'pivot_table', '$local_key', '$foriegn_key');
         }
         //========================================================
         ";
