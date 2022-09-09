@@ -2,6 +2,7 @@
 
 namespace Hani221b\Grace\Controllers\RelationControllers;
 
+use App\Models\Table;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -35,27 +36,25 @@ class SubmitRelationController
         $relations_array = array();
         $template = array();
         $relation_template = '';
-        foreach($this->relation_type as $type){
-            array_push($relations_array, "rt__".$type."__rt");
+        foreach ($this->relation_type as $type) {
+            array_push($relations_array, "rt__" . $type . "__rt");
         }
-        foreach($this->foreign_table as $index => $foreign_table){
-            $relations_array[$index] = $relations_array[$index]. "__ft__". $foreign_table."__ft";
+        foreach ($this->foreign_table as $index => $foreign_table) {
+            $relations_array[$index] = $relations_array[$index] . "__ft__" . $foreign_table . "__ft";
         }
-        foreach($this->foriegn_key as $index => $foriegn_key){
-            $relations_array[$index] = $relations_array[$index]. "__fk__". $foriegn_key."__fk";
+        foreach ($this->foriegn_key as $index => $foriegn_key) {
+            $relations_array[$index] = $relations_array[$index] . "__fk__" . $foriegn_key . "__fk";
         }
-        foreach($this->local_key as $index => $local_key){
-            $relations_array[$index] = $relations_array[$index]. "__lk__". $local_key."__lk";
+        foreach ($this->local_key as $index => $local_key) {
+            $relations_array[$index] = $relations_array[$index] . "__lk__" . $local_key . "__lk";
         }
-        // dd($relations_array);
-        foreach($relations_array as $arr){
+        foreach ($relations_array as $arr) {
             $single_relation = [
-                'realtion_type'=>MakeStubsAliveHelper::getStringBetween($arr, "rt__", "__rt"),
-                'foreign_table'=>MakeStubsAliveHelper::getStringBetween($arr, "ft__", "__ft"),
-                'foreign_key'=>MakeStubsAliveHelper::getStringBetween($arr, "fk__", "__fk"),
-                'local_key'=>MakeStubsAliveHelper::getStringBetween($arr, "lk__", "__lk"),
+                'realtion_type' => MakeStubsAliveHelper::getStringBetween($arr, "rt__", "__rt"),
+                'foreign_table' => MakeStubsAliveHelper::getStringBetween($arr, "ft__", "__ft"),
+                'foreign_key' => MakeStubsAliveHelper::getStringBetween($arr, "fk__", "__fk"),
+                'local_key' => MakeStubsAliveHelper::getStringBetween($arr, "lk__", "__lk"),
             ];
-            echo $single_relation['realtion_type'] . "<br>";
             switch ($single_relation['realtion_type']) {
                 case 'HasOne':
                     $relation_template = self::has_one($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
@@ -80,7 +79,19 @@ class SubmitRelationController
         foreach ($template as $index => $tem) {
             $string_relation_template .= $template[$index] . "\n";
         }
-          dd($string_relation_template);
+
+        $local_table = Table::where('table_name', $this->local_table)->first();
+        $model_path = base_path() . "/" . $local_table->model . ".php";
+        $mdoel_content = file_get_contents($model_path);
+        $start_relation_field_marker = "// Relations field [DO NOT REMOVE THIS COMMENT]";
+        $end_relation_field_marker = "// The end of relations field [DO NOT REMOVE THIS COMMENT]";
+        $relations_field_in_model = MakeStubsAliveHelper::getStringBetween($mdoel_content, $start_relation_field_marker, $end_relation_field_marker);
+        $new_model = str_replace(
+            $relations_field_in_model,
+            $relations_field_in_model .= $string_relation_template,
+            $mdoel_content
+        );
+        file_put_contents($model_path, $new_model);
     }
 
     /**
@@ -94,7 +105,7 @@ class SubmitRelationController
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
         //============= $this->local_table - $single_foreign_table_name relation =============
-        public function $this->single_foreign_table_name()
+        public function $single_foreign_table_name()
         {
             return \$this->hasOne($foriegn_model::class, '$foriegn_key', '$local_key');
         }

@@ -65,14 +65,16 @@ class {{ class_name }} extends Model
     {{ mutatators }}
 
     //=============================================================
-    // Relations field.
-    //=============================================================
+    // Relations field [DO NOT REMOVE THIS COMMENT]
 
     //get translations for a certain record
     public function translations()
     {
         return $this->hasMany(self::class, 'translation_of');
     }
+
+    // The end of relations field [DO NOT REMOVE THIS COMMENT]
+    //=============================================================
 
     // The end of the class [DO NOT REMOVE THIS COMMENT]
 }
