@@ -17,15 +17,16 @@ class SubmitRelationController
     public $foreign_model;
     public $local_key;
     public $foriegn_key;
+    public $pivot_table;
 
     public function __construct(Request $request)
     {
-        // dd($request);
         $this->relation_type = $request->relation_type;
         $this->local_table = $request->local_table;
         $this->foreign_table = $request->foreign_table;
         $this->local_key = $request->local_key;
         $this->foriegn_key = $request->foriegn_key;
+        $this->pivot_table = $request->pivot_table;
     }
     /**
      * Adding desired relation for the named model
@@ -48,12 +49,17 @@ class SubmitRelationController
         foreach ($this->local_key as $index => $local_key) {
             $relations_array[$index] = $relations_array[$index] . "__lk__" . $local_key . "__lk";
         }
+        foreach ($this->pivot_table as $index => $pivot_table) {
+            $relations_array[$index] = $relations_array[$index] . "__pt__" . $pivot_table . "__pt";
+        }
+
         foreach ($relations_array as $arr) {
             $single_relation = [
                 'realtion_type' => MakeStubsAliveHelper::getStringBetween($arr, "rt__", "__rt"),
                 'foreign_table' => MakeStubsAliveHelper::getStringBetween($arr, "ft__", "__ft"),
                 'foreign_key' => MakeStubsAliveHelper::getStringBetween($arr, "fk__", "__fk"),
                 'local_key' => MakeStubsAliveHelper::getStringBetween($arr, "lk__", "__lk"),
+                'pivot_table' => MakeStubsAliveHelper::getStringBetween($arr, "pt__", "__pt"),
             ];
             switch ($single_relation['realtion_type']) {
                 case 'HasOne':
@@ -65,11 +71,11 @@ class SubmitRelationController
                     break;
 
                 case 'HasMany':
-                    $relation_template = self::has_many($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
+                    $relation_template = self::has_many($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key'], $single_relation['pivot_table']);
                     break;
 
                 case 'BelongsToMany':
-                    $relation_template = self::belongs_to_many($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
+                    $relation_template = self::belongs_to_many($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key'], $single_relation['pivot_table']);
                     break;
             }
             array_push($template, $relation_template);
@@ -79,7 +85,7 @@ class SubmitRelationController
         foreach ($template as $index => $tem) {
             $string_relation_template .= $template[$index] . "\n";
         }
-
+        dd($string_relation_template);
         $local_table = Table::where('table_name', $this->local_table)->first();
         $model_path = base_path() . "/" . $local_table->model . ".php";
         $mdoel_content = file_get_contents($model_path);
@@ -118,15 +124,18 @@ class SubmitRelationController
      * @param $foriegn_table
      * @return String
      */
-    public function has_many($foreign_table, $foriegn_key, $local_key)
+    public function has_many($foreign_table, $foriegn_key, $local_key, $pivot_table)
     {
-        $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
-        // $single_foreign_table_name = Str::singular($foreign_table);
+        if($pivot_table == null){
+            $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table)."::class";
+        } else {
+            $foriegn_model = "'$pivot_table'";
+        }
         return "
         //============= $this->local_table - $foreign_table relation =============
         public function $foreign_table()
         {
-            return \$this->hasMany($foriegn_model::class, '$foriegn_key', '$local_key');
+            return \$this->hasMany($foriegn_model, '$foriegn_key', '$local_key');
         }
         //========================================================
         ";
@@ -156,15 +165,19 @@ class SubmitRelationController
      * @param $foriegn_table
      * @return String
      */
-    public function belongs_to_many($foreign_table, $foriegn_key, $local_key)
+    public function belongs_to_many($foreign_table, $foriegn_key, $local_key, $pivot_table)
     {
-        $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
+        if($pivot_table == null){
+            $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table)."::class";
+        } else {
+            $foriegn_model = "'$pivot_table'";
+        }
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
         //============= $this->local_table - $single_foreign_table_name relation =============
         public function $this->single_foreign_table_name()
         {
-            return \$this->belongsToMany($foriegn_model::class, 'pivot_table', '$local_key', '$foriegn_key');
+            return \$this->belongsToMany($foriegn_model, '$local_key', '$foriegn_key');
         }
         //========================================================
         ";

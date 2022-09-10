@@ -44,7 +44,7 @@
                                             <v-col cols="4">
                                                 <v-select counter-value outlined label="Relatoin Type"
                                                     :items="relationTypes" item-value="key" item-text="label"
-                                                    name="relation_type[]">
+                                                    name="relation_type[]" v-on:change="relationType(index, $event)">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="4">
@@ -68,6 +68,12 @@
                                                 <v-btn color="error" v-on:click="deleteRelation(index)">
                                                     Remove
                                                     Relation</v-btn>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row v-if="relation.relationType == 'HasMany' || relation.relationType == 'BelongsToMany'">
+                                            <v-col cols="4">
+                                                <v-text-field  outlined label="Pivot Table" name="pivot_table[]" >
+                                                </v-text-field>
                                             </v-col>
                                         </v-row>
                                     </v-container>
@@ -112,6 +118,7 @@
                 relations: [{
                     foriegnKey: [],
                     time: Date.now(),
+                    relationType:''
                 }],
                 id: 1,
                 relationTypes: [{
@@ -135,13 +142,18 @@
         },
         methods: {
             ForeignTable(index, event) {
+                console.log(event);
                 this.relations[index].foriegnKey = Object.values(this.dbFields[event]);
+            },
+            relationType(index, event){
+                this.relations[index].relationType = event;
             },
             addRelation() {
                 this.id += 1;
                 this.relations.push({
                     foriegnKey: [],
                     time: Date.now(),
+                    relationType:''
                 });
             },
             deleteRelation(relationIndex) {
