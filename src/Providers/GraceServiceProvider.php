@@ -41,26 +41,26 @@ class GraceServiceProvider extends ServiceProvider
     public function boot()
     {
         if (config('grace.status') === 'enabled') {
-            include __DIR__ . '../../Routes/routes.php';
+            include __DIR__ . '/../Routes/routes.php';
         }
         /**
          * publish package stuff
          */
         $this->publishes([
             //config
-            __DIR__ . '..\\..\\Config\\grace.php' => config_path('grace.php'),
+            __DIR__ . '/../Config/grace.php' => config_path('grace.php'),
             //migrations
-            __DIR__ . '..\\..\\Database\\Migrations' => base_path('database\\migrations'),
+            __DIR__ . '/../Database/Migrations' => base_path('database/migrations'),
             //views
-            __DIR__ . '..\\..\\Views\\Grace' => base_path('resources\\views\grace'),
+            __DIR__ . '/../Views/Grace' => base_path('resources/views\grace'),
             //assets
-            __DIR__ . '..\\..\\Assets' => base_path('public\\grace\\assets'),
+            __DIR__ . '/../Assets' => base_path('public/grace/assets'),
             //models
-            __DIR__ . '..\\..\\Models' => base_path('app\\Models'),
+            __DIR__ . '/../Models' => base_path('app/Models'),
             //routes
-            __DIR__ . '..\\..\\Routes\\grace.php' => base_path('routes\\grace.php'),
+            __DIR__ . '/../Routes/grace.php' => base_path('routes/grace.php'),
             //seeders
-            __DIR__ . '..\\..\\Database\Seeders\LanguageSeeder.php' => base_path('database\seeders\LanguageSeeder.php'),
+            __DIR__ . '/../Database/Seeders/LanguageSeeder.php' => base_path('database/seeders/LanguageSeeder.php'),
         ], 'grace');
 
     }

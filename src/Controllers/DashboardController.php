@@ -23,7 +23,8 @@ class DashboardController
 
     public function get_dashboard()
     {
-        return view('grace.dashboard');
+
+        return view('Grace::Grace.dashboard');
     }
 
     /**

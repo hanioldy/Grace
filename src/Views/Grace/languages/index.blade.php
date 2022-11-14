@@ -1,4 +1,4 @@
-@extends('grace.grace_layout')
+@extends('Grace::Grace.grace_layout')
 
 @section('content')
     <div class="content-body">

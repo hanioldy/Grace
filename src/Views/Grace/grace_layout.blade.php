@@ -33,13 +33,13 @@
     ***********************************-->
     <div id="main-wrapper">
 
-        @include('grace.includes.header')
+        @include('Grace::Grace.includes.header')
 
-        @include('grace.includes.sidebar')
+        @include('Grace::Grace.includes.sidebar')
 
         @yield('content')
 
-        @include('grace.includes.footer')
+        @include('Grace::Grace.includes.footer')
 
     </div>
     <!--**********************************
