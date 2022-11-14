@@ -19,7 +19,7 @@ class MakeDiskAliveHelper
         //========================= end $table_name disk ==========================
         ";
 
-        $filename = base_path() . '\config\filesystems.php';
+        $filename = base_path() . '/config/filesystems.php';
         $line_i_am_looking_for = 57;
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
         $lines[$line_i_am_looking_for] = "\n" . $disk;

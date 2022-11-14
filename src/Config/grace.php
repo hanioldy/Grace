@@ -32,7 +32,7 @@ return [
     |
      */
 
-    'views_folder_name' => 'grace\resources',
+    'views_folder_name' => 'grace/resources',
 
     /*
     |--------------------------------------------------------------------------
@@ -81,29 +81,29 @@ return [
     // Model
     //==========================================
 
-    'model_namespace' => 'App\Models',
+    'model_namespace' => 'app/Models',
 
     //==========================================
     // Request
     //==========================================
 
-    'request_namespace' => 'App\Http\Requests',
+    'request_namespace' => 'app/Http/Requests',
 
     //==========================================
     // Migration
     //==========================================
 
-    'migration_namespace' => 'database\migrations',
+    'migration_namespace' => 'database/migrations',
 
     //==========================================
     // Resource
     //==========================================
 
-    'resource_namespace' => 'App\Http\Resources',
+    'resource_namespace' => 'app/Http/Resources',
 
     //==========================================
     // Controoller
     //==========================================
 
-    'controller_namespace' => 'App\Http\Controllers',
+    'controller_namespace' => 'app/Http/Controllers',
 ];

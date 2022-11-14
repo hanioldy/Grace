@@ -108,13 +108,13 @@ class CreateFullResource extends Controller
 
                 Table::create([
                     'table_name' => $this->table_name,
-                    'controller' => $this->controller_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
-                    'model' => $this->model_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name),
-                    'request' => $this->request_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
-                    'resource' => $this->resource_namespace . '\\' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
-                    'migration' => $this->migration_namespace . '\\' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
+                    'controller' => $this->controller_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
+                    'model' => $this->model_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name),
+                    'request' => $this->request_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
+                    'resource' => $this->resource_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
+                    'migration' => $this->migration_namespace . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
                     . "_create_" . MakeStubsAliveHelper::getPluralLowerName($this->table_name) . "_table",
-                    'views' => config('grace.views_folder_name') . '\\' . $this->table_name,
+                    'views' => config('grace.views_folder_name') . '/' . $this->table_name,
                 ]);
                 return 'Resource has been created successfully';
             } catch (Exception $exception) {
@@ -145,7 +145,7 @@ class CreateFullResource extends Controller
     public function getModelVariables()
     {
         return [
-            'namespace' => $this->model_namespace,
+            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->model_namespace),
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name),
             'table_name' => $this->table_name,
             'fillable_array' => makeModelAliveHelper::model_fillable_array($this->field_names),
@@ -162,10 +162,10 @@ class CreateFullResource extends Controller
     public function getControllerVariables()
     {
         return [
-            'namespace' => $this->controller_namespace,
-            'model_path' => $this->model_namespace . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
-            'resource_path' => $this->resource_namespace . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
-            'request_path' => $this->request_namespace . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
+            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->controller_namespace),
+            'model_path' =>  MakeStubsAliveHelper::correctionForNamespace($this->model_namespace) . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
+            'resource_path' => MakeStubsAliveHelper::correctionForNamespace($this->resource_namespace)  . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
+            'request_path' => MakeStubsAliveHelper::correctionForNamespace($this->request_namespace)  . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
             'request_class' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
@@ -181,7 +181,7 @@ class CreateFullResource extends Controller
     public function getRequestVariables()
     {
         return [
-            'namespace' => $this->request_namespace,
+            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->request_namespace),
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
             'table_name' => $this->table_name,
 
@@ -195,7 +195,7 @@ class CreateFullResource extends Controller
     public function getResourceVariables()
     {
         return [
-            'namespace' => $this->resource_namespace,
+            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->resource_namespace),
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
 
         ];
@@ -210,8 +210,7 @@ class CreateFullResource extends Controller
         return [
             'table_name' => $this->table_name,
             'controller_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Controller",
-            'controller_namespace' => $this->controller_namespace,
-        ];
+            'controller_namespace' => MakeStubsAliveHelper::correctionForNamespace($this->controller_namespace),        ];
     }
 
     /**

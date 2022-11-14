@@ -37,7 +37,7 @@ class MakeStubsAliveHelper
      */
     public static function getSourceFilePath($namespace, $class_name, $suffix)
     {
-        return base_path($namespace) . '\\' . self::getSingularClassName($class_name) . $suffix . '.php';
+        return base_path($namespace) . '/' . self::getSingularClassName($class_name) . $suffix . '.php';
     }
 
     /**
@@ -47,7 +47,7 @@ class MakeStubsAliveHelper
      */
     public static function getMigrationSourceFilePath($namespace, $table_name)
     {
-        return base_path($namespace) . '\\' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
+        return base_path($namespace) . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
         . "_create_" . self::getPluralLowerName($table_name) . "_table" . '.php';
     }
 
@@ -328,6 +328,17 @@ class MakeStubsAliveHelper
         $body = implode("", array_slice($source, $start_line, $length));
         $source_code = self::getStringBetween($body, "{", "// The end of the class [DO NOT REMOVE THIS COMMENT]");
         return $source_code;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param String $namespace
+     * @return string
+     */
+    public static function correctionForNamespace($namespace)
+    {
+        return str_replace("/","\\", $namespace);
     }
 
 

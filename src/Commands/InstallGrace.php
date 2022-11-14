@@ -46,9 +46,9 @@ class InstallGrace extends Command
         foreach ($routes_function_array as $index => $tem) {
             $grace_route_registration_template .= $routes_function_array[$index] . "\n";
         }
-        $route_service_provider = \file_get_contents(base_path() . '\\app\\Providers\\RouteServiceProvider.php');
+        $route_service_provider = \file_get_contents(base_path() . '/app/Providers/RouteServiceProvider.php');
         $route_service_provider = str_replace($routes_function, $grace_route_registration_template, $route_service_provider);
-        file_put_contents(base_path() . '\\app\\Providers\\RouteServiceProvider.php', $route_service_provider);
+        file_put_contents(base_path() . '/app/Providers/RouteServiceProvider.php', $route_service_provider);
     }
 
     /**
@@ -95,8 +95,9 @@ class InstallGrace extends Command
             $this->line('<fg=blue>Seeding Langauges</>
         ');
         } catch (\Exception $excecption) {
-            $db = config('database.connections.mysql.database');
-            $this->info("<fg=red>Database $db was not found. Please create it before installing Grace</>");
+            $this->info($excecption);
+            // $db = config('database.connections.mysql.database');
+            // $this->info("<fg=red>Database $db was not found. Please create it before installing Grace</>");
         }
 
     }

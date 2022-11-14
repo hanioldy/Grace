@@ -52,8 +52,8 @@ class CreateController extends Controller
             'namespace' => $this->namespace,
             'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
-            'model_path' => $this->model_path . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
-            'resource_path' => $this->resource_path . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Resource',
+            'model_path' => $this->model_path . "/" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
+            'resource_path' => $this->resource_path . "/" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Resource',
             'fillable_array' => MakeStubsAliveHelper::fillable_array($this->field_names, $this->files_fields),
             'fillable_files_array' => "'" . str_replace(",", "', '", $this->fillable_files_array) . "'",
         ];

@@ -22,7 +22,7 @@ class GraceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->loadViewsFrom(__DIR__ . '../../Views', 'Grace');
+        $this->loadViewsFrom(__DIR__ . '/../Views', 'Grace');
         //adding new methods for a resoureful route
         $registrar = new ResourceRegistrar($this->app['router']);
         $this->app->bind('Illuminate\Routing\ResourceRegistrar', function () use ($registrar) {
