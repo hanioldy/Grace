@@ -49,8 +49,11 @@ class SubmitRelationController
         foreach ($this->local_key as $index => $local_key) {
             $relations_array[$index] = $relations_array[$index] . "__lk__" . $local_key . "__lk";
         }
-        foreach ($this->pivot_table as $index => $pivot_table) {
-            $relations_array[$index] = $relations_array[$index] . "__pt__" . $pivot_table . "__pt";
+        if($this->pivot_table)
+        {
+            foreach ($this->pivot_table as $index => $pivot_table) {
+                $relations_array[$index] = $relations_array[$index] . "__pt__" . $pivot_table . "__pt";
+            }
         }
 
         foreach ($relations_array as $arr) {
@@ -85,7 +88,7 @@ class SubmitRelationController
         foreach ($template as $index => $tem) {
             $string_relation_template .= $template[$index] . "\n";
         }
-        dd($string_relation_template);
+
         $local_table = Table::where('table_name', $this->local_table)->first();
         $model_path = base_path() . "/" . $local_table->model . ".php";
         $mdoel_content = file_get_contents($model_path);

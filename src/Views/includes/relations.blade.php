@@ -36,46 +36,69 @@
                             <v-container>
                                 <form method="POST" action="{{ route('submit_relations') }}">
                                     <v-container v-for="(relation, index) in relations">
-                                        <v-row>
-                                            <v-col cols="4">
-                                                <h1>Table {{ $table->table_name }}</h1>
-                                            </v-col>
-                                            <input type="hidden" name="local_table" value="{{ $table->table_name }}">
-                                            <v-col cols="4">
-                                                <v-select counter-value outlined label="Relatoin Type"
-                                                    :items="relationTypes" item-value="key" item-text="label"
-                                                    name="relation_type[]" v-on:change="relationType(index, $event)">
-                                                </v-select>
-                                            </v-col>
-                                            <v-col cols="4">
-                                                <v-select outlined label="Foreign Table" :items="dbTables"
-                                                    v-on:change="ForeignTable(index, $event)" name="foreign_table[]">
-                                                </v-select>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col cols="4">
-                                                <v-select outlined label="Local Key" :items="localFields"
-                                                    item-value="key" item-text="label" name="local_key[]">
-                                                </v-select>
-                                            </v-col>
-                                            <v-col cols="4">
-                                                <v-select outlined label="Foreign Key" :items="relation.foriegnKey"
-                                                    name="foriegn_key[]">
-                                                </v-select>
-                                            </v-col>
-                                            <v-col cols="3">
-                                                <v-btn color="error" v-on:click="deleteRelation(index)">
-                                                    Remove
-                                                    Relation</v-btn>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row v-if="relation.relationType == 'HasMany' || relation.relationType == 'BelongsToMany'">
-                                            <v-col cols="4">
-                                                <v-text-field  outlined label="Pivot Table" name="pivot_table[]" >
-                                                </v-text-field>
-                                            </v-col>
-                                        </v-row>
+                                        <v-card elevation="4">
+                                            <v-card-text>
+                                                <v-row>
+                                                    <v-col cols="2">
+                                                        <h2>Table {{ $table->table_name }}</h2>
+                                                    </v-col>
+                                                    <input type="hidden" name="local_table"
+                                                        value="{{ $table->table_name }}">
+                                                    <v-col cols="2">
+                                                        <v-select outlined label="Relatoin Type" :items="relationTypes"
+                                                            item-value="key" item-text="label" name="relation_type[]"
+                                                            v-on:change="relationType(index, $event)">
+                                                        </v-select>
+                                                    </v-col>
+                                                    <v-col cols="2">
+                                                        <v-select outlined label="Foreign Table" :items="dbTables"
+                                                            v-on:change="ForeignTable(index, $event)"
+                                                            name="foreign_table[]" ref="foreign_table">
+                                                        </v-select>
+                                                    </v-col>
+
+                                                    <v-col cols="2">
+                                                        <h2>Foriegn Key</h2>
+                                                    </v-col>
+                                                    <v-col cols="2">
+                                                        <v-select outlined label="Foreign Key"
+                                                            :items="relation.foriegnKey" name="foriegn_key[]">
+                                                        </v-select>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="2">
+                                                        <h2>Store</h2>
+                                                    </v-col>
+                                                    <v-col cols="2">
+                                                        <v-select outlined label="Local Key" :items="relation.storeKey"
+                                                            item-value="key" item-text="label" name="store_key[]">
+                                                        </v-select>
+                                                    </v-col>
+                                                    <v-col cols="2">
+                                                        <h2>Display</h2>
+                                                    </v-col>
+                                                    <v-col cols="2">
+                                                        <v-select outlined label="Display"
+                                                            :items="relation.displayKey" name="display_key[]">
+                                                        </v-select>
+                                                    </v-col>
+                                                    <v-col cols="3">
+                                                        <v-btn color="error" v-on:click="deleteRelation(index)">
+                                                            Remove
+                                                            Relation</v-btn>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row
+                                                    v-if="relation.relationType == 'HasMany' || relation.relationType == 'BelongsToMany'">
+                                                    <v-col cols="4">
+                                                        <v-text-field outlined label="Pivot Table" name="pivot_table[]">
+                                                        </v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-card-text>
+                                        </v-card>
+
                                     </v-container>
                                     <v-row>
                                         <v-col cols="3">
@@ -117,8 +140,10 @@
             return {
                 relations: [{
                     foriegnKey: [],
+                    displayKey:[],
+                    storeKey:[],
                     time: Date.now(),
-                    relationType:''
+                    relationType: ''
                 }],
                 id: 1,
                 relationTypes: [{
@@ -138,22 +163,42 @@
                 dbTables: [],
                 localKey: [],
                 dbFields: [],
+
             }
         },
         methods: {
             ForeignTable(index, event) {
-                console.log(event);
-                this.relations[index].foriegnKey = Object.values(this.dbFields[event]);
+                let relationType = this.relations[index].relationType
+                if (relationType === 'BelongsTo' || relationType === 'BelongsToMany') {
+                    this.relations[index].storeKey = Object.values(this.dbFields[selected_foreign_table]);
+                    this.relations[index].foriegnKey = Object.values(this.localFields);
+                } else {
+                    this.relations[index].foriegnKey = Object.values(this.dbFields[event]);
+                }
+                this.relations[index].displayKey = Object.values(this.dbFields[event])
             },
-            relationType(index, event){
+            relationType(index, event) {
                 this.relations[index].relationType = event;
+                let selected_foreign_table = this.$refs.foreign_table[0].lazyValue;
+                if (event === 'BelongsTo' || event === 'BelongsToMany') {
+                    this.relations[index].storeKey = Object.values(this.dbFields[selected_foreign_table]);
+                    this.relations[index].foriegnKey = Object.values(this.localFields);
+                } else {
+                    if (selected_foreign_table !== undefined) {
+                        this.relations[index].storeKey = Object.values(this.localFields);
+                        this.relations[index].foriegnKey = Object.values(this.dbFields[selected_foreign_table]);
+                    } else {
+                        this.relations[index].storeKey = []
+                        this.relations[index].foriegnKey = []
+                    }
+                }
             },
             addRelation() {
                 this.id += 1;
                 this.relations.push({
                     foriegnKey: [],
                     time: Date.now(),
-                    relationType:''
+                    relationType: ''
                 });
             },
             deleteRelation(relationIndex) {
