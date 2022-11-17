@@ -142,7 +142,11 @@ class MakeStubsAliveHelper
 
         $string_mutators_template = makeModelAliveHelper::appendMutatorToModel($stubVariables);
 
-        $contents = str_replace('{{ mutatators }}', $string_mutators_template, $contents);
+        if($stubVariables['files_fields']  === ""){
+            $contents = str_replace('{{ mutatators }}', "", $contents);
+        } else {
+            $contents = str_replace('{{ mutatators }}', $string_mutators_template, $contents);
+        }
 
         foreach ($stubVariables as $search => $replace) {
 
@@ -338,7 +342,9 @@ class MakeStubsAliveHelper
      */
     public static function correctionForNamespace($namespace)
     {
-        return str_replace("/","\\", $namespace);
+        $namespace = str_replace("app", "App", $namespace);
+        $namespace = str_replace("/","\\", $namespace);
+        return $namespace;
     }
 
 

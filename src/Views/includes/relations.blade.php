@@ -68,19 +68,23 @@
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="2">
-                                                        <h2>Store</h2>
+                                                        <h2>Store <span
+                                                                v-if="relation.relationType === 'BelongsToMany' || relation.relationType === 'BelongsTo'"
+                                                                > <span v-html="relation.foreignTable"></span></span>
+                                                                <span v-else>{{ $table->table_name }}</span>
+                                                        </h2>
                                                     </v-col>
                                                     <v-col cols="2">
                                                         <v-select outlined label="Local Key" :items="relation.storeKey"
-                                                            item-value="key" item-text="label" name="store_key[]">
+                                                            item-value="key" item-text="label" name="local_key[]">
                                                         </v-select>
                                                     </v-col>
                                                     <v-col cols="2">
-                                                        <h2>Display</h2>
+                                                        <h2>Display <span v-html="relation.foreignTable"></span></h2>
                                                     </v-col>
                                                     <v-col cols="2">
-                                                        <v-select outlined label="Display"
-                                                            :items="relation.displayKey" name="display_key[]">
+                                                        <v-select outlined label="Display" :items="relation.displayKey"
+                                                            name="display_key[]">
                                                         </v-select>
                                                     </v-col>
                                                     <v-col cols="3">
@@ -89,8 +93,7 @@
                                                             Relation</v-btn>
                                                     </v-col>
                                                 </v-row>
-                                                <v-row
-                                                    v-if="relation.relationType == 'HasMany' || relation.relationType == 'BelongsToMany'">
+                                                <v-row v-if="relation.relationType == 'BelongsToMany'">
                                                     <v-col cols="4">
                                                         <v-text-field outlined label="Pivot Table" name="pivot_table[]">
                                                         </v-text-field>
@@ -140,10 +143,11 @@
             return {
                 relations: [{
                     foriegnKey: [],
-                    displayKey:[],
-                    storeKey:[],
+                    displayKey: [],
+                    storeKey: [],
                     time: Date.now(),
-                    relationType: ''
+                    relationType: '',
+                    foreignTable: '',
                 }],
                 id: 1,
                 relationTypes: [{
@@ -168,25 +172,31 @@
         },
         methods: {
             ForeignTable(index, event) {
+                console.log('event', event);
+                this.relations[index].foreignTable = event;
                 let relationType = this.relations[index].relationType
                 if (relationType === 'BelongsTo' || relationType === 'BelongsToMany') {
-                    this.relations[index].storeKey = Object.values(this.dbFields[selected_foreign_table]);
+                    this.relations[index].storeKey = Object.values(this.dbFields[this.relations[index].foreignTable]);
                     this.relations[index].foriegnKey = Object.values(this.localFields);
                 } else {
                     this.relations[index].foriegnKey = Object.values(this.dbFields[event]);
+                    this.relations[index].storeKey = Object.values(this.localFields);
                 }
                 this.relations[index].displayKey = Object.values(this.dbFields[event])
             },
             relationType(index, event) {
                 this.relations[index].relationType = event;
-                let selected_foreign_table = this.$refs.foreign_table[0].lazyValue;
                 if (event === 'BelongsTo' || event === 'BelongsToMany') {
-                    this.relations[index].storeKey = Object.values(this.dbFields[selected_foreign_table]);
+                    console.log(this.dbFields[this.relations[index].foreignTable]);
+                    console.log(this.localFields);
+                    if(this.relations[index].foreignTable !== undefined){
+                        this.relations[index].foriegnKey = Object.values(this.dbFields[this.relations[index].foreignTable]);
+                    }
                     this.relations[index].foriegnKey = Object.values(this.localFields);
                 } else {
-                    if (selected_foreign_table !== undefined) {
+                    if (this.relations[index].foreignTable !== undefined) {
                         this.relations[index].storeKey = Object.values(this.localFields);
-                        this.relations[index].foriegnKey = Object.values(this.dbFields[selected_foreign_table]);
+                        this.relations[index].foriegnKey = Object.values(this.dbFields[this.relations[index].foreignTable]);
                     } else {
                         this.relations[index].storeKey = []
                         this.relations[index].foriegnKey = []

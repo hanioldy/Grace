@@ -99,12 +99,12 @@ class DashboardController
     public function delete_table($id)
     {
         $table = Table::where('id', $id)->first();
-        $controller = base_path() . '\\' . $table->controller . '.php';
-        $model = base_path() . '\\' . $table->model . '.php';
-        $request = base_path() . '\\' . $table->request . '.php';
-        $resource = base_path() . '\\' . $table->resource . '.php';
-        $migration = base_path() . '\\' . $table->migration . '.php';
-        $views = base_path() . '\\' . $table->views . '.php';
+        $controller = base_path() . '/' . $table->controller . '.php';
+        $model = base_path() . '/' . $table->model . '.php';
+        $request = base_path() . '/' . $table->request . '.php';
+        $resource = base_path() . '/' . $table->resource . '.php';
+        $migration = base_path() . '/' . $table->migration . '.php';
+        $views = base_path() . '/' . $table->views . '.php';
         if (file_exists($controller)) {
             unlink($controller);
         }
@@ -126,7 +126,7 @@ class DashboardController
         // removing route
         $route_start = "//========================= $table->table_name routes =========================";
         $route_end = "//======================= end $table->table_name routes =======================";
-        $route_file_name = base_path() . '\routes\grace.php';
+        $route_file_name = base_path() . '/routes/grace.php';
         $route_file = file_get_contents($route_file_name);
         $route = MakeStubsAliveHelper::getStringBetween($route_file, $route_start, $route_end);
         $full_route = $route_start . $route . $route_end;
@@ -146,7 +146,7 @@ class DashboardController
 
         $disk_start = "//============================= $table->table_name disk ===============================";
         $disk_end = "//========================= end $table->table_name disk ==============================";
-        $file_system = base_path() . '\config\filesystems.php';
+        $file_system = base_path() . '/config/filesystems.php';
         $file_system_content = file_get_contents($file_system);
         $disk = MakeStubsAliveHelper::getStringBetween($file_system_content, $disk_start, $disk_end);
         $full_disk = $disk_start . $disk . $disk_end;
@@ -157,7 +157,7 @@ class DashboardController
 
         $sidebar_item_start = "{{-- ================================= $table->table_name ================================= --}}";
         $sidebar_item_end = "{{-- ============================= end $table->table_name ============================= --}}";
-        $sidebar_file = base_path() . '\resources\views\grace\includes\sidebar.blade.php';
+        $sidebar_file = base_path() . '/resources/views/grace/includes/sidebar.blade.php';
         $sidebar_file_content = file_get_contents($sidebar_file);
         $item = MakeStubsAliveHelper::getStringBetween($sidebar_file_content, $sidebar_item_start, $sidebar_item_end);
         $full_item = $sidebar_item_start . $item . $sidebar_item_end;
@@ -166,7 +166,7 @@ class DashboardController
 
         //remove views
 
-        MakeStubsAliveHelper::deleteDir(base_path() . '\\resources\\views\\' . config('grace.views_folder_name') . '\\' . $table->table_name);
+        MakeStubsAliveHelper::deleteDir(base_path() . '/resources/views/' . config('grace.views_folder_name') . '/' . $table->table_name);
 
         //remove table
 
@@ -196,7 +196,7 @@ class DashboardController
     public function submit_validation(Request $request)
     {
         $table = Table::where('id', $request->table_id)->select('request', 'table_name')->first();
-        $request_file = file_get_contents(base_path() . '\\' . $table->request . '.php');
+        $request_file = file_get_contents(base_path() . '/' . $table->request . '.php');
         $validations = array_values($request->validation);
         $fields_array = array();
         $rules_array = array();
@@ -223,7 +223,7 @@ class DashboardController
         }
 
         $contents = str_replace('//rules go here [DO NOT REMOVE THIS COMMENT]', $validation_template, $request_file);
-        file_put_contents(base_path() . '\\' . $table->request . '.php', $contents);
+        file_put_contents(base_path() . '' . $table->request . '.php', $contents);
         return "Validation has been added successfully to file: $table->request.php";
     }
 
