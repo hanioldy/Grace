@@ -347,6 +347,16 @@ class MakeStubsAliveHelper
         return $namespace;
     }
 
+     /**
+     * Remove All extra spaces from a string
+     *
+     * @param String $str
+     * @return string
+     */
+    public static function stripString($str)
+    {
+      return  trim(preg_replace('/[\t\n\r\s]+/', ' ', $str));
+    }
 
     /**
      * Put the requested data inside the files have just created
