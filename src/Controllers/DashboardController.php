@@ -23,8 +23,7 @@ class DashboardController
 
     public function get_dashboard()
     {
-
-        return view('Grace::Grace.dashboard');
+        return view('grace.dashboard');
     }
 
     /**
@@ -99,33 +98,24 @@ class DashboardController
     public function delete_table($id)
     {
         $table = Table::where('id', $id)->first();
-        $controller = base_path() . '/' . $table->controller . '.php';
-        $model = base_path() . '/' . $table->model . '.php';
-        $request = base_path() . '/' . $table->request . '.php';
-        $resource = base_path() . '/' . $table->resource . '.php';
-        $migration = base_path() . '/' . $table->migration . '.php';
-        $views = base_path() . '/' . $table->views . '.php';
-        if (file_exists($controller)) {
-            unlink($controller);
+        $resources = [
+            base_path() . '/' . $table->controller . '.php',
+            base_path() . '/' . $table->model . '.php',
+            base_path() . '/' . $table->request . '.php',
+            base_path() . '/' . $table->resource . '.php',
+            base_path() . '/' . $table->resource . '.php',
+            base_path() . '/' . $table->migration . '.php',
+            base_path() . '/' . $table->views . '.php'
+        ];
+        foreach($resources as $resource){
+            if (file_exists($resource)) {
+                unlink($resource);
+            }
         }
-        if (file_exists($model)) {
-            unlink($model);
-        }
-        if (file_exists($request)) {
-            unlink($request);
-        }
-        if (file_exists($resource)) {
-            unlink($resource);
-        }
-        if (file_exists($migration)) {
-            unlink($migration);
-        }
-        if (file_exists($views)) {
-            unlink($views);
-        }
+
         // removing route
-        $route_start = "//========================= $table->table_name routes =========================";
-        $route_end = "//======================= end $table->table_name routes =======================";
+        $route_start = "/*<$table->table_name-routes>*/";
+        $route_end = "/*</$table->table_name-routes>*/";
         $route_file_name = base_path() . '/routes/grace.php';
         $route_file = file_get_contents($route_file_name);
         $route = MakeStubsAliveHelper::getStringBetween($route_file, $route_start, $route_end);
@@ -135,8 +125,8 @@ class DashboardController
 
         //remove route controlle use statement
 
-        $use_statement_start = "//======== $table->table_name controller ===========";
-        $use_statement_end = "//====== end $table->table_name controller =========";
+        $use_statement_start = "/*<$table->table_name-controller>*/";
+        $use_statement_end = "/*</$table->table_name-controller>*/";
         $use_statement = MakeStubsAliveHelper::getStringBetween($route_file, $use_statement_start, $use_statement_end);
         $full_use_statement = $use_statement_start . $use_statement . $use_statement_end;
         $new_route_file = str_replace($full_use_statement, '', $new_route_file);
@@ -144,8 +134,8 @@ class DashboardController
 
         //remove disk
 
-        $disk_start = "//============================= $table->table_name disk ===============================";
-        $disk_end = "//========================= end $table->table_name disk ==============================";
+        $disk_start = "/*<$table->table_name-disk>*/";
+        $disk_end = "/*</$table->table_name-disk>*/";
         $file_system = base_path() . '/config/filesystems.php';
         $file_system_content = file_get_contents($file_system);
         $disk = MakeStubsAliveHelper::getStringBetween($file_system_content, $disk_start, $disk_end);
@@ -155,8 +145,8 @@ class DashboardController
 
         //remove sidebar list item
 
-        $sidebar_item_start = "{{-- ================================= $table->table_name ================================= --}}";
-        $sidebar_item_end = "{{-- ============================= end $table->table_name ============================= --}}";
+        $sidebar_item_start = "<!--<$table->table_name>-->";
+        $sidebar_item_end = "<!--</$table->table_name>-->";
         $sidebar_file = base_path() . '/resources/views/grace/includes/sidebar.blade.php';
         $sidebar_file_content = file_get_contents($sidebar_file);
         $item = MakeStubsAliveHelper::getStringBetween($sidebar_file_content, $sidebar_item_start, $sidebar_item_end);
@@ -223,7 +213,7 @@ class DashboardController
         }
 
         $contents = str_replace('//rules go here [DO NOT REMOVE THIS COMMENT]', $validation_template, $request_file);
-        file_put_contents(base_path() . '' . $table->request . '.php', $contents);
+        file_put_contents(base_path() . '/' . $table->request . '.php', $contents);
         return "Validation has been added successfully to file: $table->request.php";
     }
 

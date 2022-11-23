@@ -14,7 +14,7 @@ class SidebarViewHelper
             $row = self::single_record_table($table_name);
         }
 
-        $filename = base_path() . '\resources\views\grace\includes\sidebar.blade.php';
+        $filename = base_path() . '/resources/views/grace/includes/sidebar.blade.php';
         $line_i_am_looking_for = 4;
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
         $lines[$line_i_am_looking_for] = "\n" . $row;
@@ -30,7 +30,7 @@ class SidebarViewHelper
     {
         $label = ucfirst($table_name);
         return "
-        {{-- ================================= $table_name ================================= --}}
+        <!--<$table_name>-->
         <li>
             <a class='has-arrow' href='javascript:void()' aria-expanded='false'>
                 <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
@@ -41,7 +41,7 @@ class SidebarViewHelper
                 <li><a href='{{ route('grace.$table_name.sort') }}'>Sort</a></li>
             </ul>
         </li>
-        {{-- ============================= end $table_name ============================= --}}
+        <!--</$table_name>-->
      ";
     }
 
@@ -53,13 +53,13 @@ class SidebarViewHelper
     {
         $label = ucfirst($table_name);
         return "
-        {{-- ================================= $table_name ================================= --}}
+        <!--<$table_name>-->
         <li>
             <a class='has-arrow' href='{{ route('grace.$table_name.index') }}' aria-expanded='false'>
                 <i class='icon-speedometer menu-icon'></i><span class='nav-text'>$label</span>
             </a>
         </li>
-        {{-- ============================= end $table_name ============================= --}}
+        <!--</$table_name>-->
      ";
     }
 }

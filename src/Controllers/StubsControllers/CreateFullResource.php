@@ -26,6 +26,7 @@ class CreateFullResource extends Controller
      */
     protected $files;
     protected $table_name;
+    protected $single_table_name;
     protected $controller_namespace;
     protected $model_namespace;
     protected $request_namespace;
@@ -45,6 +46,7 @@ class CreateFullResource extends Controller
     {
         $this->files = $files;
         $this->table_name = $request->table_name;
+        $this->single_table_name = Str::singular($request->table_name);
         $this->controller_namespace = $request->controller_namespace;
         $this->model_namespace = $request->model_namespace;
         $this->request_namespace = $request->request_namespace;
@@ -210,7 +212,8 @@ class CreateFullResource extends Controller
         return [
             'table_name' => $this->table_name,
             'controller_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Controller",
-            'controller_namespace' => MakeStubsAliveHelper::correctionForNamespace($this->controller_namespace),        ];
+            'controller_namespace' => MakeStubsAliveHelper::correctionForNamespace($this->controller_namespace),
+           ];
     }
 
     /**
@@ -251,7 +254,7 @@ class CreateFullResource extends Controller
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
             'key' => Str::singular($this->table_name),
-            'url' => "{{ route('grace.$this->table_name.update', " . "$" . ". Str::singular($this->table_name)->id) }}",
+            'url' => "{{ route('grace.$this->table_name.update', " . "$$this->single_table_name"."->id) }}",
             'select_options' => $this->select_options,
         ];
     }

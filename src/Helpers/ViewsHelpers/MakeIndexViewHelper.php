@@ -52,7 +52,7 @@ class MakeIndexViewHelper
         }
 
         $contents = str_replace('{{ th_fields }}', $string_th_fields_template, $contents);
-        
+
         //===============================================================
         // Tr fields
         //===============================================================
@@ -81,11 +81,11 @@ class MakeIndexViewHelper
                 $contents = str_replace('{{ ' . $search . ' }}', $replace, $contents);
             }
         }
-        $path = base_path() . '\\resources\\views\\' . config('grace.views_folder_name') . '\\' . $table_name;
+        $path = base_path() . '/resources/views/' . config('grace.views_folder_name') . '/' . $table_name;
         if (!file_exists($path)) {
             mkdir($path, 0700, true);
         }
-        $file_name = $path . '\\index.blade.php';
+        $file_name = $path . '/index.blade.php';
         file_put_contents($file_name, $contents);
     }
 }

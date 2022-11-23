@@ -13,9 +13,9 @@ class MakeRoutesAliveHelper
     public static function getRouteFileName()
     {
         if (config('grace.mode') === 'api') {
-            $filename = base_path() . '\routes\api.php';
+            $filename = base_path() . '/routes/api.php';
         } else if (config('grace.mode') === 'blade') {
-            $filename = base_path() . '\routes\grace.php';
+            $filename = base_path() . '/routes/grace.php';
         }
         return $filename;
     }
@@ -31,9 +31,9 @@ class MakeRoutesAliveHelper
         $controller_namespace = $stubVariables['controller_namespace'];
         $table_name = $stubVariables['table_name'];
         $use_controller = "
-//======== $table_name controller ===========
+/*<$table_name-controller>*/
 use $controller_namespace\\$controller_name;
-//====== end $table_name controller =========
+/*</$table_name-controller>*/
 ";
         $filename = self::getRouteFileName();
         $line_i_am_looking_for = 1;
@@ -54,9 +54,9 @@ use $controller_namespace\\$controller_name;
         $controller_name = MakeStubsAliveHelper::getSingularClassName($stubVariables['table_name']) . "Controller";
         $table_name = $stubVariables['table_name'];
         $routes_template = "
-//========================= $table_name routes =========================
+/*<$table_name-routes>*/
 Route::resource('$table_name', $controller_name::class, ['as' => 'grace']);
-//======================= end $table_name routes =======================
+/*</$table_name-routes>*/
 ";
 
         self::appendUseController($stubVariables, $controller_name);

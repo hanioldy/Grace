@@ -11,31 +11,21 @@ class {{ class_name }} extends Model
     use HasFactory;
     use SoftDeletes;
 
-    //=========================================
-    // Table's name in database
-    //=========================================
-
+    /*<table-name>*/
     protected $table = '{{ table_name }}';
+    /*</table-name>*/
 
-    //=========================================
-    // Fillable values
-    //=========================================
-
+    /*<fillable-fields>*/
     protected $fillable = [
         'translation_of', 'translation_lang', {{ fillable_array }} , 'status', 'order'
     ];
+    /*</fillable-fields>*/
 
-    //=============================================================
-    // Define soft delete dates.
-    //=============================================================
-
+    /*<soft-delete>*/
     protected $dates = ['deleted_at'];
+    /*</soft-delete>*/
 
-    //=============================================================
-    // Scopes field. We usually define Selection scope.
-    // We use this scope to return only the columns we need.
-    //=============================================================
-
+    /*<scopes>*/
     public function scopeSelection($query)
     {
         return $query->select(
@@ -52,29 +42,18 @@ class {{ class_name }} extends Model
     {
         return $query->where('translation_of', 0);
     }
+    /*</scopes>*
 
-
-    //=============================================================
-    // Mutators field. We usually define Image mutator.
-    // We use this mutator to specify images and icons path.
-    // we just include the name of the field between 'get' and
-    // 'Attribute' in camel case, then pass the value in the function
-    // parameter
-    //=============================================================
-
+    /*<mutatators>*/
     {{ mutatators }}
+    /*</mutatators>*/
 
-    //=============================================================
-    // Relations field [DO NOT REMOVE THIS COMMENT]
-
-    //get translations for a certain record
+    /*<relations>*/
     public function translations()
     {
         return $this->hasMany(self::class, 'translation_of');
     }
+    /*</relations>*/
 
-    // The end of relations field [DO NOT REMOVE THIS COMMENT]
-    //=============================================================
-
-    // The end of the class [DO NOT REMOVE THIS COMMENT]
+    /*<end-of-class>*/
 }

@@ -92,8 +92,9 @@ class SubmitRelationController
         $local_table = Table::where('table_name', $this->local_table)->first();
         $model_path = base_path() . "/" . $local_table->model . ".php";
         $mdoel_content = file_get_contents($model_path);
-        $start_relation_field_marker = "// Relations field [DO NOT REMOVE THIS COMMENT]";
-        $end_relation_field_marker = "// The end of relations field [DO NOT REMOVE THIS COMMENT]";
+
+        $start_relation_field_marker = "/*<relations>*/";
+        $end_relation_field_marker = "/*</relations>*/";
         $relations_field_in_model = MakeStubsAliveHelper::getStringBetween($mdoel_content, $start_relation_field_marker, $end_relation_field_marker);
         $new_model = str_replace(
             $relations_field_in_model,
@@ -113,12 +114,12 @@ class SubmitRelationController
         $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
-        //============= $this->local_table - $single_foreign_table_name relation =============
+        /*<$this->local_table-$single_foreign_table_name-relation>*/
         public function $single_foreign_table_name()
         {
             return \$this->hasOne($foriegn_model::class, '$foriegn_key', '$local_key');
         }
-        //========================================================
+        /*</$this->local_table-$single_foreign_table_name-relation>*/
         ";
     }
 
@@ -135,12 +136,12 @@ class SubmitRelationController
             $foriegn_model = "'$pivot_table'";
         }
         return "
-        //============= $this->local_table - $foreign_table relation =============
+        /*<$this->local_table-$foreign_table-relation>*/
         public function $foreign_table()
         {
             return \$this->hasMany($foriegn_model, '$foriegn_key', '$local_key');
         }
-        //========================================================
+        /*</$this->local_table-$foreign_table-relation>*/
         ";
     }
 
@@ -154,12 +155,12 @@ class SubmitRelationController
         $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
-        //============= $this->local_table - $single_foreign_table_name relation =============
+        /*<$this->local_table-$single_foreign_table_name-relation>*/
         public function $this->single_foreign_table_name()
         {
             return \$this->belongsTo($foriegn_model::class, '$foriegn_key', '$local_key');
         }
-        //========================================================
+        /*</$this->local_table-$single_foreign_table_name-relation>*/
         ";
     }
 
@@ -177,12 +178,12 @@ class SubmitRelationController
         }
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
-        //============= $this->local_table - $single_foreign_table_name relation =============
+        /*<$this->local_table-$single_foreign_table_name-relation>*/
         public function $this->single_foreign_table_name()
         {
             return \$this->belongsToMany($foriegn_model, '$local_key', '$foriegn_key');
         }
-        //========================================================
+        /*</$this->local_table-$single_foreign_table_name-relation>*/
         ";
     }
 }

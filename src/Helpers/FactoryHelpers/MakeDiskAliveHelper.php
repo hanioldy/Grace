@@ -9,14 +9,14 @@ class MakeDiskAliveHelper
         $table_name = $stubVariables['table_name'];
         // $storage_path = $stubVariables['storage_path'];
         $disk = "
-        //=========================== $table_name disk ============================
+        /*<$table_name-disk>*/
         '$table_name' => [
             'driver' => 'local',
             'root' => public_path() . '/grace/storage/$table_name' ,
             'url' => env('APP_URL') . '/',
             'visibility' => 'public',
         ],
-        //========================= end $table_name disk ==========================
+        /*</$table_name-disk>*/
         ";
 
         $filename = base_path() . '/config/filesystems.php';
