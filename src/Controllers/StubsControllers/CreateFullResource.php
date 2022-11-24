@@ -5,18 +5,18 @@ namespace Hani221b\Grace\Controllers\StubsControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Table;
 use Exception;
-use Hani221b\Grace\Helpers\FactoryHelpers\MakeDiskAliveHelper;
-use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
-use Hani221b\Grace\Helpers\FactoryHelpers\MakeRoutesAliveHelper;
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeEditViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
 use Hani221b\Grace\Helpers\ViewsHelpers\SidebarViewHelper;
+use Hani221b\Grace\Support\Core;
+use Hani221b\Grace\Support\Factory;
+use Hani221b\Grace\Support\File;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
+use Hani221b\Grace\Support\Str as GraceStr;
 
 class CreateFullResource extends Controller
 {
@@ -37,6 +37,9 @@ class CreateFullResource extends Controller
     protected $storage_path;
     protected $single_record_table;
     protected $select_options;
+    protected $files_fields;
+    protected $fillable_files_array;
+    protected $input_types;
 
     /**
      * Create a new command instance.
@@ -52,9 +55,9 @@ class CreateFullResource extends Controller
         $this->request_namespace = $request->request_namespace;
         $this->migration_namespace = $request->migration_namespace;
         $this->resource_namespace = $request->resource_namespace;
-        $this->files_fields = MakeStubsAliveHelper::isFileValues($request);
+        $this->files_fields = Core::isFileValues($request);
         $this->field_names = $request->field_names;
-        $this->fillable_files_array = MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields);
+        $this->fillable_files_array = Core::files_fillable_array($this->field_names, $this->files_fields);
         //filtering null values
         if ($request->field_types !== null) {
             $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
@@ -100,7 +103,6 @@ class CreateFullResource extends Controller
 
     public function makeFullResourceAlive()
     {
-
         $new_table_to_be_registered = Table::where('table_name', $this->table_name)->first();
         if ($new_table_to_be_registered !== null) {
             return 'Table already exist';
@@ -110,12 +112,12 @@ class CreateFullResource extends Controller
 
                 Table::create([
                     'table_name' => $this->table_name,
-                    'controller' => $this->controller_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
-                    'model' => $this->model_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name),
-                    'request' => $this->request_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
-                    'resource' => $this->resource_namespace . '/' . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
+                    'controller' => $this->controller_namespace . '/' . GraceStr::getSingularClassName($this->table_name) . 'Controller',
+                    'model' => $this->model_namespace . '/' . GraceStr::getSingularClassName($this->table_name),
+                    'request' => $this->request_namespace . '/' . GraceStr::getSingularClassName($this->table_name) . 'Request',
+                    'resource' => $this->resource_namespace . '/' . GraceStr::getSingularClassName($this->table_name) . "Resource",
                     'migration' => $this->migration_namespace . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
-                    . "_create_" . MakeStubsAliveHelper::getPluralLowerName($this->table_name) . "_table",
+                    . "_create_" . GraceStr::getPluralLowerName($this->table_name) . "_table",
                     'views' => config('grace.views_folder_name') . '/' . $this->table_name,
                 ]);
                 return 'Resource has been created successfully';
@@ -123,7 +125,6 @@ class CreateFullResource extends Controller
                 return 'Something went worng please try again later!';
             }
         }
-
     }
 
     /**
@@ -147,13 +148,12 @@ class CreateFullResource extends Controller
     public function getModelVariables()
     {
         return [
-            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->model_namespace),
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name),
+            'namespace' => GraceStr::correctionForNamespace($this->model_namespace),
+            'class_name' => GraceStr::getSingularClassName($this->table_name),
             'table_name' => $this->table_name,
-            'fillable_array' => makeModelAliveHelper::model_fillable_array($this->field_names),
-            // 'file_name' => ucwords(str_replace(",", "', '", $this->fillable_files_array)),
+            'fillable_array' => Factory::model_fillable_array($this->field_names),
             'storage_path' => $this->storage_path,
-            'files_fields' => MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields),
+            'files_fields' => Core::files_fillable_array($this->field_names, $this->files_fields),
         ];
     }
 
@@ -164,14 +164,14 @@ class CreateFullResource extends Controller
     public function getControllerVariables()
     {
         return [
-            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->controller_namespace),
-            'model_path' =>  MakeStubsAliveHelper::correctionForNamespace($this->model_namespace) . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
-            'resource_path' => MakeStubsAliveHelper::correctionForNamespace($this->resource_namespace)  . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
-            'request_path' => MakeStubsAliveHelper::correctionForNamespace($this->request_namespace)  . "\\" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
-            'request_class' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Request",
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
+            'namespace' => GraceStr::correctionForNamespace($this->controller_namespace),
+            'model_path' =>  GraceStr::correctionForNamespace($this->model_namespace) . "\\" . GraceStr::getSingularClassName($this->table_name),
+            'resource_path' => GraceStr::correctionForNamespace($this->resource_namespace)  . "\\" . GraceStr::getSingularClassName($this->table_name) . "Resource",
+            'request_path' => GraceStr::correctionForNamespace($this->request_namespace)  . "\\" . GraceStr::getSingularClassName($this->table_name) . "Request",
+            'request_class' => GraceStr::getSingularClassName($this->table_name) . "Request",
+            'class_name' => GraceStr::getSingularClassName($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
-            'fillable_array' => MakeStubsAliveHelper::fillable_array($this->field_names, $this->files_fields),
+            'fillable_array' => Core::fillable_array($this->field_names, $this->files_fields),
             'fillable_files_array' => "'" . str_replace(",", "', '", $this->fillable_files_array) . "'",
         ];
     }
@@ -183,8 +183,8 @@ class CreateFullResource extends Controller
     public function getRequestVariables()
     {
         return [
-            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->request_namespace),
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Request',
+            'namespace' => GraceStr::correctionForNamespace($this->request_namespace),
+            'class_name' => GraceStr::getSingularClassName($this->table_name) . 'Request',
             'table_name' => $this->table_name,
 
         ];
@@ -194,11 +194,12 @@ class CreateFullResource extends Controller
      * Mapping the value of resource stubs variables
      * @return array
      */
+
     public function getResourceVariables()
     {
         return [
-            'namespace' => MakeStubsAliveHelper::correctionForNamespace($this->resource_namespace),
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Resource",
+            'namespace' => GraceStr::correctionForNamespace($this->resource_namespace),
+            'class_name' => GraceStr::getSingularClassName($this->table_name) . "Resource",
 
         ];
     }
@@ -211,8 +212,8 @@ class CreateFullResource extends Controller
     {
         return [
             'table_name' => $this->table_name,
-            'controller_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . "Controller",
-            'controller_namespace' => MakeStubsAliveHelper::correctionForNamespace($this->controller_namespace),
+            'controller_name' => GraceStr::getSingularClassName($this->table_name) . "Controller",
+            'controller_namespace' => GraceStr::correctionForNamespace($this->controller_namespace),
            ];
     }
 
@@ -288,18 +289,18 @@ class CreateFullResource extends Controller
 
     /**
      * Create Migration
-     * @return viod
+     * @return void
      */
 
     public function makeMigration()
     {
-        $path = MakeStubsAliveHelper::getMigrationSourceFilePath($this->migration_namespace, $this->table_name, '');
+        $path = File::getMigrationSourceFilePath($this->migration_namespace, $this->table_name);
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($path));
+        File::makeDirectory($this->files, dirname($path));
 
-        $contents = MakeStubsAliveHelper::getMigrationSourceFile($this->getMigrationVariables(), 'migration');
+        $contents = File::getMigrationSourceFile($this->getMigrationVariables(), 'migration');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+        File::putFilesContent($this->files, $path, $contents);
 
         if (config('grace.auto_migrate') === true) {
             $base_path = base_path();
@@ -312,96 +313,96 @@ class CreateFullResource extends Controller
 
     /**
      * Create Model
-     * @return viod
+     * @return void
      */
 
     public function makeModel()
     {
-        $model_path = MakeStubsAliveHelper::getSourceFilePath($this->model_namespace, $this->table_name, '');
+        $model_path = File::getSourceFilePath($this->model_namespace, $this->table_name, '');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($model_path));
+        File::makeDirectory($this->files, dirname($model_path));
 
-        $model_contents = MakeStubsAliveHelper::getModelSourceFile($this->getModelVariables(), 'model');
+        $model_contents = File::getModelSourceFile($this->getModelVariables(), 'model');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $model_path, $model_contents);
+        File::putFilesContent($this->files, $model_path, $model_contents);
     }
 
     /**
      * Create Controller
-     * @return viod
+     * @return void
      */
 
     public function makeController()
     {
-        $controller_path = MakeStubsAliveHelper::getSourceFilePath($this->controller_namespace, $this->table_name, 'Controller');
+        $controller_path = File::getSourceFilePath($this->controller_namespace, $this->table_name, 'Controller');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($controller_path));
+        File::makeDirectory($this->files, dirname($controller_path));
 
         if ($this->single_record_table === null) {
             $type = 'controller';
         } else if ($this->single_record_table === "1") {
             $type = 'controller.single.record';
         }
-        $controller_contents = MakeStubsAliveHelper::getSourceFile($this->getControllerVariables(), $type);
+        $controller_contents = File::getSourceFile($this->getControllerVariables(), $type);
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $controller_path, $controller_contents);
+        File::putFilesContent($this->files, $controller_path, $controller_contents);
     }
 
     /**
      * Create Request
-     * @return viod
+     * @return void
      */
 
     public function makeRequest()
     {
-        $request_path = MakeStubsAliveHelper::getSourceFilePath($this->request_namespace, $this->table_name, 'Request');
+        $request_path = File::getSourceFilePath($this->request_namespace, $this->table_name, 'Request');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($request_path));
+        File::makeDirectory($this->files, dirname($request_path));
 
-        $request_contents = MakeStubsAliveHelper::getSourceFile($this->getRequestVariables(), 'request');
+        $request_contents = File::getSourceFile($this->getRequestVariables(), 'request');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $request_path, $request_contents);
+        File::putFilesContent($this->files, $request_path, $request_contents);
     }
 
     /**
      * Create Resource
-     * @return viod
+     * @return void
      */
 
     public function makeResource()
     {
-        $resource_path = MakeStubsAliveHelper::getSourceFilePath($this->resource_namespace, $this->table_name, 'Resource');
+        $resource_path = File::getSourceFilePath($this->resource_namespace, $this->table_name, 'Resource');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($resource_path));
+        File::makeDirectory($this->files, dirname($resource_path));
 
-        $resource_contents = MakeStubsAliveHelper::getSourceFile($this->getResourceVariables(), 'resource');
+        $resource_contents = File::getSourceFile($this->getResourceVariables(), 'resource');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $resource_path, $resource_contents);
+        File::putFilesContent($this->files, $resource_path, $resource_contents);
     }
 
     /**
      * Create Routes
-     * @return viod
+     * @return void
      */
 
     public function makeRoutes()
     {
-        MakeRoutesAliveHelper::appendRoutes($this->getRoutesVariables());
+        Factory::appendRoutes($this->getRoutesVariables());
     }
 
     /**
      * Create Disk
-     * @return viod
+     * @return void
      */
 
     public function makeDisk()
     {
-        return MakeDiskAliveHelper::appendDisk($this->getDiskVariables());
+         Factory::appendDisk($this->getDiskVariables());
     }
 
     /**
      * Create Disk
-     * @return viod
+     * @return void
      */
 
     public function makeViews()

@@ -4,6 +4,9 @@ namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Support\Core;
+use Hani221b\Grace\Support\File;
+use Hani221b\Grace\Support\Str;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 
@@ -21,6 +24,8 @@ class CreateController extends Controller
     protected $resource_path;
     protected $field_names;
     protected $field_types;
+    protected $files_fields;
+    protected $fillable_files_array;
 
     /**
      * Create a new command instance.
@@ -34,9 +39,9 @@ class CreateController extends Controller
         $this->table_name = $request->table_name;
         $this->model_path = $request->model_namespace;
         $this->resource_path = $request->resource_namespace;
-        $this->files_fields = MakeStubsAliveHelper::isFileValues($request);
+        $this->files_fields = Core::isFileValues($request);
         $this->field_names = $request->field_names;
-        $this->fillable_files_array = MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields);
+        $this->fillable_files_array = Core::files_fillable_array($this->field_names, $this->files_fields);
     }
 
     /**
@@ -50,11 +55,11 @@ class CreateController extends Controller
     {
         return [
             'namespace' => $this->namespace,
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Controller',
+            'class_name' => Str::getSingularClassName($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
-            'model_path' => $this->model_path . "/" . MakeStubsAliveHelper::getSingularClassName($this->table_name),
-            'resource_path' => $this->resource_path . "/" . MakeStubsAliveHelper::getSingularClassName($this->table_name) . 'Resource',
-            'fillable_array' => MakeStubsAliveHelper::fillable_array($this->field_names, $this->files_fields),
+            'model_path' => $this->model_path . "/" . Str::getSingularClassName($this->table_name),
+            'resource_path' => $this->resource_path . "/" . Str::getSingularClassName($this->table_name) . 'Resource',
+            'fillable_array' => Core::fillable_array($this->field_names, $this->files_fields),
             'fillable_files_array' => "'" . str_replace(",", "', '", $this->fillable_files_array) . "'",
         ];
     }
@@ -64,12 +69,12 @@ class CreateController extends Controller
      */
     public function makeControllerAlive()
     {
-        $controller_path = MakeStubsAliveHelper::getSourceFilePath($this->namespace, $this->table_name, 'Controller');
+        $controller_path = File::getSourceFilePath($this->namespace, $this->table_name, 'Controller');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($controller_path));
+        File::makeDirectory($this->files, dirname($controller_path));
 
-        $controller_contents = MakeStubsAliveHelper::getSourceFile($this->getStubVariables(), 'controller');
+        $controller_contents = File::getSourceFile($this->getStubVariables(), 'controller');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $controller_path, $controller_contents);
+        File::putFilesContent($this->files, $controller_path, $controller_contents);
     }
 }
