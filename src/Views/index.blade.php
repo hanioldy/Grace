@@ -98,7 +98,7 @@
             vuetify: new Vuetify(),
             data: () => ({
                 columnTypes: ['bigIncrements', 'bigInteger', 'binary', 'boolean', 'char', 'dateTimeTz',
-                    'dateTime', 'date', 'decimal', 'double', 'enum', 'float', 'foreignId', 'foreignId',
+                    'dateTime', 'date', 'decimal', 'double', 'enum', 'float', 'foreignId',
                     'foreignIdFor', 'foreignUuid', 'geometryCollection', 'geometry', 'id', 'increments',
                     'integer', 'ipAddress', 'json', 'jsonb', 'lineString', 'longText ', 'macAddress',
                     'mediumIncrements', 'mediumInteger', 'mediumText', 'morphs', 'morphs', 'multiPoint',
@@ -111,12 +111,14 @@
                     'uuidMorphs', 'uuid', 'year'
                 ],
                 inputTypes: ['text', 'select', 'textarea', 'file'],
+                relationsFields: ['foreignId', 'foreignIdFor', 'foreignUuid'],
                 tab: null,
                 id: 1,
                 fields: [{
                     name: "",
                     time: Date.now(),
                     isSelect:false,
+                    isRelationType:false
                 }],
             }),
             methods: {
@@ -126,6 +128,7 @@
                         name: "",
                         time: Date.now(),
                         isSelect:false,
+                        isRelationType:false
                     });
                 },
                 deleteField(fieldIndex) {
@@ -136,6 +139,13 @@
                         this.fields[index].isSelect = true;
                     } else {
                         this.fields[index].isSelect = false;
+                    }
+                },
+                fieldType(index, event){
+                    if(this.relationsFields.includes(event)){
+                        this.fields[index].isRelationType = true
+                    } else {
+                        this.fields[index].isRelationType = false
                     }
                 }
             },

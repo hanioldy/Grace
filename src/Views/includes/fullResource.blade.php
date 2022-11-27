@@ -28,10 +28,10 @@
                                 </v-col>
                                 <v-col cols="3">
                                     <v-autocomplete name="field_types[]" label="Field Type" small-chips
-                                        :items="columnTypes"></v-autocomplete>
+                                    v-on:change="fieldType(index, $event)" :items="columnTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="3">
-                                    <v-autocomplete name="input_types[]" label="Input Type" small-chips
+                                    <v-autocomplete :disabled="item.isRelationType" name="input_types[]" label="Input Type" small-chips
                                         v-on:change="inputType(index, $event)" :items="inputTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
