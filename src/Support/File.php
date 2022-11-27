@@ -13,9 +13,9 @@ class File
      *
      * @return string
      */
-    public static function getSourceFilePath($namespace, $class_name, $suffix): string
+    public static function sourceFilePath($namespace, $class_name, $suffix): string
     {
-        return base_path($namespace) . '/' . GraceStr::getSingularClassName($class_name) . $suffix . '.php';
+        return base_path($namespace) . '/' . GraceStr::singularClass($class_name) . $suffix . '.php';
     }
 
     /**
@@ -23,10 +23,10 @@ class File
      *
      * @return string
      */
-    public static function getMigrationSourceFilePath($namespace, $table_name): string
+    public static function migrationSourceFilePath($namespace, $table_name): string
     {
         return base_path($namespace) . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
-            . "_create_" . GraceStr::getPluralLowerName($table_name) . "_table" . '.php';
+            . "_create_" . GraceStr::pluralLower($table_name) . "_table" . '.php';
     }
 
         /**
@@ -51,7 +51,7 @@ class File
      * @return bool|mixed|string
      *
      */
-    public static function getSourceFile($StubVariables, $type): mixed
+    public static function sourceFile($StubVariables, $type): mixed
     {
         return Stub::getStubContents(Stub::getStubPath($type), $StubVariables);
     }
@@ -62,7 +62,7 @@ class File
      * @return bool|mixed|string
      *
      */
-    public static function getMigrationSourceFile($StubVariables, $type): mixed
+    public static function migrationSourceFile($StubVariables, $type): mixed
     {
         return Stub::getMigrationStubContents(Stub::getStubPath($type), $StubVariables);
     }
@@ -73,7 +73,7 @@ class File
      * @return bool|mixed|string
      *
      */
-    public static function getModelSourceFile($StubVariables, $type): mixed
+    public static function modelSourceFile($StubVariables, $type): mixed
     {
         return Stub::getModelStubContents(Stub::getStubPath($type), $StubVariables);
     }
@@ -111,7 +111,7 @@ class File
      * @param string $contents
      * @return bool|mixed|string
      */
-    public static function putFilesContent($files, $path, $contents): mixed
+    public static function put($files, $path, $contents): mixed
     {
         if (!$files->exists($path)) {
             $files->put($path, $contents);
@@ -123,7 +123,7 @@ class File
         }
     }
 
-    public static function UploadFile($folder, $file)
+    public static function upload($folder, $file)
     {
         // return var_dump($file);
         $file->store('/', $folder);
@@ -132,7 +132,7 @@ class File
         return $path;
     }
 
-    public static function UnlinkFile($file_from_request)
+    public static function unlink($file_from_request)
     {
         $file = Str::after($file_from_request, asset(''));
         $file_to_be_unlinked = base_path($file);
@@ -141,7 +141,7 @@ class File
         }
     }
 
-    public static function CheckKeyExists(
+    public static function checkKeyExists(
         $files_fillable_values,
         $disk = null,
         $collection_array = null,
@@ -152,9 +152,9 @@ class File
         foreach ($files_fillable_values as $fillable_value) {
             if (in_array($fillable_value, $files_fillable_values)) {
                 if (isset($unlink_collection)) {
-                    self::UnlinkFile($unlink_collection[$fillable_value]);
+                    self::unlink($unlink_collection[$fillable_value]);
                 }
-                $path = self::UploadFile($disk, $collection_array[$fillable_value]);
+                $path = self::upload($disk, $collection_array[$fillable_value]);
                 $file_array = array_merge($file_array, [$fillable_value => $path]);
 
             } else {
@@ -165,12 +165,12 @@ class File
     }
 
 
-    public static function UnlinkWhenDelete($files_fillable_values, $unlink_collection)
+    public static function unlinkWhenDelete($files_fillable_values, $unlink_collection)
     {
         $files_fillable_values = array_values($files_fillable_values);
         foreach ($files_fillable_values as $fillable_value) {
             if (in_array($fillable_value, $files_fillable_values)) {
-                self::UnlinkFile($unlink_collection[$fillable_value]);
+                self::unlink($unlink_collection[$fillable_value]);
             }
         }
     }

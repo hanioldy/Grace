@@ -23,7 +23,7 @@ class Index
      * @return array
      *
      */
-    public static function makeCreate($table_name, $stubVariables)
+    public static function make($table_name, $stubVariables)
     {
         // dd($table_name);
         $field_names = $stubVariables['field_names'];

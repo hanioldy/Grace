@@ -22,7 +22,7 @@ class Create
      * @return array
      *
      */
-    public static function makeCreate($folder_name, $stubVariables)
+    public static function make($folder_name, $stubVariables)
     {
         $field_names = $stubVariables['field_names'];
         $inputs_types = $stubVariables['input_types'];
@@ -59,7 +59,7 @@ class Create
         $contents = file_get_contents(self::getStubPath());
 
         $contents = str_replace('{{ inputs }}', $string_input_template, $contents);
-        // dd($contents);
+
         foreach ($stubVariables as $search => $replace) {
 
             if (!is_array($replace)) {

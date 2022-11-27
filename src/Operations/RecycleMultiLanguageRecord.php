@@ -2,7 +2,7 @@
 
 namespace Hani221b\Grace\Operations;
 
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
 
 class RecycleMultiLanguageRecord
 {
@@ -20,7 +20,7 @@ class RecycleMultiLanguageRecord
         $requested_record = $model_path::find($id);
         //return false if requested was not found
         if (!$requested_record) {
-            return JsonResponse::errorResponse('The requested record does not exist', 404);
+            return Response::errorResponse('The requested record does not exist', 404);
         }
         // FileHelper::UnlinkFile();
         $translations = $model_path::where('translation_of', $requested_record->id)->get();
@@ -28,7 +28,7 @@ class RecycleMultiLanguageRecord
         $translations->each->delete();
         $requested_record->delete();
         if (config('grace.mode') === 'api') {
-            return JsonResponse::successResponse([
+            return Response::successResponse([
                 'Default Record' => $requested_record,
                 'translations' => $translations,
             ], 'The record has been recycled successfully', 200);

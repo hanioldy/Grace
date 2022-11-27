@@ -117,7 +117,7 @@ class DashboardController
         $route_end = "/*</$table->table_name-routes>*/";
         $route_file_name = base_path() . '/routes/grace.php';
         $route_file = file_get_contents($route_file_name);
-        $route = Str::getStringBetween($route_file, $route_start, $route_end);
+        $route = Str::getBetween($route_file, $route_start, $route_end);
         $full_route = $route_start . $route . $route_end;
         $new_route_file = str_replace($full_route, '', $route_file);
         file_put_contents($route_file_name, $new_route_file);
@@ -126,7 +126,7 @@ class DashboardController
 
         $use_statement_start = "/*<$table->table_name-controller>*/";
         $use_statement_end = "/*</$table->table_name-controller>*/";
-        $use_statement = Str::getStringBetween($route_file, $use_statement_start, $use_statement_end);
+        $use_statement = Str::getBetween($route_file, $use_statement_start, $use_statement_end);
         $full_use_statement = $use_statement_start . $use_statement . $use_statement_end;
         $new_route_file = str_replace($full_use_statement, '', $new_route_file);
         file_put_contents($route_file_name, $new_route_file);
@@ -137,7 +137,7 @@ class DashboardController
         $disk_end = "/*</$table->table_name-disk>*/";
         $file_system = base_path() . '/config/filesystems.php';
         $file_system_content = file_get_contents($file_system);
-        $disk = Str::getStringBetween($file_system_content, $disk_start, $disk_end);
+        $disk = Str::getBetween($file_system_content, $disk_start, $disk_end);
         $full_disk = $disk_start . $disk . $disk_end;
         $new_file_system = str_replace($full_disk, '', $file_system_content);
         file_put_contents($file_system, $new_file_system);
@@ -148,7 +148,7 @@ class DashboardController
         $sidebar_item_end = "<!--</$table->table_name>-->";
         $sidebar_file = base_path() . '/resources/views/grace/includes/sidebar.blade.php';
         $sidebar_file_content = file_get_contents($sidebar_file);
-        $item = Str::getStringBetween($sidebar_file_content, $sidebar_item_start, $sidebar_item_end);
+        $item = Str::getBetween($sidebar_file_content, $sidebar_item_start, $sidebar_item_end);
         $full_item = $sidebar_item_start . $item . $sidebar_item_end;
         $new_sidebar_file = str_replace($full_item, '', $sidebar_file_content);
         file_put_contents($sidebar_file, $new_sidebar_file);

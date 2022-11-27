@@ -3,9 +3,9 @@
 namespace Hani221b\Grace\Controllers\RelationControllers;
 
 use App\Models\Table;
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Hani221b\Grace\Support\Str as GraceStr;
 
 class SubmitRelationController
 {
@@ -58,11 +58,11 @@ class SubmitRelationController
 
         foreach ($relations_array as $arr) {
             $single_relation = [
-                'realtion_type' => MakeStubsAliveHelper::getStringBetween($arr, "rt__", "__rt"),
-                'foreign_table' => MakeStubsAliveHelper::getStringBetween($arr, "ft__", "__ft"),
-                'foreign_key' => MakeStubsAliveHelper::getStringBetween($arr, "fk__", "__fk"),
-                'local_key' => MakeStubsAliveHelper::getStringBetween($arr, "lk__", "__lk"),
-                'pivot_table' => MakeStubsAliveHelper::getStringBetween($arr, "pt__", "__pt"),
+                'realtion_type' => GraceStr::getBetween($arr, "rt__", "__rt"),
+                'foreign_table' => GraceStr::getBetween($arr, "ft__", "__ft"),
+                'foreign_key' => GraceStr::getBetween($arr, "fk__", "__fk"),
+                'local_key' => GraceStr::getBetween($arr, "lk__", "__lk"),
+                'pivot_table' => GraceStr::getBetween($arr, "pt__", "__pt"),
             ];
             switch ($single_relation['realtion_type']) {
                 case 'HasOne':
@@ -95,7 +95,7 @@ class SubmitRelationController
 
         $start_relation_field_marker = "/*<relations>*/";
         $end_relation_field_marker = "/*</relations>*/";
-        $relations_field_in_model = MakeStubsAliveHelper::getStringBetween($mdoel_content, $start_relation_field_marker, $end_relation_field_marker);
+        $relations_field_in_model = GraceStr::getBetween($mdoel_content, $start_relation_field_marker, $end_relation_field_marker);
         $new_model = str_replace(
             $relations_field_in_model,
             $relations_field_in_model .= $string_relation_template,
@@ -111,7 +111,7 @@ class SubmitRelationController
      */
     public function has_one($foreign_table, $foriegn_key, $local_key)
     {
-        $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
+        $foriegn_model = GraceStr::singularClass($foreign_table);
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
         /*<$this->local_table-$single_foreign_table_name-relation>*/
@@ -131,7 +131,7 @@ class SubmitRelationController
     public function has_many($foreign_table, $foriegn_key, $local_key, $pivot_table)
     {
         if($pivot_table == null){
-            $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table)."::class";
+            $foriegn_model = GraceStr::singularClass($foreign_table)."::class";
         } else {
             $foriegn_model = "'$pivot_table'";
         }
@@ -152,7 +152,7 @@ class SubmitRelationController
      */
     public function belongs_to($foreign_table, $foriegn_key, $local_key)
     {
-        $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table);
+        $foriegn_model = GraceStr::singularClass($foreign_table);
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
         /*<$this->local_table-$single_foreign_table_name-relation>*/
@@ -172,7 +172,7 @@ class SubmitRelationController
     public function belongs_to_many($foreign_table, $foriegn_key, $local_key, $pivot_table)
     {
         if($pivot_table == null){
-            $foriegn_model = MakeStubsAliveHelper::getSingularClassName($foreign_table)."::class";
+            $foriegn_model = GraceStr::singularClass($foreign_table)."::class";
         } else {
             $foriegn_model = "'$pivot_table'";
         }

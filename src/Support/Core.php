@@ -12,7 +12,7 @@ class Core
      * Combine fields names and files fileds value to return files fillable array
      * @return string
      */
-    public static function files_fillable_array($field_names, $files_fields): string
+    public static function filesFillableArray($field_names, $files_fields): string
     {
         $files_fillable_array = [];
         if ($field_names !== null && $files_fields !== null) {
@@ -32,7 +32,7 @@ class Core
      * @return string
      */
 
-    public static function fillable_array($field_names, $files_fields): string
+    public static function fillableArray($field_names, $files_fields): string
     {
         $fillable_array = [];
         $all_fields = array_combine($field_names, $files_fields);
@@ -69,7 +69,7 @@ class Core
      * @return string
      */
 
-    public static function getMethodSourceCode($class, $method): string
+    public static function methodSource($class, $method): string
     {
         $func = new ReflectionMethod($class, $method);
         $filename = $func->getFileName();
@@ -78,7 +78,7 @@ class Core
         $length = $end_line - $start_line;
         $source = file($filename);
         $body = implode("", array_slice($source, $start_line, $length));
-        $source_code = Str::getStringBetween($body, "{\n", "}\n");
+        $source_code = Str::getBetween($body, "{\n", "}\n");
         return $source_code;
     }
 
@@ -98,7 +98,7 @@ class Core
         $length = $end_line - $start_line;
         $source = file($filename);
         $body = implode("", array_slice($source, $start_line, $length));
-        $source_code = Str::getStringBetween($body, "{", "// The end of the class [DO NOT REMOVE THIS COMMENT]");
+        $source_code = Str::getBetween($body, "{", "// The end of the class [DO NOT REMOVE THIS COMMENT]");
         return $source_code;
     }
 }

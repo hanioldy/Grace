@@ -2,7 +2,7 @@
 
 namespace Hani221b\Grace\Operations;
 
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
 
 class DisplayRecords
 {
@@ -20,7 +20,7 @@ class DisplayRecords
             ->with('translations')->paginate(config('grace.pagination_count'));
 
         if (config('grace.mode') === 'api') {
-            return JsonResponse::successResponse(new $resource_path($records), 'Data passed successfully', 200);
+            return Response::successResponse(new $resource_path($records), 'Data passed successfully', 200);
         } else if (config('grace.mode') === 'blade') {
             return view(config('grace.views_folder_name') . "." . $table_name . '.index')->with([$table_name => $records]);
         }

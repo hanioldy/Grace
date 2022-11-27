@@ -61,7 +61,7 @@ class Factory
      * @return string
      */
 
-    public static function model_fillable_array($field_names)
+    public static function modelFillableArray($field_names)
     {
         return "'" . str_replace(",", "', '", implode(",", $field_names)) . "'";
     }
@@ -111,7 +111,7 @@ use $controller_namespace\\$controller_name;
     {
         $routes_file = self::getRouteFileName();
         $opened_file = fopen($routes_file, 'a');
-        $controller_name = Str::getSingularClassName($stubVariables['table_name']) . "Controller";
+        $controller_name = Str::singularClass($stubVariables['table_name']) . "Controller";
         $table_name = $stubVariables['table_name'];
         $routes_template = "
 /*<$table_name-routes>*/

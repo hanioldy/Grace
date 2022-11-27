@@ -24,7 +24,7 @@ class Edit
      * @return array
      *
      */
-    public static function makeEdit($folder_name, $stubVariables)
+    public static function make($folder_name, $stubVariables)
     {
         $field_names = $stubVariables['field_names'];
         $inputs_types = $stubVariables['input_types'];

@@ -4,6 +4,7 @@ namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
 use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Support\File;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 
@@ -57,12 +58,12 @@ class CreateMigration extends Controller
      */
     public function makeMigrationAlive()
     {
-        $path = MakeStubsAliveHelper::getMigrationSourceFilePath($this->namespace, $this->table_name, '');
+        $path = File::migrationSourceFilePath($this->namespace, $this->table_name);
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($path));
+        File::makeDirectory($this->files, dirname($path));
 
-        $contents = MakeStubsAliveHelper::getMigrationSourceFile($this->getStubVariables(), 'migration');
+        $contents = File::migrationSourceFile($this->getStubVariables(), 'migration');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+        File::put($this->files, $path, $contents);
     }
 }

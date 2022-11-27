@@ -2,10 +2,11 @@
 
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Support\File;
 use Illuminate\Filesystem\Filesystem;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Hani221b\Grace\Support\Str as GraceStr;
 
 class CreateResource extends Controller
 {
@@ -39,7 +40,7 @@ class CreateResource extends Controller
     {
         return [
             'namespace' => $this->namespace,
-            'class_name' => MakeStubsAliveHelper::getSingularClassName($this->class_name),
+            'class_name' => GraceStr::singularClass($this->class_name),
         ];
     }
 
@@ -48,12 +49,12 @@ class CreateResource extends Controller
      */
     public function makeResourceAlive()
     {
-        $path = MakeStubsAliveHelper::getSourceFilePath($this->namespace, $this->class_name, 'Resource');
+        $path = File::sourceFilePath($this->namespace, $this->class_name, 'Resource');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($path));
+        File::makeDirectory($this->files, dirname($path));
 
-        $contents = MakeStubsAliveHelper::getSourceFile($this->getStubVariables(), 'resource');
+        $contents = File::sourceFile($this->getStubVariables(), 'resource');
 
-        return  MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+        return  File::put($this->files, $path, $contents);
     }
 }

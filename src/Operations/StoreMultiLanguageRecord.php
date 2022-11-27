@@ -2,10 +2,11 @@
 
 namespace Hani221b\Grace\Operations;
 
-use Hani221b\Grace\Helpers\FileHelper;
-use Hani221b\Grace\Helpers\GlobalHelper;
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
+use Hani221b\Grace\Support\File;
+use Hani221b\Grace\Support\Lang;
 use Illuminate\Support\Facades\DB;
+
 
 class StoreMultiLanguageRecord
 {
@@ -29,7 +30,7 @@ class StoreMultiLanguageRecord
         $records = collect($records_from_request);
         //filter the collection and get record
         $default_language_record_filter = $records->filter(function ($value) {
-            return $value['abbr'] == GlobalHelper::GetDefaultLanguage();
+            return $value['abbr'] == Lang::GetDefaultLanguage();
         });
         //get record in default language
         $default_record = array_values($default_language_record_filter->all())[0];
@@ -41,7 +42,7 @@ class StoreMultiLanguageRecord
             $dynamic_fillable_values_array[$fillable_value] = $default_record[$fillable_value];
         }
         //check if request has any kind of file and merge it into the array that will be submitted
-        $files_array = FileHelper::CheckKeyExists(
+        $files_array = File::CheckKeyExists(
             $files_fillable_vales, $disk, $default_record
         );
         //define language_identification_values
@@ -56,7 +57,7 @@ class StoreMultiLanguageRecord
         $default_record_id = $model_path::insertGetId($default_language_fillable_array);
         //get records in other languages records
         $translations = $records->filter(function ($value) {
-            return $value['abbr'] != GlobalHelper::GetDefaultLanguage();
+            return $value['abbr'] != Lang::GetDefaultLanguage();
         });
 
         $translations_fillable_array = [];
@@ -69,7 +70,7 @@ class StoreMultiLanguageRecord
                     $dynamic_fillable_values_array[$translation_fillable_value] = $translation[$translation_fillable_value];
                 }
                 //check if request has any kind of file and merge it into the array that will be submitted
-                $translations_files_array = FileHelper::CheckKeyExists(
+                $translations_files_array = File::CheckKeyExists(
                     $files_fillable_vales, $disk, $translation
                 );
                 //define language identification values for translations
@@ -89,7 +90,7 @@ class StoreMultiLanguageRecord
         $record_in_default_language = $model_path::where('id', $default_record_id)->first();
 
         if (config('grace.mode') === 'api') {
-            return JsonResponse::successResponse([
+            return Response::successResponse([
                 'Record in default language' => $record_in_default_language,
                 'translations' => $translations_fillable_array,
             ], 'The record has been stored successfully', 200);

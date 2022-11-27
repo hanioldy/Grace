@@ -2,8 +2,8 @@
 
 namespace Hani221b\Grace\Operations;
 
-use Hani221b\Grace\Helpers\FileHelper;
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
+use Hani221b\Grace\Support\File;
 
 class UpdateMultiLanguageRecord
 {
@@ -33,7 +33,7 @@ class UpdateMultiLanguageRecord
         $requested_record = $model_path::find($id);
         //return false if requested was not found
         if (!$requested_record) {
-            return JsonResponse::errorResponse('The requested record does not exist', 404);
+            return Response::errorResponse('The requested record does not exist', 404);
         }
         //fetch translations
         $translations = $requested_record->translations;
@@ -48,7 +48,7 @@ class UpdateMultiLanguageRecord
                 $dynamic_fillable_values_array[$fillable_value] = $record[$fillable_value];
             }
             //check if request has any kind of file and merge it into the array that will be submitted
-            FileHelper::CheckKeyExists(
+            File::CheckKeyExists(
                 $files_fillable_values,
                 $disk,
                 $record,
@@ -57,7 +57,7 @@ class UpdateMultiLanguageRecord
             //update translations
             foreach ($translations as $translation) {
                 //check if request has any kind of file and merge it into the array that will be submitted (translations)
-                $translations_files_array = FileHelper::CheckKeyExists(
+                $translations_files_array = File::CheckKeyExists(
                     $files_fillable_values,
                     $disk,
                     $record,
@@ -77,7 +77,7 @@ class UpdateMultiLanguageRecord
             $all_records = $requested_record->with('translations')->first();
         }
         if (config('grace.mode') === 'api') {
-            return JsonResponse::successResponse(
+            return Response::successResponse(
                 $all_records,
                 'The record has been updated successfully',
                 200

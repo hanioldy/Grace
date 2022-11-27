@@ -4,7 +4,7 @@ namespace Hani221b\Grace\Support\Views;
 
 class Sidebar
 {
-    public static function appendSidebarRow($stubVariables = [])
+    public static function append($stubVariables = [])
     {
         $table_name = $stubVariables['table_name'];
         $single_record_table = $stubVariables['single_record_table'];

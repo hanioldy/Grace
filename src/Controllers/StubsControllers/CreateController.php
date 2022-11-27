@@ -3,7 +3,6 @@
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
 use Hani221b\Grace\Support\Core;
 use Hani221b\Grace\Support\File;
 use Hani221b\Grace\Support\Str;
@@ -41,7 +40,7 @@ class CreateController extends Controller
         $this->resource_path = $request->resource_namespace;
         $this->files_fields = Core::isFileValues($request);
         $this->field_names = $request->field_names;
-        $this->fillable_files_array = Core::files_fillable_array($this->field_names, $this->files_fields);
+        $this->fillable_files_array = Core::filesFillableArray($this->field_names, $this->files_fields);
     }
 
     /**
@@ -55,11 +54,11 @@ class CreateController extends Controller
     {
         return [
             'namespace' => $this->namespace,
-            'class_name' => Str::getSingularClassName($this->table_name) . 'Controller',
+            'class_name' => Str::singularClass($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
-            'model_path' => $this->model_path . "/" . Str::getSingularClassName($this->table_name),
-            'resource_path' => $this->resource_path . "/" . Str::getSingularClassName($this->table_name) . 'Resource',
-            'fillable_array' => Core::fillable_array($this->field_names, $this->files_fields),
+            'model_path' => $this->model_path . "/" . Str::singularClass($this->table_name),
+            'resource_path' => $this->resource_path . "/" . Str::singularClass($this->table_name) . 'Resource',
+            'fillable_array' => Core::fillableArray($this->field_names, $this->files_fields),
             'fillable_files_array' => "'" . str_replace(",", "', '", $this->fillable_files_array) . "'",
         ];
     }
@@ -69,12 +68,12 @@ class CreateController extends Controller
      */
     public function makeControllerAlive()
     {
-        $controller_path = File::getSourceFilePath($this->namespace, $this->table_name, 'Controller');
+        $controller_path = File::sourceFilePath($this->namespace, $this->table_name, 'Controller');
 
         File::makeDirectory($this->files, dirname($controller_path));
 
-        $controller_contents = File::getSourceFile($this->getStubVariables(), 'controller');
+        $controller_contents = File::sourceFile($this->getStubVariables(), 'controller');
 
-        File::putFilesContent($this->files, $controller_path, $controller_contents);
+        File::put($this->files, $controller_path, $controller_contents);
     }
 }

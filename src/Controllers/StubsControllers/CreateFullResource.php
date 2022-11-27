@@ -5,13 +5,13 @@ namespace Hani221b\Grace\Controllers\StubsControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Table;
 use Exception;
-use Hani221b\Grace\Helpers\ViewsHelpers\MakeCreateViewHelper;
-use Hani221b\Grace\Helpers\ViewsHelpers\MakeEditViewHelper;
-use Hani221b\Grace\Helpers\ViewsHelpers\MakeIndexViewHelper;
-use Hani221b\Grace\Helpers\ViewsHelpers\SidebarViewHelper;
 use Hani221b\Grace\Support\Core;
 use Hani221b\Grace\Support\Factory;
 use Hani221b\Grace\Support\File;
+use Hani221b\Grace\Support\Views\Create;
+use Hani221b\Grace\Support\Views\Edit;
+use Hani221b\Grace\Support\Views\Index;
+use Hani221b\Grace\Support\Views\Sidebar;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -57,7 +57,7 @@ class CreateFullResource extends Controller
         $this->resource_namespace = $request->resource_namespace;
         $this->files_fields = Core::isFileValues($request);
         $this->field_names = $request->field_names;
-        $this->fillable_files_array = Core::files_fillable_array($this->field_names, $this->files_fields);
+        $this->fillable_files_array = Core::filesFillableArray($this->field_names, $this->files_fields);
         //filtering null values
         if ($request->field_types !== null) {
             $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
@@ -112,12 +112,12 @@ class CreateFullResource extends Controller
 
                 Table::create([
                     'table_name' => $this->table_name,
-                    'controller' => $this->controller_namespace . '/' . GraceStr::getSingularClassName($this->table_name) . 'Controller',
-                    'model' => $this->model_namespace . '/' . GraceStr::getSingularClassName($this->table_name),
-                    'request' => $this->request_namespace . '/' . GraceStr::getSingularClassName($this->table_name) . 'Request',
-                    'resource' => $this->resource_namespace . '/' . GraceStr::getSingularClassName($this->table_name) . "Resource",
+                    'controller' => $this->controller_namespace . '/' . GraceStr::singularClass($this->table_name) . 'Controller',
+                    'model' => $this->model_namespace . '/' . GraceStr::singularClass($this->table_name),
+                    'request' => $this->request_namespace . '/' . GraceStr::singularClass($this->table_name) . 'Request',
+                    'resource' => $this->resource_namespace . '/' . GraceStr::singularClass($this->table_name) . "Resource",
                     'migration' => $this->migration_namespace . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
-                    . "_create_" . GraceStr::getPluralLowerName($this->table_name) . "_table",
+                    . "_create_" . GraceStr::pluralLower($this->table_name) . "_table",
                     'views' => config('grace.views_folder_name') . '/' . $this->table_name,
                 ]);
                 return 'Resource has been created successfully';
@@ -148,12 +148,12 @@ class CreateFullResource extends Controller
     public function getModelVariables()
     {
         return [
-            'namespace' => GraceStr::correctionForNamespace($this->model_namespace),
-            'class_name' => GraceStr::getSingularClassName($this->table_name),
+            'namespace' => GraceStr::namespaceCorrection($this->model_namespace),
+            'class_name' => GraceStr::singularClass($this->table_name),
             'table_name' => $this->table_name,
-            'fillable_array' => Factory::model_fillable_array($this->field_names),
+            'fillable_array' => Factory::modelFillableArray($this->field_names),
             'storage_path' => $this->storage_path,
-            'files_fields' => Core::files_fillable_array($this->field_names, $this->files_fields),
+            'files_fields' => Core::filesFillableArray($this->field_names, $this->files_fields),
         ];
     }
 
@@ -164,14 +164,14 @@ class CreateFullResource extends Controller
     public function getControllerVariables()
     {
         return [
-            'namespace' => GraceStr::correctionForNamespace($this->controller_namespace),
-            'model_path' =>  GraceStr::correctionForNamespace($this->model_namespace) . "\\" . GraceStr::getSingularClassName($this->table_name),
-            'resource_path' => GraceStr::correctionForNamespace($this->resource_namespace)  . "\\" . GraceStr::getSingularClassName($this->table_name) . "Resource",
-            'request_path' => GraceStr::correctionForNamespace($this->request_namespace)  . "\\" . GraceStr::getSingularClassName($this->table_name) . "Request",
-            'request_class' => GraceStr::getSingularClassName($this->table_name) . "Request",
-            'class_name' => GraceStr::getSingularClassName($this->table_name) . 'Controller',
+            'namespace' => GraceStr::namespaceCorrection($this->controller_namespace),
+            'model_path' =>  GraceStr::namespaceCorrection($this->model_namespace) . "\\" . GraceStr::singularClass($this->table_name),
+            'resource_path' => GraceStr::namespaceCorrection($this->resource_namespace)  . "\\" . GraceStr::singularClass($this->table_name) . "Resource",
+            'request_path' => GraceStr::namespaceCorrection($this->request_namespace)  . "\\" . GraceStr::singularClass($this->table_name) . "Request",
+            'request_class' => GraceStr::singularClass($this->table_name) . "Request",
+            'class_name' => GraceStr::singularClass($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
-            'fillable_array' => Core::fillable_array($this->field_names, $this->files_fields),
+            'fillable_array' => Core::fillableArray($this->field_names, $this->files_fields),
             'fillable_files_array' => "'" . str_replace(",", "', '", $this->fillable_files_array) . "'",
         ];
     }
@@ -183,8 +183,8 @@ class CreateFullResource extends Controller
     public function getRequestVariables()
     {
         return [
-            'namespace' => GraceStr::correctionForNamespace($this->request_namespace),
-            'class_name' => GraceStr::getSingularClassName($this->table_name) . 'Request',
+            'namespace' => GraceStr::namespaceCorrection($this->request_namespace),
+            'class_name' => GraceStr::singularClass($this->table_name) . 'Request',
             'table_name' => $this->table_name,
 
         ];
@@ -198,8 +198,8 @@ class CreateFullResource extends Controller
     public function getResourceVariables()
     {
         return [
-            'namespace' => GraceStr::correctionForNamespace($this->resource_namespace),
-            'class_name' => GraceStr::getSingularClassName($this->table_name) . "Resource",
+            'namespace' => GraceStr::namespaceCorrection($this->resource_namespace),
+            'class_name' => GraceStr::singularClass($this->table_name) . "Resource",
 
         ];
     }
@@ -212,8 +212,8 @@ class CreateFullResource extends Controller
     {
         return [
             'table_name' => $this->table_name,
-            'controller_name' => GraceStr::getSingularClassName($this->table_name) . "Controller",
-            'controller_namespace' => GraceStr::correctionForNamespace($this->controller_namespace),
+            'controller_name' => GraceStr::singularClass($this->table_name) . "Controller",
+            'controller_namespace' => GraceStr::namespaceCorrection($this->controller_namespace),
            ];
     }
 
@@ -294,13 +294,13 @@ class CreateFullResource extends Controller
 
     public function makeMigration()
     {
-        $path = File::getMigrationSourceFilePath($this->migration_namespace, $this->table_name);
+        $path = File::migrationSourceFilePath($this->migration_namespace, $this->table_name);
 
         File::makeDirectory($this->files, dirname($path));
 
-        $contents = File::getMigrationSourceFile($this->getMigrationVariables(), 'migration');
+        $contents = File::migrationSourceFile($this->getMigrationVariables(), 'migration');
 
-        File::putFilesContent($this->files, $path, $contents);
+        File::put($this->files, $path, $contents);
 
         if (config('grace.auto_migrate') === true) {
             $base_path = base_path();
@@ -318,13 +318,13 @@ class CreateFullResource extends Controller
 
     public function makeModel()
     {
-        $model_path = File::getSourceFilePath($this->model_namespace, $this->table_name, '');
+        $model_path = File::sourceFilePath($this->model_namespace, $this->table_name, '');
 
         File::makeDirectory($this->files, dirname($model_path));
 
-        $model_contents = File::getModelSourceFile($this->getModelVariables(), 'model');
+        $model_contents = File::modelSourceFile($this->getModelVariables(), 'model');
 
-        File::putFilesContent($this->files, $model_path, $model_contents);
+        File::put($this->files, $model_path, $model_contents);
     }
 
     /**
@@ -334,7 +334,7 @@ class CreateFullResource extends Controller
 
     public function makeController()
     {
-        $controller_path = File::getSourceFilePath($this->controller_namespace, $this->table_name, 'Controller');
+        $controller_path = File::sourceFilePath($this->controller_namespace, $this->table_name, 'Controller');
 
         File::makeDirectory($this->files, dirname($controller_path));
 
@@ -343,9 +343,9 @@ class CreateFullResource extends Controller
         } else if ($this->single_record_table === "1") {
             $type = 'controller.single.record';
         }
-        $controller_contents = File::getSourceFile($this->getControllerVariables(), $type);
+        $controller_contents = File::sourceFile($this->getControllerVariables(), $type);
 
-        File::putFilesContent($this->files, $controller_path, $controller_contents);
+        File::put($this->files, $controller_path, $controller_contents);
     }
 
     /**
@@ -355,13 +355,13 @@ class CreateFullResource extends Controller
 
     public function makeRequest()
     {
-        $request_path = File::getSourceFilePath($this->request_namespace, $this->table_name, 'Request');
+        $request_path = File::sourceFilePath($this->request_namespace, $this->table_name, 'Request');
 
         File::makeDirectory($this->files, dirname($request_path));
 
-        $request_contents = File::getSourceFile($this->getRequestVariables(), 'request');
+        $request_contents = File::sourceFile($this->getRequestVariables(), 'request');
 
-        File::putFilesContent($this->files, $request_path, $request_contents);
+        File::put($this->files, $request_path, $request_contents);
     }
 
     /**
@@ -371,13 +371,13 @@ class CreateFullResource extends Controller
 
     public function makeResource()
     {
-        $resource_path = File::getSourceFilePath($this->resource_namespace, $this->table_name, 'Resource');
+        $resource_path = File::sourceFilePath($this->resource_namespace, $this->table_name, 'Resource');
 
         File::makeDirectory($this->files, dirname($resource_path));
 
-        $resource_contents = File::getSourceFile($this->getResourceVariables(), 'resource');
+        $resource_contents = File::sourceFile($this->getResourceVariables(), 'resource');
 
-        File::putFilesContent($this->files, $resource_path, $resource_contents);
+        File::put($this->files, $resource_path, $resource_contents);
     }
 
     /**
@@ -407,9 +407,9 @@ class CreateFullResource extends Controller
 
     public function makeViews()
     {
-        MakeCreateViewHelper::makeCreate($this->table_name, $this->getCreateViewVariables());
-        MakeEditViewHelper::makeEdit($this->table_name, $this->getEditViewVariables());
-        MakeIndexViewHelper::makeCreate($this->table_name, $this->getIndexViewVariables());
-        SidebarViewHelper::appendSidebarRow($this->getSidebarViewVariables());
+        Create::make($this->table_name, $this->getCreateViewVariables());
+        Edit::make($this->table_name, $this->getEditViewVariables());
+        Index::make($this->table_name, $this->getIndexViewVariables());
+        Sidebar::append($this->getSidebarViewVariables());
     }
 }
