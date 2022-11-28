@@ -128,7 +128,8 @@
                         name: "",
                         time: Date.now(),
                         isSelect:false,
-                        isRelationType:false
+                        isRelationType:false,
+                        input_type_value:''
                     });
                 },
                 deleteField(fieldIndex) {
@@ -143,6 +144,7 @@
                 },
                 fieldType(index, event){
                     if(this.relationsFields.includes(event)){
+                        this.fields[index].input_type_value =  'relation'
                         this.fields[index].isRelationType = true
                     } else {
                         this.fields[index].isRelationType = false

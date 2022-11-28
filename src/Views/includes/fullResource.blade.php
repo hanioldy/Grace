@@ -32,7 +32,7 @@
                                 </v-col>
                                 <v-col cols="3">
                                     <v-autocomplete :disabled="item.isRelationType" name="input_types[]" label="Input Type" small-chips
-                                        v-on:change="inputType(index, $event)" :items="inputTypes"></v-autocomplete>
+                                        v-on:change="inputType(index, $event)" :items="inputTypes" ref="input_types" :value="item.input_type_value"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
                                     <v-btn color="error" @click="deleteField(index)">
