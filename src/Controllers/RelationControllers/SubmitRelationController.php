@@ -152,11 +152,12 @@ class SubmitRelationController
      */
     public function belongs_to($foreign_table, $foriegn_key, $local_key)
     {
+
         $foriegn_model = GraceStr::singularClass($foreign_table);
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
         /*<$this->local_table-$single_foreign_table_name-relation>*/
-        public function $this->single_foreign_table_name()
+        public function $single_foreign_table_name()
         {
             return \$this->belongsTo($foriegn_model::class, '$foriegn_key', '$local_key');
         }
@@ -179,7 +180,7 @@ class SubmitRelationController
         $single_foreign_table_name = Str::singular($foreign_table);
         return "
         /*<$this->local_table-$single_foreign_table_name-relation>*/
-        public function $this->single_foreign_table_name()
+        public function $single_foreign_table_name()
         {
             return \$this->belongsToMany($foriegn_model, '$local_key', '$foriegn_key');
         }
