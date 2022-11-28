@@ -38,9 +38,9 @@ class CreateController extends Controller
         $this->table_name = $request->table_name;
         $this->model_path = $request->model_namespace;
         $this->resource_path = $request->resource_namespace;
-        $this->files_fields = Core::isFileValues($request);
+        $this->files_fields = Core::isFileValues($request->field_names, $request->field_types);
         $this->field_names = $request->field_names;
-        $this->fillable_files_array = Core::filesFillableArray($this->field_names, $this->files_fields);
+        $this->fillable_files_array = Core::filesFillableArray($this->files_fields);
     }
 
     /**

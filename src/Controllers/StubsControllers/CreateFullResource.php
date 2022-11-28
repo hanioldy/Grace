@@ -55,9 +55,9 @@ class CreateFullResource extends Controller
         $this->request_namespace = $request->request_namespace;
         $this->migration_namespace = $request->migration_namespace;
         $this->resource_namespace = $request->resource_namespace;
-        $this->files_fields = Core::isFileValues($request);
         $this->field_names = $request->field_names;
-        $this->fillable_files_array = Core::filesFillableArray($this->field_names, $this->files_fields);
+        $this->files_fields = Core::isFileValues($request->field_names,$request->input_types);
+        $this->fillable_files_array = Core::filesFillableArray($this->files_fields);
         //filtering null values
         if ($request->field_types !== null) {
             $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
@@ -153,7 +153,7 @@ class CreateFullResource extends Controller
             'table_name' => $this->table_name,
             'fillable_array' => Factory::modelFillableArray($this->field_names),
             'storage_path' => $this->storage_path,
-            'files_fields' => Core::filesFillableArray($this->field_names, $this->files_fields),
+            'files_fields' => Core::filesFillableArray($this->files_fields),
         ];
     }
 

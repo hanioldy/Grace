@@ -37,7 +37,7 @@ class CreateModel extends Controller
         $this->class_name = $this->getSingularClassName();
         $this->field_names = $request->field_names;
         $this->files_fields = $request->files_fields;
-        $this->files_fields = Core::isFileValues($request);
+        $this->files_fields = Core::isFileValues($request->field_names,$request->field_types);
     }
 
     /**
@@ -64,7 +64,7 @@ class CreateModel extends Controller
             'class_name' => $this->class_name,
             'table_name' => $this->table_name,
             'fillable_array' => Factory::modelFillableArray($this->field_names),
-            'files_fields' => Core::filesFillableArray($this->field_names, $this->files_fields),
+            'files_fields' => Core::filesFillableArray($this->files_fields),
         ];
     }
 

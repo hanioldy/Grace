@@ -12,18 +12,13 @@ class Core
      * Combine fields names and files fileds value to return files fillable array
      * @return string
      */
-    public static function filesFillableArray($field_names, $files_fields): string
+    public static function filesFillableArray($files_fields): string
     {
-        $files_fillable_array = [];
-        if ($field_names !== null && $files_fields !== null) {
-            $files_array = array_combine($field_names, $files_fields);
-            foreach ($files_array as $field_name => $file_filed) {
-                if ($file_filed === '1') {
-                    array_push($files_fillable_array, $field_name);
-                }
-            }
+        if ($files_fields !== null) {
+            return implode(",", $files_fields);
+        } else {
+            return '';
         }
-        return implode(",", $files_fillable_array);
     }
 
 
@@ -34,13 +29,9 @@ class Core
 
     public static function fillableArray($field_names, $files_fields): string
     {
-        $fillable_array = [];
-        $all_fields = array_combine($field_names, $files_fields);
-        foreach ($all_fields as $name => $value) {
-            if ($value === "0") {
-                array_push($fillable_array, $name);
-            }
-        }
+       $fillable_array =  array_filter($field_names, function($field_name) use ($files_fields){
+            return !in_array($field_name, $files_fields);
+        });
         return "'" . str_replace(",", "', '", implode(",", $fillable_array)) . "'";
     }
 
@@ -49,14 +40,18 @@ class Core
      * @param \Illuminate\Http\Request
      * @return array
      */
-    public static function isFileValues($request): array
+    public static function isFileValues($field_names, $input_types): array
     {
-        $files_fields = $request->isFile;
-        if ($files_fields !== null) {
-            foreach ($files_fields as $key => $value) {
-                if ($value === '1') {
-                    unset($files_fields[$key + 1]);
-                }
+        $types = [];
+        $files_fields = [];
+        foreach($input_types as $index => $type){
+            if($index % 2 !== 0){
+                array_push($types, $type);
+            }
+        }
+        foreach($types as $index => $type){
+            if($type === 'file'){
+                array_push($files_fields, $field_names[$index] );
             }
         }
         return $files_fields;

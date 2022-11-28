@@ -35,11 +35,6 @@
                                         v-on:change="inputType(index, $event)" :items="inputTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
-                                    <v-checkbox name="isFile[]" label="File?" value="1"></v-checkbox>
-                                    <input style="display:none" id='testNameHidden' type='checkbox' value='0'
-                                        name='isFile[]' checked>
-                                </v-col>
-                                <v-col cols="1">
                                     <v-btn color="error" @click="deleteField(index)">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
                                             width="30" height="30" preserveAspectRatio="xMidYMid meet"
