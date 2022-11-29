@@ -90,7 +90,7 @@ class StoreMultiLanguageRecord
         $record_in_default_language = $model_path::where('id', $default_record_id)->first();
 
         if (config('grace.mode') === 'api') {
-            return Response::successResponse([
+            return Response::success([
                 'Record in default language' => $record_in_default_language,
                 'translations' => $translations_fillable_array,
             ], 'The record has been stored successfully', 200);

@@ -12,7 +12,7 @@ class DeleteMultiLanguageRecord
      *
      * @param int $id
      * @param string $model_path
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
 
     public static function delete(
@@ -25,7 +25,7 @@ class DeleteMultiLanguageRecord
         $requested_record = $model_path::withTrashed()->find($id);
         //return false if requested was not found
         if (!$requested_record) {
-            return Response::errorResponse('The requested record does not exist', 404);
+            return Response::error('The requested record does not exist', 404);
         }
         $translations = $model_path::withTrashed()->where('translation_of', $requested_record->id)->get();
         // Unlink files from storage
@@ -38,7 +38,7 @@ class DeleteMultiLanguageRecord
         //delete default record
         $requested_record->forceDelete();
         if (config('grace.mode') === 'api') {
-            return Response::successResponse([
+            return Response::success([
                 'Default Record' => $requested_record,
                 'Translations' => $translations,
             ], 'The record has been deleted successfully', 200);

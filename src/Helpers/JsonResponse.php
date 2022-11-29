@@ -21,7 +21,7 @@ class JsonResponse
     //Return error if the request failed
     //=======================================
 
-    // public static function errorResponse($message = '', $status = 200)
+    // public static function error($message = '', $status = 200)
     // {
     //     return response()->json([
     //         'message' => $message,

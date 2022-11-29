@@ -2,6 +2,8 @@
 
 namespace Hani221b\Grace\Support;
 
+use Hani221b\Grace\Support\Str as GraceStr;
+use Illuminate\Support\Str;
 class Factory
 {
     public static function appendDisk($stubVariables = [])
@@ -38,13 +40,16 @@ class Factory
         $files_fileds = $stubVariables['files_fields'];
         $files_array = explode(',', $files_fileds);
         foreach ($files_array as $value) {
-            $mutators_names = "get" . ucwords($value) . "Attribute";
-
+            $name =  str_replace("'", "", Str::title($value));
+            $mutators_names =  "get${name}Attribute";
+            //remove spaces if exist
+            $mutators_names =   str_replace(" ", "", $mutators_names);
             $mutator_template = "public function $mutators_names(\$value)
     {
         return (\$value !== null) ? asset('grace/storage/$table_name/' . \$value) : '';
     }
     ";
+
             array_push($template, $mutator_template);
         }
 
@@ -111,7 +116,7 @@ use $controller_namespace\\$controller_name;
     {
         $routes_file = self::getRouteFileName();
         $opened_file = fopen($routes_file, 'a');
-        $controller_name = Str::singularClass($stubVariables['table_name']) . "Controller";
+        $controller_name = GraceStr::singularClass($stubVariables['table_name']) . "Controller";
         $table_name = $stubVariables['table_name'];
         $routes_template = "
 /*<$table_name-routes>*/

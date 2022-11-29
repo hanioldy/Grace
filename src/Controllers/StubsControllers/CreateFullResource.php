@@ -49,7 +49,9 @@ class CreateFullResource extends Controller
     {
         $this->files = $files;
         $this->table_name = $request->table_name;
-        $this->single_table_name = Str::singular($request->table_name);
+        if($request->table_name != null){
+            $this->single_table_name = Str::singular($request->table_name);
+        }
         $this->controller_namespace = $request->controller_namespace;
         $this->model_namespace = $request->model_namespace;
         $this->request_namespace = $request->request_namespace;
@@ -172,7 +174,7 @@ class CreateFullResource extends Controller
             'class_name' => GraceStr::singularClass($this->table_name) . 'Controller',
             'table_name' => $this->table_name,
             'fillable_array' => Core::fillableArray($this->field_names, $this->files_fields),
-            'fillable_files_array' => "'" . str_replace(",", "', '", $this->fillable_files_array) . "'",
+            'fillable_files_array' => Core::filesFillableArray($this->files_fields),
         ];
     }
 

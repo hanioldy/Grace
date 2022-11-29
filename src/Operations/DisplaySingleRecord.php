@@ -20,7 +20,7 @@ class DisplaySingleRecord
             ->with('translations')->first();
 
         if (config('grace.mode') === 'api') {
-            return Response::successResponse(new $resource_path($records), 'Data passed successfully', 200);
+            return Response::success(new $resource_path($records), 'Data passed successfully', 200);
         } else if (config('grace.mode') === 'blade') {
             return view(config('grace.views_folder_name') . "." . $table_name . '.index')->with([$table_name => $records]);
         }

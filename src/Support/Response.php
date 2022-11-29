@@ -3,7 +3,7 @@
 namespace Hani221b\Grace\Support;
 
 class Response {
-    public static function successResponse($data = null, $message = '', $status = 200)
+    public static function success($data = null, $message = '', $status = 200)
     {
         return response()->json([
             'data' => $data,
@@ -12,7 +12,7 @@ class Response {
         ], $status);
     }
 
-    public static function errorResponse($message = '', $status = 200)
+    public static function error($message = '', $status = 200)
     {
         return response()->json([
             'message' => $message,

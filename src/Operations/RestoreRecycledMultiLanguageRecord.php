@@ -20,7 +20,7 @@ class RestoreRecycledMultiLanguageRecord
         $requested_record = $model_path::withTrashed()->find($id);
         //return false if requested was not found
         if (!$requested_record) {
-            return Response::errorResponse('The requested record does not exist', 404);
+            return Response::error('The requested record does not exist', 404);
         }
         // FileHelper::UnlinkFile();
         $translations = $model_path::withTrashed()->where('translation_of', $requested_record->id)->get();
@@ -28,7 +28,7 @@ class RestoreRecycledMultiLanguageRecord
         $translations->each->restore();
         $requested_record->restore();
         if (config('grace.mode') === 'api') {
-            return Response::successResponse([
+            return Response::success([
                 'Default Record' => $requested_record,
                 'Translations' => $translations,
             ], 'The record has been restored successfully', 200);

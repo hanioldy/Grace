@@ -33,7 +33,7 @@ class UpdateMultiLanguageRecord
         $requested_record = $model_path::find($id);
         //return false if requested was not found
         if (!$requested_record) {
-            return Response::errorResponse('The requested record does not exist', 404);
+            return Response::error('The requested record does not exist', 404);
         }
         //fetch translations
         $translations = $requested_record->translations;
@@ -77,7 +77,7 @@ class UpdateMultiLanguageRecord
             $all_records = $requested_record->with('translations')->first();
         }
         if (config('grace.mode') === 'api') {
-            return Response::successResponse(
+            return Response::success(
                 $all_records,
                 'The record has been updated successfully',
                 200

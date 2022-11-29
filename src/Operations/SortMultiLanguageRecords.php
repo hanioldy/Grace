@@ -29,7 +29,7 @@ class SortMultiLanguageRecords
             }
         }
         if (config('grace.mode') === 'api') {
-            return Response::successResponse(null, 'The status of the record has been changed successfully', 200);
+            return Response::success(null, 'The status of the record has been changed successfully', 200);
         } else if (config('grace.mode') === 'blade') {
             return redirect('/' . $table_name);
         }

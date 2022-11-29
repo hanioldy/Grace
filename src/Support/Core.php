@@ -12,12 +12,12 @@ class Core
      * Combine fields names and files fileds value to return files fillable array
      * @return string
      */
-    public static function filesFillableArray($files_fields): string
+    public static function filesFillableArray($files_fields): string | null
     {
-        if ($files_fields !== null) {
-            return implode(",", $files_fields);
+        if ($files_fields !== []) {
+          return  "'" . str_replace(",", "', '", implode(",", $files_fields)) . "'" ;
         } else {
-            return '';
+            return null;
         }
     }
 
@@ -44,9 +44,11 @@ class Core
     {
         $types = [];
         $files_fields = [];
-        foreach($input_types as $index => $type){
-            if($index % 2 !== 0){
-                array_push($types, $type);
+        if($input_types !== null){
+            foreach($input_types as $index => $type){
+                if($index % 2 !== 0){
+                    array_push($types, $type);
+                }
             }
         }
         foreach($types as $index => $type){
