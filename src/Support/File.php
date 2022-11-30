@@ -150,15 +150,19 @@ class File
         $file_array = [];
         $files_fillable_values = array_values($files_fillable_values);
         foreach ($files_fillable_values as $fillable_value) {
-            if (in_array($fillable_value, $files_fillable_values)) {
+            if (in_array($fillable_value, array_keys( $collection_array))) {
                 if (isset($unlink_collection)) {
                     self::unlink($unlink_collection[$fillable_value]);
                 }
-                $path = self::upload($disk, $collection_array[$fillable_value]);
-                $file_array = array_merge($file_array, [$fillable_value => $path]);
+                // if(array_key_exists($fillable_value, $collection_array)){
+                    echo $fillable_value.  "<br>";
+                    $path = self::upload($disk, $collection_array[$fillable_value]);
 
-            } else {
-                $file_array = [];
+                    $file_array = array_merge($file_array, [$fillable_value => $path]);
+                // } else {
+                //     $file_array = [];
+                // }
+
             }
         }
         return $file_array;

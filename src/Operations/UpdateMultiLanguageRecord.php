@@ -44,16 +44,18 @@ class UpdateMultiLanguageRecord
             //declare empty array to push fillable values inside it
             $dynamic_fillable_values_array = [];
             //loop through incoming fillable values
+            //check if request has any kind of file and merge it into the array that will be submitted
+           $files_fillable_array = File::CheckKeyExists(
+            $files_fillable_values,
+            $disk,
+            $record,
+            $requested_record
+            );
+
             foreach ($fillable_values as $fillable_value) {
                 $dynamic_fillable_values_array[$fillable_value] = $record[$fillable_value];
             }
-            //check if request has any kind of file and merge it into the array that will be submitted
-            File::CheckKeyExists(
-                $files_fillable_values,
-                $disk,
-                $record,
-                $requested_record
-            );
+            $dynamic_fillable_values_array = array_merge($dynamic_fillable_values_array, $files_fillable_array);
             //update translations
             foreach ($translations as $translation) {
                 //check if request has any kind of file and merge it into the array that will be submitted (translations)
