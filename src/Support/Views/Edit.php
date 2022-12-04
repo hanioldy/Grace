@@ -37,22 +37,24 @@ class Edit
 
         $template = array();
         foreach ($names_types_array as $field => $value) {
+        $field_name = $folder_name . '[0]' . '[' . $field . ']';
+        $error = "$folder_name.0.$field";
             switch ($value) {
                 case 'text':
-                    $input_template = self::input($folder_name, $field, Str::singular($folder_name));
+                    $input_template = self::input($folder_name, $field, Str::singular($folder_name), $field_name, $error);
                     break;
 
                 case 'file':
-                    $input_template = self::file($folder_name, $field, Str::singular($folder_name));
+                    $input_template = self::file($folder_name, $field, Str::singular($folder_name), $field_name, $error);
                     break;
 
                 case 'textarea':
-                    $input_template = self::textarea($folder_name, $field, Str::singular($folder_name));
+                    $input_template = self::textarea($folder_name, $field, Str::singular($folder_name), $field_name, $error);
                     break;
 
                 case 'select':
                     foreach ($select_options as $options) {;
-                        $input_template = self::select($field, $folder_name, $options);
+                        $input_template = self::select($field, $folder_name, $options, $field_name, $error);
                     }
                     break;
             }
@@ -72,17 +74,19 @@ class Edit
 
         $translations_template = array();
         foreach ($names_types_array as $field => $value) {
+        $translation_field_name = $folder_name . '[{{ $index }}]' . '[' . $field . ']';
+        $translation_error = "$folder_name.\$index.$field";
             switch ($value) {
                 case 'text':
-                    $translation_input_template = self::input($folder_name, $field, 'translation');
+                    $translation_input_template = self::input($folder_name, $field, 'translation', $translation_field_name, $translation_error);
                     break;
 
                 case 'file':
-                    $translation_input_template = self::file($folder_name, $field, 'translation');
+                    $translation_input_template = self::file($folder_name, $field, 'translation',$translation_field_name, $translation_error);
                     break;
 
                 case 'textarea':
-                    $translation_input_template = self::textarea($folder_name, $field, 'translation');
+                    $translation_input_template = self::textarea($folder_name, $field, 'translation', $translation_field_name, $translation_error);
                     break;
             }
             array_push($translations_template, $translation_input_template);
@@ -115,17 +119,16 @@ class Edit
      * @return String
      */
 
-    public static function input($folder_name, $field, $key)
+    public static function input($folder_name, $field, $key, $field_name, $error)
     {
         $title = ucfirst($field);
 
-        $name = $folder_name . '[0]' . '[' . $field . ']';
         return "<div class='form-group'>
         <label for='{$field}'>
         <h5>{$title}</h5>
         </label>
-        <input type='text' class='form-control input-default' value='{{ $$key->$field }}' name='$name'>
-        @error(\"$folder_name.\$index.$field\")
+        <input type='text' class='form-control input-default' value='{{ $$key->$field }}' name='$field_name'>
+        @error('$error')
         <p class='text-danger'>{{ \$message }}</p>
         @enderror
         </div>";
@@ -137,16 +140,15 @@ class Edit
      * @return String
      */
 
-    public static function textarea($folder_name, $field, $key)
+    public static function textarea($folder_name, $field, $key, $field_name, $error)
     {
         $title = ucfirst($field);
-        $name = $folder_name . '[0]' . '[' . $field . ']';
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
-        <textarea class='form-control summernote' name='$name'>{{ $$key->$field }}</textarea>
-        @error(\"$folder_name.\$index.$field\")
+        <textarea class='form-control summernote' name='$field_name'>{{ $$key->$field }}</textarea>
+        @error('$error')
         <p class='text-danger'>{{ \$message }}</p>
         @enderror
         </div>";
@@ -158,17 +160,16 @@ class Edit
      * @return String
      */
 
-    public static function file($folder_name, $field, $key)
+    public static function file($folder_name, $field, $key, $field_name, $error)
     {
         $title = ucfirst($field);
-        $name = $folder_name . '[0]' . '[' . $field . ']';
         return "<div class='form-group'>
         <label for='{$field}'>
             <h5>{$title}</h5>
         </label>
         <img src='{{ $$key->$field }}'  width='200px'>
-        <input type='file' class='form-control' name='$name'>
-        @error(\"$folder_name.\$index.$field\")
+        <input type='file' class='form-control' name='$field_name'>
+        @error('$error')
         <p class='text-danger'>{{ \$message }}</p>
         @enderror
         </div>";
@@ -181,8 +182,9 @@ class Edit
      * @return String
      */
 
-    public static function select($field, $table_name, $select_options)
+    public static function select($field, $table_name, $select_options, $field_name, $error)
     {
+
         $list_of_options = '';
         $options = explode(',', $select_options);
         foreach ($options as $option) {
@@ -191,10 +193,10 @@ class Edit
         $title = ucfirst($field);
         return "<div class='form-group'>
         <label>{$title}</label>
-        <select class='form-control' name='{$table_name}[{{ \$index }}][{$field}]'>
+        <select class='form-control' name='$'>
           {$list_of_options}
         </select>
-        @error(\"$table_name.\$index.$field\")
+        @error('$error')
         <p class='text-danger'>{{ \$message }}</p>
         @enderror
     </div>";

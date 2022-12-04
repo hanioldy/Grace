@@ -44,32 +44,30 @@
                                         @endforeach
                                     </ul>
 
-                                    <div class="tab-content">
-                                        <form method="POST" action="{{ url }}"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @isset(${{ key }}->translations)
-                                                @foreach (${{ key }}->translations as $index => $translation)
-                                                    <div class="tab-pane @if ($index == 0) active @endif"
-                                                        id="translation{{ $index }}" role="tabpanel"
-                                                        aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">
-                                                        <div class="basic-form">
+                                        @isset(${{ key }}->translations)
+                                            <form method="POST" action="{{ url }}"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                 <div class="basic-form">
+                                                    <div class="tab-content">
+                                                    @foreach (${{ key }}->translations as $index => $translation)
+                                                        <div class="tab-pane @if ($index == 0) active @endif"
+                                                            id="translation{{ $index }}" role="tabpanel"
+                                                            aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">
 
-                                                            <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
-                                                                value="{{ $translation->translation_lang }}">
-                                                            <input type="hidden" name="{{ table_name }}[0][id]" class="form-control"
-                                                                value="{{ $translation->id }}">
-
-                                                            {{ translations_inputs }}
-
-                                                            <div class="form-group">
-                                                                <button type="submit" class="btn mb-1 btn-primary">Save</button>
-                                                            </div>
+                                                                <input type="hidden" name="{{ table_name }}[{{ $index }}][abbr]" class="form-control"
+                                                                    value="{{ $translation->translation_lang }}">
+                                                                <input type="hidden" name="{{ table_name }}[{{ $index }}][id]" class="form-control"
+                                                                    value="{{ $translation->id }}">
+                                                                {{ translations_inputs }}
 
                                                         </div>
+                                                    @endforeach
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn mb-1 btn-primary">Save</button>
                                                     </div>
+                                                </div>
                                             </form>
-                                            @endforeach
                                         @endisset
                                     </div>
                                 </div>
