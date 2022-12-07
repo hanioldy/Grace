@@ -34,7 +34,7 @@ class ChangeStatusForMultiLanguageRecord
         if (config('grace.mode') === 'api') {
             return Response::success($all_records, 'The status of the record has been changed successfully', 200);
         } else if (config('grace.mode') === 'blade') {
-            return redirect('/' . $table_name);
+            return redirect()->route("grace.$table_name.index");
         }
     }
 }

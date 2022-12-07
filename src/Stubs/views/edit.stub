@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                @isset(${{ key }}->translations)
+                @if(count($band->translations) > 0)
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
@@ -43,38 +43,35 @@
                                             </li>
                                         @endforeach
                                     </ul>
+                                        <form method="POST" action="{{ url }}"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                                <div class="basic-form">
+                                                <div class="tab-content">
+                                                @foreach (${{ key }}->translations as $index => $translation)
+                                                    <div class="tab-pane @if ($index == 0) active @endif"
+                                                        id="translation{{ $index }}" role="tabpanel"
+                                                        aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">
 
-                                        @isset(${{ key }}->translations)
-                                            <form method="POST" action="{{ url }}"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                 <div class="basic-form">
-                                                    <div class="tab-content">
-                                                    @foreach (${{ key }}->translations as $index => $translation)
-                                                        <div class="tab-pane @if ($index == 0) active @endif"
-                                                            id="translation{{ $index }}" role="tabpanel"
-                                                            aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">
+                                                            <input type="hidden" name="{{ table_name }}[{{ $index }}][abbr]" class="form-control"
+                                                                value="{{ $translation->translation_lang }}">
+                                                            <input type="hidden" name="{{ table_name }}[{{ $index }}][id]" class="form-control"
+                                                                value="{{ $translation->id }}">
+                                                            {{ translations_inputs }}
 
-                                                                <input type="hidden" name="{{ table_name }}[{{ $index }}][abbr]" class="form-control"
-                                                                    value="{{ $translation->translation_lang }}">
-                                                                <input type="hidden" name="{{ table_name }}[{{ $index }}][id]" class="form-control"
-                                                                    value="{{ $translation->id }}">
-                                                                {{ translations_inputs }}
-
-                                                        </div>
-                                                    @endforeach
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn mb-1 btn-primary">Save</button>
                                                     </div>
+                                                @endforeach
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn mb-1 btn-primary">Save</button>
                                                 </div>
-                                            </form>
-                                        @endisset
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endisset
+                @endif
             </div>
         </div>
     </div>

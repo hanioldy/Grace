@@ -35,6 +35,9 @@
                                                     <a href="{{ route('grace.{{ table_name }}.destroy', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
                                                     </a>
+                                                      <a href="{{ route('grace.{{ table_name }}.change_status', ${{ key }}->id) }}">
+                                                        <button type="button" class="btn mb-1 btn-primary">{{ ${{ key }}->status === 0 ? "Activate" : "Deactivate" }}</button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
