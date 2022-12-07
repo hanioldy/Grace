@@ -3,6 +3,7 @@
 namespace Hani221b\Grace\Controllers\RelationControllers;
 
 use App\Models\Table;
+use App\Models\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Hani221b\Grace\Support\Str as GraceStr;
@@ -37,11 +38,17 @@ class SubmitRelationController
         $relations_array = array();
         $template = array();
         $relation_template = '';
+        $local_table = Table::where('table_name', $this->local_table)->first();
         foreach ($this->relation_type as $type) {
             array_push($relations_array, "rt__" . $type . "__rt");
         }
         foreach ($this->foreign_table as $index => $foreign_table) {
             $relations_array[$index] = $relations_array[$index] . "__ft__" . $foreign_table . "__ft";
+        //store record in db
+        Relation::create([
+            'local_table'=>$local_table->table_name,
+            'foreign_table'=>$foreign_table
+            ]);
         }
         foreach ($this->foriegn_key as $index => $foriegn_key) {
             $relations_array[$index] = $relations_array[$index] . "__fk__" . $foriegn_key . "__fk";
@@ -89,10 +96,8 @@ class SubmitRelationController
             $string_relation_template .= $template[$index] . "\n";
         }
 
-        $local_table = Table::where('table_name', $this->local_table)->first();
         $model_path = base_path() . "/" . $local_table->model . ".php";
         $mdoel_content = file_get_contents($model_path);
-
         $start_relation_field_marker = "/*<relations>*/";
         $end_relation_field_marker = "/*</relations>*/";
         $relations_field_in_model = GraceStr::getBetween($mdoel_content, $start_relation_field_marker, $end_relation_field_marker);
@@ -102,6 +107,15 @@ class SubmitRelationController
             $mdoel_content
         );
         file_put_contents($model_path, $new_model);
+
+        //append relation field in create.blade.pho file
+        $create_file_content = file_get_contents(base_path()."/resources/views/grace/$local_table->table_name/create.blade.php");
+        $create_form = GraceStr::getBetween( $create_file_content, "<!--<$local_table->table_name-form>-->","<!--</$local_table->table_name-form>-->");
+        $new_create_form = $create_form . $this->create('categories');
+        $new_create_form = preg_replace('/\\\\/', '', $new_create_form);
+        $create_file_content = str_replace($create_form, $new_create_form, $create_file_content);
+        file_put_contents(base_path()."/resources/views/grace/$local_table->table_name/create.blade.php" ,$create_file_content);
+
     }
 
     /**
@@ -185,6 +199,21 @@ class SubmitRelationController
             return \$this->belongsToMany($foriegn_model, '$local_key', '$foriegn_key');
         }
         /*</$this->local_table-$single_foreign_table_name-relation>*/
+        ";
+    }
+
+    public function create($foreign_table){
+        $capital_foreign_table = Str::title($foreign_table);
+        $singular_foreign_table = Str::singular($foreign_table);
+        return "
+        <div class='form-group'>
+        <label>$capital_foreign_table</label>
+        <select class='form-control' id='sel1'>
+        @foreach($$foreign_table as $$singular_foreign_table)
+            <option value='{{ $$singular_foreign_table->\id }}'>{{ $$singular_foreign_table->\\name }}</option>
+        @endforeach
+        </select>
+    </div>
         ";
     }
 }
