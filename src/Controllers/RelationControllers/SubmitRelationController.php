@@ -11,14 +11,14 @@ use Hani221b\Grace\Support\Str as GraceStr;
 class SubmitRelationController
 {
 
-    public $relation_type;
-    public $local_table;
-    public $foreign_table;
-    public $single_foreign_table_name;
-    public $foreign_model;
-    public $local_key;
-    public $foriegn_key;
-    public $pivot_table;
+    private $relation_type;
+    private $local_table;
+    private $foreign_table;
+    private $single_foreign_table_name;
+    private $foreign_model;
+    private $local_key;
+    private $foriegn_key;
+    private $pivot_table;
 
     public function __construct(Request $request)
     {
@@ -44,11 +44,6 @@ class SubmitRelationController
         }
         foreach ($this->foreign_table as $index => $foreign_table) {
             $relations_array[$index] = $relations_array[$index] . "__ft__" . $foreign_table . "__ft";
-        //store record in db
-        Relation::create([
-            'local_table'=>$local_table->table_name,
-            'foreign_table'=>$foreign_table
-            ]);
         }
         foreach ($this->foriegn_key as $index => $foriegn_key) {
             $relations_array[$index] = $relations_array[$index] . "__fk__" . $foriegn_key . "__fk";
@@ -108,14 +103,31 @@ class SubmitRelationController
         );
         file_put_contents($model_path, $new_model);
 
-        //append relation field in create.blade.pho file
-        $create_file_content = file_get_contents(base_path()."/resources/views/grace/$local_table->table_name/create.blade.php");
-        $create_form = GraceStr::getBetween( $create_file_content, "<!--<$local_table->table_name-form>-->","<!--</$local_table->table_name-form>-->");
-        $new_create_form = $create_form . $this->create('categories');
-        $new_create_form = preg_replace('/\\\\/', '', $new_create_form);
-        $create_file_content = str_replace($create_form, $new_create_form, $create_file_content);
-        file_put_contents(base_path()."/resources/views/grace/$local_table->table_name/create.blade.php" ,$create_file_content);
+        //append create fields
+        $this->appendCreateField();
 
+    }
+
+    /**
+     * Append create field for the relation in create.blade.php file
+     * @return void
+     */
+    public function appendCreateField(){
+        $foreign_tables_keys = array_combine($this->foreign_table, $this->foriegn_key);
+        foreach ($foreign_tables_keys as $foriegn_table => $foriegn_key) {
+            //store record in db
+            Relation::create([
+                'local_table'=>$this->local_table,
+                'foreign_table'=>$foriegn_table
+                ]);
+            //append relation field in create.blade.pho file
+            $create_file_content = file_get_contents(base_path()."/resources/views/grace/$this->local_table/create.blade.php");
+            $create_form = GraceStr::getBetween( $create_file_content, "<!--<$this->local_table-form>-->","<!--</$this->local_table-form>-->");
+            $new_create_form = $create_form . $this->create($foriegn_table, $foriegn_key);
+            $new_create_form = preg_replace('/\\\\/', '', $new_create_form);
+            $create_file_content = str_replace($create_form, $new_create_form, $create_file_content);
+            file_put_contents(base_path()."/resources/views/grace/$this->local_table/create.blade.php" ,$create_file_content);
+        }
     }
 
     /**
@@ -202,13 +214,13 @@ class SubmitRelationController
         ";
     }
 
-    public function create($foreign_table){
+    public function create($foreign_table, $field){
         $capital_foreign_table = Str::title($foreign_table);
         $singular_foreign_table = Str::singular($foreign_table);
         return "
         <div class='form-group'>
         <label>$capital_foreign_table</label>
-        <select class='form-control' id='sel1'>
+        <select class='form-control' name='$this->local_table\[{{ \$index }}][$field]'>
         @foreach($$foreign_table as $$singular_foreign_table)
             <option value='{{ $$singular_foreign_table->\id }}'>{{ $$singular_foreign_table->\\name }}</option>
         @endforeach
