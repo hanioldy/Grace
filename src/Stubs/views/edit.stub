@@ -11,14 +11,14 @@
                                 <form method="POST" action="{{ url }}"
                                     enctype="multipart/form-data">
                                     @csrf
-
+                                    <!--<{{ table_name }}-form>-->
                                     <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
                                         value="{{ ${{ key }}->translation_lang }}">
                                     <input type="hidden" name="{{ table_name }}[0][id]" class="form-control"
                                         value="{{ ${{ key }}->id }}">
 
                                     {{ inputs }}
-
+                                    <!--</{{ table_name }}-form>-->
                                     <div class="form-group">
                                         <button type="submit" class="btn mb-1 btn-primary">Save</button>
                                     </div>
@@ -57,7 +57,9 @@
                                                                 value="{{ $translation->translation_lang }}">
                                                             <input type="hidden" name="{{ table_name }}[{{ $index }}][id]" class="form-control"
                                                                 value="{{ $translation->id }}">
+                                                            <!--</{{ table_name }}-translations-form>-->
                                                             {{ translations_inputs }}
+                                                            <!--</{{ table_name }}-translations-form>-->
 
                                                     </div>
                                                 @endforeach

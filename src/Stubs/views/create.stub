@@ -23,14 +23,14 @@ $languages_count = \App\Models\Language::count();
                                             <hr>
                                         </div>
                                         <div class="basic-form">
-                                        <!--<bands-form>-->
+                                        <!--<{{ table_name }}-form>-->
                                             <input name="{{ table_name }}[{{ $index }}][id]" value="{{ $language->id }}"
                                                 type="hidden">
                                             <input name="{{ table_name }}[{{ $index }}][abbr]" class="form-control"
                                                 value="{{ $language->abbr }}" type="hidden">
 
                                         {{ inputs }}
-                                        <!--</bands-form>-->
+                                        <!--</{{ table_name }}-form>-->
                                         </div>
                                     </div>
                                 </div>

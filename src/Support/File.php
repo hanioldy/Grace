@@ -155,7 +155,6 @@ class File
                     self::unlink($unlink_collection[$fillable_value]);
                 }
                 // if(array_key_exists($fillable_value, $collection_array)){
-                    echo $fillable_value.  "<br>";
                     $path = self::upload($disk, $collection_array[$fillable_value]);
 
                     $file_array = array_merge($file_array, [$fillable_value => $path]);

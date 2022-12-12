@@ -107,6 +107,10 @@ class SubmitRelationController
 
         //append create fields
         $this->appendCreateFields();
+        //append edit fields
+        $this->appendEditFields("<!--<$this->local_table-form>-->", "<!--</$this->local_table-form>-->", 0);
+          //append translations fields
+        $this->appendEditFields("<!--<$this->local_table-translations-form>-->", "<!--</$this->local_table-translations-form>-->", "{{ \$index }}");
         //append index fieled
         $this->appendIndexFiellds();
 
@@ -131,6 +135,23 @@ class SubmitRelationController
             $new_create_form = preg_replace('/\\\\/', '', $new_create_form);
             $create_file_content = str_replace($create_form, $new_create_form, $create_file_content);
             file_put_contents(base_path()."/resources/views/grace/$this->local_table/create.blade.php" ,$create_file_content);
+        }
+    }
+
+    /**
+     * Append edit fields for the relation in edit.blade.php file
+     * @return void
+     */
+    public function appendEditFields($start_marker, $end_marker, $index){
+        $foreign_tables_keys = array_combine($this->foreign_table, $this->foriegn_key);
+        foreach ($foreign_tables_keys as $foriegn_table => $foriegn_key) {
+            //append relation field in create.blade.pho file
+            $edit_file_content = file_get_contents(base_path()."/resources/views/grace/$this->local_table/edit.blade.php");
+            $edit_form = GraceStr::getBetween($edit_file_content, $start_marker, $end_marker);
+            $new_edit_form = $edit_form . $this->edit($foriegn_table, $foriegn_key, $index);
+            $new_edit_form = preg_replace('/\\\\/', '', $new_edit_form);
+            $edit_file_content = str_replace($edit_form, $new_edit_form, $edit_file_content);
+            file_put_contents(base_path()."/resources/views/grace/$this->local_table/edit.blade.php" ,$edit_file_content);
         }
     }
 
@@ -251,6 +272,21 @@ class SubmitRelationController
         <select class='form-control' name='$this->local_table\[{{ \$index }}][$field]'>
         @foreach($$foreign_table as $$singular_foreign_table)
             <option value='{{ $$singular_foreign_table->\id }}'>{{ $$singular_foreign_table->\\name }}</option>
+        @endforeach
+        </select>
+    </div>
+        ";
+    }
+    public function edit($foreign_table, $field, $index){
+        $capital_foreign_table = Str::title($foreign_table);
+        $singular_foreign_table = Str::singular($foreign_table);
+        $singular_local_table = Str::singular($this->local_table);
+        return "
+        <div class='form-group'>
+        <label>$capital_foreign_table</label>
+        <select class='form-control' name='$this->local_table\[$index][$field]'>
+        @foreach($$foreign_table as $$singular_foreign_table)
+            <option value='{{ $$singular_foreign_table->\id }}' @if($$singular_foreign_table->\id === $$singular_local_table->$field) selected @endif>{{ $$singular_foreign_table->\\name }}</option>
         @endforeach
         </select>
     </div>
