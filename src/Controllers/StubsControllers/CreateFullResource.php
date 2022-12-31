@@ -77,7 +77,7 @@ class CreateFullResource extends Controller
      * Execute the file creation.
      */
 
-    public function excuteFileCreation()
+    public function executeFileCreation()
     {
         // migration
         $this->makeMigration();
@@ -110,7 +110,7 @@ class CreateFullResource extends Controller
             return 'Table already exist';
         } else {
             try {
-                $this->excuteFileCreation();
+                $this->executeFileCreation();
 
                 Table::create([
                     'table_name' => $this->table_name,
@@ -122,15 +122,18 @@ class CreateFullResource extends Controller
                     . "_create_" . GraceStr::pluralLower($this->table_name) . "_table",
                     'views' => config('grace.views_folder_name') . '/' . $this->table_name,
                 ]);
+
+                Artisan::call('optimize');
+
                 return 'Resource has been created successfully';
             } catch (Exception $exception) {
-                return 'Something went worng please try again later!';
+                return 'Something went wrong please try again later!';
             }
         }
     }
 
     /**
-     * Mapping the value of migrtaion stubs variables
+     * Mapping the value of migration stubs variables
      * @return array
      */
     public function getMigrationVariables()

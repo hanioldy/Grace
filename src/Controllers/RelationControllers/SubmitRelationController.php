@@ -7,6 +7,8 @@ use App\Models\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Hani221b\Grace\Support\Str as GraceStr;
+use Hani221b\Grace\Support\Stub;
+use Illuminate\Support\Facades\Artisan;
 
 class SubmitRelationController
 {
@@ -62,13 +64,13 @@ class SubmitRelationController
 
         foreach ($relations_array as $arr) {
             $single_relation = [
-                'realtion_type' => GraceStr::getBetween($arr, "rt__", "__rt"),
+                'relation_type' => GraceStr::getBetween($arr, "rt__", "__rt"),
                 'foreign_table' => GraceStr::getBetween($arr, "ft__", "__ft"),
                 'foreign_key' => GraceStr::getBetween($arr, "fk__", "__fk"),
                 'local_key' => GraceStr::getBetween($arr, "lk__", "__lk"),
                 'pivot_table' => GraceStr::getBetween($arr, "pt__", "__pt"),
             ];
-            switch ($single_relation['realtion_type']) {
+            switch ($single_relation['relation_type']) {
                 case 'HasOne':
                     $relation_template = self::has_one($single_relation['foreign_table'], $single_relation['foreign_key'], $single_relation['local_key']);
                     break;
@@ -94,25 +96,25 @@ class SubmitRelationController
         }
 
         $model_path = base_path() . "/" . $local_table->model . ".php";
-        $mdoel_content = file_get_contents($model_path);
+        $model_content = file_get_contents($model_path);
         $start_relation_field_marker = "/*<relations>*/";
         $end_relation_field_marker = "/*</relations>*/";
-        $relations_field_in_model = GraceStr::getBetween($mdoel_content, $start_relation_field_marker, $end_relation_field_marker);
+        $relations_field_in_model = GraceStr::getBetween($model_content, $start_relation_field_marker, $end_relation_field_marker);
         $new_model = str_replace(
             $relations_field_in_model,
             $relations_field_in_model .= $string_relation_template,
-            $mdoel_content
+            $model_content
         );
-        file_put_contents($model_path, $new_model);
+        // file_put_contents($model_path, $new_model);
 
         //append create fields
-        $this->appendCreateFields();
+        // $this->appendCreateFields();
         //append edit fields
-        $this->appendEditFields("<!--<$this->local_table-form>-->", "<!--</$this->local_table-form>-->", 0);
+        // $this->appendEditFields("<!--<$this->local_table-form>-->", "<!--</$this->local_table-form>-->", 0);
           //append translations fields
-        $this->appendEditFields("<!--<$this->local_table-translations-form>-->", "<!--</$this->local_table-translations-form>-->", "{{ \$index }}");
-        //append index fieled
-        $this->appendIndexFiellds();
+        // $this->appendEditFields("<!--<$this->local_table-translations-form>-->", "<!--</$this->local_table-translations-form>-->", "{{ \$index }}");
+        //append index field
+        // $this->appendIndexFields();
 
     }
 
@@ -159,7 +161,7 @@ class SubmitRelationController
      * Append index fields for the relation in index.blade.php file
      * @return void
      */
-    public function appendIndexFiellds(){
+    public function appendIndexFields(){
         $foriegn_data = [];
         $index_file = file_get_contents(base_path() . "/resources/views/grace/$this->local_table/index.blade.php");
         foreach ($this->foreign_table as $table) {
@@ -175,6 +177,7 @@ class SubmitRelationController
             $relation_key = substr($data, strpos($data, '_|_') + 3);
             $index_file = str_replace("$$local_key->$key", "$$local_key->$relation_name->$relation_key", $index_file);
             $index_file = str_replace("<td>".Str::title($key)."</td>", "<td>".Str::title($relation_name)."</td>", $index_file);
+            $index_file = str_replace("<th>".ucfirst($key)."</th>", "<th>".ucfirst($relation_name)."</th>", $index_file);
             file_put_contents(base_path() . "/resources/views/grace/$this->local_table/index.blade.php", $index_file);
         }
     }
@@ -250,14 +253,25 @@ class SubmitRelationController
         if($pivot_table == null){
             $foriegn_model = GraceStr::singularClass($foreign_table)."::class";
         } else {
-            $foriegn_model = "'$pivot_table'";
+            $foriegn_model = GraceStr::singularClass($foreign_table)."::class, '$pivot_table'";
         }
+        $foreign_id = Str::singular($foreign_table)."_id";
+        $local_id = Str::singular($this->local_table)."_id";
+
         $single_foreign_table_name = Str::singular($foreign_table);
+
+        $pivotStubsVariables = [
+            'field_names'=>[$foreign_id, $local_id],
+            'field_types'=>['integer','integer'],
+        ];
+
+        $this->create_pivot_table($pivotStubsVariables);
+
         return "
         /*<$this->local_table-$single_foreign_table_name-relation>*/
         public function $single_foreign_table_name()
         {
-            return \$this->belongsToMany($foriegn_model, '$local_key', '$foriegn_key');
+            return \$this->belongsToMany($foriegn_model, '$local_id', '$foreign_id');
         }
         /*</$this->local_table-$single_foreign_table_name-relation>*/
         ";
@@ -291,5 +305,18 @@ class SubmitRelationController
         </select>
     </div>
         ";
+    }
+
+    public function create_pivot_table($pivotStubsVariables)
+    {
+        $content = Stub::getMigrationStubContents(__DIR__ . "/../../Stubs/migration.pivot.stub", $pivotStubsVariables);
+        $foreign_table = Str::plural(str_replace('_id', '', $pivotStubsVariables['field_names'][0]));
+        $local_table = Str::plural(str_replace('_id', '', $pivotStubsVariables['field_names'][1]));
+        $table_name = $foreign_table."_".$local_table;
+        $file_name =  date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
+            . "_create_".$table_name."_table" . '.php';
+            $content = str_replace("{{ table_name }}", $table_name, $content);
+            file_put_contents( base_path() . '/database/migrations/' .$file_name, $content);
+            Artisan::call('migrate', ['--path'=>  '/database/migrations/'.$file_name]);
     }
 }

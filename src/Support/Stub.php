@@ -47,7 +47,7 @@ class Stub
 
         $string_mutators_template = Factory::appendMutatorToModel($stubVariables);
 
-        if ($stubVariables['files_fields'] === "") {
+        if ($stubVariables['files_fields'] === null) {
             $contents = str_replace('{{ mutatators }}', "", $contents);
         } else {
             $contents = str_replace('{{ mutatators }}', $string_mutators_template, $contents);

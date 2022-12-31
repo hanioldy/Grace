@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                @if(count($band->translations) > 0)
+                @if(count(${{ key }}->translations) > 0)
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">

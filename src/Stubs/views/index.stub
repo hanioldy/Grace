@@ -21,7 +21,9 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                        <!--<{{ table_name }}-th-fields>-->
                                             {{ th_fields }}
+                                        <!--</{{ table_name }}-th-fields>-->
                                         </tr>
                                     </thead>
                                     <tbody>

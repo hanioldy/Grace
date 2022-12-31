@@ -48,6 +48,8 @@ class Create
                     foreach($select_options as $options){;
                         $input_template = self::select($field, $table_name, $options);
                     }
+                case 'relation':
+                        $input_template = '';
                     break;
             }
             array_push($template, $input_template);

@@ -56,6 +56,8 @@ class Edit
                     foreach ($select_options as $options) {;
                         $input_template = self::select($field, $folder_name, $options, $field_name, $error);
                     }
+                    case 'relation':
+                        $input_template = '';
                     break;
             }
             array_push($template, $input_template);
