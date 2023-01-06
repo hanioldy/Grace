@@ -28,16 +28,11 @@
                                 </v-col>
                                 <v-col cols="3">
                                     <v-autocomplete name="field_types[]" label="Field Type" small-chips
-                                        :items="columnTypes"></v-autocomplete>
+                                    v-on:change="fieldType(index, $event)" :items="columnTypes"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="3">
-                                    <v-autocomplete name="input_types[]" label="Input Type" small-chips
-                                        v-on:change="inputType(index, $event)" :items="inputTypes"></v-autocomplete>
-                                </v-col>
-                                <v-col cols="1">
-                                    <v-checkbox name="isFile[]" label="File?" value="1"></v-checkbox>
-                                    <input style="display:none" id='testNameHidden' type='checkbox' value='0'
-                                        name='isFile[]' checked>
+                                    <v-autocomplete :disabled="item.isRelationType" name="input_types[]" label="Input Type" small-chips
+                                        v-on:change="inputType(index, $event)" :items="inputTypes" ref="input_types" :value="item.input_type_value"></v-autocomplete>
                                 </v-col>
                                 <v-col cols="1">
                                     <v-btn color="error" @click="deleteField(index)">

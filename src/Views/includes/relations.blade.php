@@ -62,7 +62,7 @@
                                                     </v-col>
                                                     <v-col cols="2">
                                                         <v-select outlined label="Foreign Key"
-                                                            :items="relation.foriegnKey" name="foriegn_key[]">
+                                                            :items="relation.foriegnKey" name="foriegn_key[]" :disabled="relation.isBelongsToMany">
                                                         </v-select>
                                                     </v-col>
                                                 </v-row>
@@ -76,7 +76,7 @@
                                                     </v-col>
                                                     <v-col cols="2">
                                                         <v-select outlined label="Local Key" :items="relation.storeKey"
-                                                            item-value="key" item-text="label" name="local_key[]">
+                                                            item-value="key" item-text="label" name="local_key[]" :disabled="relation.isBelongsToMany">
                                                         </v-select>
                                                     </v-col>
                                                     <v-col cols="2">
@@ -84,7 +84,7 @@
                                                     </v-col>
                                                     <v-col cols="2">
                                                         <v-select outlined label="Display" :items="relation.displayKey"
-                                                            name="display_key[]">
+                                                            name="display_key[]" :disabled="relation.isBelongsToMany">
                                                         </v-select>
                                                     </v-col>
                                                     <v-col cols="3">
@@ -148,6 +148,7 @@
                     time: Date.now(),
                     relationType: '',
                     foreignTable: '',
+                    isBelongsToMany: false
                 }],
                 id: 1,
                 relationTypes: [{
@@ -186,9 +187,13 @@
             },
             relationType(index, event) {
                 this.relations[index].relationType = event;
+                if(event === 'BelongsToMany'){
+                    this.relations[index].isBelongsToMany = true
+                } else {
+                    this.relations[index].isBelongsToMany = false
+                }
+
                 if (event === 'BelongsTo' || event === 'BelongsToMany') {
-                    console.log(this.dbFields[this.relations[index].foreignTable]);
-                    console.log(this.localFields);
                     if(this.relations[index].foreignTable !== undefined){
                         this.relations[index].foriegnKey = Object.values(this.dbFields[this.relations[index].foreignTable]);
                     }

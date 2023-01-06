@@ -2,7 +2,7 @@
 
 namespace Hani221b\Grace\Operations;
 
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
 
 class ChangeStatusForMultiLanguageRecord
 {
@@ -11,7 +11,7 @@ class ChangeStatusForMultiLanguageRecord
      *
      * @param int $id
      * @param string $model_path
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
 
     public static function changeStatus($id, $model_path, $table_name)
@@ -20,7 +20,7 @@ class ChangeStatusForMultiLanguageRecord
         $requested_record = $model_path::find($id);
         //return false if requested was not found
         if (!$requested_record) {
-            return JsonResponse::errorResponse('The requested record does not exist', 404);
+            return Response::error('The requested record does not exist', 404);
         }
         //switch the status value of the requested record
         $status = $requested_record->status == 0 ? 1 : 0;
@@ -32,9 +32,9 @@ class ChangeStatusForMultiLanguageRecord
         $translations->each->update(['status' => $status]);
         $all_records = $model_path::where('id', $id)->with('translations')->get();
         if (config('grace.mode') === 'api') {
-            return JsonResponse::successResponse($all_records, 'The status of the record has been changed successfully', 200);
+            return Response::success($all_records, 'The status of the record has been changed successfully', 200);
         } else if (config('grace.mode') === 'blade') {
-            return redirect('/' . $table_name);
+            return redirect()->route("grace.$table_name.index");
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Support\File;
 use Illuminate\Http\Request;
 
 class CreateDisk extends Controller
@@ -13,10 +13,13 @@ class CreateDisk extends Controller
      * @return string
      */
     protected $table_name;
+    protected $namespace;
+    protected $class_name;
+    protected $files;
 
     /**
      * Create a new command instance.
-     * @param Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      */
     public function __construct(Request $request)
     {
@@ -42,12 +45,12 @@ class CreateDisk extends Controller
      */
     public function makeDiskAlive()
     {
-        $path = MakeStubsAliveHelper::getSourceFilePath($this->namespace, $this->class_name, '');
+        $path = File::sourceFilePath($this->namespace, $this->class_name, '');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($path));
+        File::makeDirectory($this->files, dirname($path));
 
-        $contents = MakeStubsAliveHelper::getSourceFile($this->getStubVariables(), 'model');
+        $contents = File::sourceFile($this->getStubVariables(), 'model');
 
-        return MakeStubsAliveHelper::putFilesContent($this->files, $path, $contents);
+        return File::put($this->files, $path, $contents);
     }
 }

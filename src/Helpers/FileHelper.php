@@ -9,28 +9,28 @@ class FileHelper
 
     //=========================================
     // Function to upload files.
-    //=========================================
-    public static function UploadFile($folder, $file)
-    {
-        // return var_dump($file);
-        $file->store('/', $folder);
-        $filename = $file->hashName();
-        $path = $filename;
-        return $path;
-    }
+    // //=========================================
+    // public static function UploadFile($folder, $file)
+    // {
+    //     // return var_dump($file);
+    //     $file->store('/', $folder);
+    //     $filename = $file->hashName();
+    //     $path = $filename;
+    //     return $path;
+    // }
 
     //=========================================
     // Function to unlink files.
     //=========================================
 
-    public static function UnlinkFile($file_from_request)
-    {
-        $file = Str::after($file_from_request, asset(''));
-        $file_to_be_unlinked = base_path($file);
-        if (file_exists($file_to_be_unlinked)) {
-            unlink($file_to_be_unlinked);
-        }
-    }
+    // public static function UnlinkFile($file_from_request)
+    // {
+    //     $file = Str::after($file_from_request, asset(''));
+    //     $file_to_be_unlinked = base_path($file);
+    //     if (file_exists($file_to_be_unlinked)) {
+    //         unlink($file_to_be_unlinked);
+    //     }
+    // }
 
     //=========================================
     // Check key exist.
@@ -94,28 +94,28 @@ class FileHelper
 
     // }
 
-    public static function CheckKeyExists(
-        $files_fillable_values,
-        $disk = null,
-        $collection_array = null,
-        $unlink_collection = null
-    ) {
-        $file_array = [];
-        $files_fillable_values = array_values($files_fillable_values);
-        foreach ($files_fillable_values as $fillable_value) {
-            if (in_array($fillable_value, $files_fillable_values)) {
-                if (isset($unlink_collection)) {
-                    FileHelper::UnlinkFile($unlink_collection[$fillable_value]);
-                }
-                $path = FileHelper::UploadFile($disk, $collection_array[$fillable_value]);
-                $file_array = array_merge($file_array, [$fillable_value => $path]);
+    // public static function CheckKeyExists(
+    //     $files_fillable_values,
+    //     $disk = null,
+    //     $collection_array = null,
+    //     $unlink_collection = null
+    // ) {
+    //     $file_array = [];
+    //     $files_fillable_values = array_values($files_fillable_values);
+    //     foreach ($files_fillable_values as $fillable_value) {
+    //         if (in_array($fillable_value, $files_fillable_values)) {
+    //             if (isset($unlink_collection)) {
+    //                 FileHelper::UnlinkFile($unlink_collection[$fillable_value]);
+    //             }
+    //             $path = FileHelper::UploadFile($disk, $collection_array[$fillable_value]);
+    //             $file_array = array_merge($file_array, [$fillable_value => $path]);
 
-            } else {
-                $file_array = [];
-            }
-        }
-        return $file_array;
-    }
+    //         } else {
+    //             $file_array = [];
+    //         }
+    //     }
+    //     return $file_array;
+    // }
 
     //=========================================
     // Unlink files when delete record.
@@ -132,13 +132,13 @@ class FileHelper
     //     }
     // }
 
-    public static function UnlinkWhenDelete($files_fillable_values, $unlink_collection)
-    {
-        $files_fillable_values = array_values($files_fillable_values);
-        foreach ($files_fillable_values as $fillable_value) {
-            if (in_array($fillable_value, $files_fillable_values)) {
-                FileHelper::UnlinkFile($unlink_collection[$fillable_value]);
-            }
-        }
-    }
+    // public static function UnlinkWhenDelete($files_fillable_values, $unlink_collection)
+    // {
+    //     $files_fillable_values = array_values($files_fillable_values);
+    //     foreach ($files_fillable_values as $fillable_value) {
+    //         if (in_array($fillable_value, $files_fillable_values)) {
+    //             FileHelper::UnlinkFile($unlink_collection[$fillable_value]);
+    //         }
+    //     }
+    // }
 }

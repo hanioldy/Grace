@@ -2,7 +2,7 @@
 
 namespace Hani221b\Grace\Operations;
 
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
 
 class SortMultiLanguageRecords
 {
@@ -29,7 +29,7 @@ class SortMultiLanguageRecords
             }
         }
         if (config('grace.mode') === 'api') {
-            return JsonResponse::successResponse(null, 'The status of the record has been changed successfully', 200);
+            return Response::success(null, 'The status of the record has been changed successfully', 200);
         } else if (config('grace.mode') === 'blade') {
             return redirect('/' . $table_name);
         }

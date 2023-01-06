@@ -21,19 +21,26 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                        <!--<{{ table_name }}-th-fields>-->
                                             {{ th_fields }}
+                                        <!--</{{ table_name }}-th-fields>-->
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (${{ table_name }} as ${{ key }})
                                             <tr>
+                                                <!--<{{ table_name }}-fields>-->
                                                 {{ td_fields }}
+                                                <!--</{{ table_name }}-fields>-->
                                                 <td>
                                                     <a href="{{ route('grace.{{ table_name }}.edit', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-warning">Edit</button>
                                                     </a>
                                                     <a href="{{ route('grace.{{ table_name }}.destroy', ${{ key }}->id) }}">
                                                         <button type="button" class="btn mb-1 btn-danger">Delete</button>
+                                                    </a>
+                                                      <a href="{{ route('grace.{{ table_name }}.change_status', ${{ key }}->id) }}">
+                                                        <button type="button" class="btn mb-1 btn-primary">{{ ${{ key }}->status === 0 ? "Activate" : "Deactivate" }}</button>
                                                     </a>
                                                 </td>
                                             </tr>

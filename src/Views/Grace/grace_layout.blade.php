@@ -35,7 +35,7 @@
 
         @include('Grace::Grace.includes.header')
 
-        @include('Grace::Grace.includes.sidebar')
+        @include('grace.includes.sidebar')
 
         @yield('content')
 

@@ -3,10 +3,11 @@
 namespace Hani221b\Grace\Commands;
 
 use App\Providers\RouteServiceProvider;
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Support\Core;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Hani221b\Grace\Support\Str as GraceStr;
 
 class InstallGrace extends Command
 {
@@ -31,8 +32,8 @@ class InstallGrace extends Command
 
     public function register_route_file()
     {
-        $body = MakeStubsAliveHelper::getMethodSourceCode(RouteServiceProvider::class, 'boot');
-        $routes_function = MakeStubsAliveHelper::getStringBetween($body, "{", "}");
+        $body = Core::methodSource(RouteServiceProvider::class, 'boot');
+        $routes_function = GraceStr::getBetween($body, "{", "}");
         $routes_function_array = explode("\n", $routes_function);
         $grace_route_registration_arrry = explode("\n", "
             Route::middleware('web')

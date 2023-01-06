@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use Hani221b\Grace\Helpers\JsonResponse;
+use Hani221b\Grace\Support\Response;
 use Hani221b\Grace\Operations\DisplaySingleRecord;
 use Hani221b\Grace\Operations\StoreMultiLanguageRecord;
 use Hani221b\Grace\Operations\UpdateMultiLanguageRecord;
@@ -55,7 +55,7 @@ class {{ class_name }} extends Controller
                 $this->resource_path
                 );
         } catch (Exception $exception) {
-            return JsonResponse::errorResponse('Something went wrong, please try again later', 500);
+            return Response::error('Something went wrong, please try again later', 500);
         }
     }
 
@@ -85,7 +85,7 @@ class {{ class_name }} extends Controller
                 $this->model_path,
             );
         } catch (Exception $exception) {
-            return JsonResponse::errorResponse('Something went wrong, please try again later', 500);
+            return Response::error('Something went wrong, please try again later', 500);
         }
     }
 
@@ -108,7 +108,7 @@ class {{ class_name }} extends Controller
                 $this->table_name,
             );
         } catch (Exception $exception) {
-            return JsonResponse::errorResponse('Something went wrong, please try again later', 500);
+            return Response::error('Something went wrong, please try again later', 500);
         }
     }
 
@@ -127,7 +127,7 @@ class {{ class_name }} extends Controller
                 $this->table_name
             );
         } catch (Exception $exception) {
-            return JsonResponse::errorResponse('Something went wrong, please try again later', 500);
+            return Response::error('Something went wrong, please try again later', 500);
         }
     }
 }

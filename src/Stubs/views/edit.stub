@@ -11,14 +11,14 @@
                                 <form method="POST" action="{{ url }}"
                                     enctype="multipart/form-data">
                                     @csrf
-
+                                    <!--<{{ table_name }}-form>-->
                                     <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
                                         value="{{ ${{ key }}->translation_lang }}">
                                     <input type="hidden" name="{{ table_name }}[0][id]" class="form-control"
                                         value="{{ ${{ key }}->id }}">
 
                                     {{ inputs }}
-
+                                    <!--</{{ table_name }}-form>-->
                                     <div class="form-group">
                                         <button type="submit" class="btn mb-1 btn-primary">Save</button>
                                     </div>
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                @isset(${{ key }}->translations)
+                @if(count(${{ key }}->translations) > 0)
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
@@ -43,40 +43,37 @@
                                             </li>
                                         @endforeach
                                     </ul>
-
-                                    <div class="tab-content">
                                         <form method="POST" action="{{ url }}"
                                             enctype="multipart/form-data">
                                             @csrf
-                                            @isset(${{ key }}->translations)
+                                                <div class="basic-form">
+                                                <div class="tab-content">
                                                 @foreach (${{ key }}->translations as $index => $translation)
                                                     <div class="tab-pane @if ($index == 0) active @endif"
                                                         id="translation{{ $index }}" role="tabpanel"
                                                         aria-expanded="{{ $index == 0 ? 'true' : 'false' }}">
-                                                        <div class="basic-form">
 
-                                                            <input type="hidden" name="{{ table_name }}[0][abbr]" class="form-control"
+                                                            <input type="hidden" name="{{ table_name }}[{{ $index }}][abbr]" class="form-control"
                                                                 value="{{ $translation->translation_lang }}">
-                                                            <input type="hidden" name="{{ table_name }}[0][id]" class="form-control"
+                                                            <input type="hidden" name="{{ table_name }}[{{ $index }}][id]" class="form-control"
                                                                 value="{{ $translation->id }}">
-
+                                                            <!--</{{ table_name }}-translations-form>-->
                                                             {{ translations_inputs }}
+                                                            <!--</{{ table_name }}-translations-form>-->
 
-                                                            <div class="form-group">
-                                                                <button type="submit" class="btn mb-1 btn-primary">Save</button>
-                                                            </div>
-
-                                                        </div>
                                                     </div>
-                                            </form>
-                                            @endforeach
-                                        @endisset
+                                                @endforeach
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn mb-1 btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endisset
+                @endif
             </div>
         </div>
     </div>

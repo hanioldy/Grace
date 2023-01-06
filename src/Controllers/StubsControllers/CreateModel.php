@@ -3,8 +3,9 @@
 namespace Hani221b\Grace\Controllers\StubsControllers;
 
 use App\Http\Controllers\Controller;
-use Hani221b\Grace\Helpers\FactoryHelpers\makeModelAliveHelper;
-use Hani221b\Grace\Helpers\MakeStubsAliveHelper;
+use Hani221b\Grace\Support\Core;
+use Hani221b\Grace\Support\Factory;
+use Hani221b\Grace\Support\File;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Pluralizer;
@@ -34,11 +35,9 @@ class CreateModel extends Controller
         $this->namespace = $request->namespace;
         $this->table_name = $request->table_name;
         $this->class_name = $this->getSingularClassName();
-        // $this->fillable_array = strip_tags($request->fillable_array);
-        // $this->file_name = $request->file_name;
         $this->field_names = $request->field_names;
         $this->files_fields = $request->files_fields;
-        $this->files_fields = MakeStubsAliveHelper::isFileValues($request);
+        $this->files_fields = Core::isFileValues($request->field_names,$request->field_types);
     }
 
     /**
@@ -64,8 +63,8 @@ class CreateModel extends Controller
             'namespace' => $this->namespace,
             'class_name' => $this->class_name,
             'table_name' => $this->table_name,
-            'fillable_array' => makeModelAliveHelper::model_fillable_array($this->field_names),
-            'files_fields' => MakeStubsAliveHelper::files_fillable_array($this->field_names, $this->files_fields),
+            'fillable_array' => Factory::modelFillableArray($this->field_names),
+            'files_fields' => Core::filesFillableArray($this->files_fields),
         ];
     }
 
@@ -74,12 +73,12 @@ class CreateModel extends Controller
      */
     public function makeModelAlive()
     {
-        $model_path = MakeStubsAliveHelper::getSourceFilePath($this->namespace, $this->table_name, '');
+        $model_path = File::sourceFilePath($this->namespace, $this->table_name, '');
 
-        MakeStubsAliveHelper::makeDirectory($this->files, dirname($model_path));
+        File::makeDirectory($this->files, dirname($model_path));
 
-        $model_contents = MakeStubsAliveHelper::getModelSourceFile($this->getStubVariables(), 'model');
+        $model_contents = File::modelSourceFile($this->getStubVariables(), 'model');
 
-        MakeStubsAliveHelper::putFilesContent($this->files, $model_path, $model_contents);
+        File::put($this->files, $model_path, $model_contents);
     }
 }
