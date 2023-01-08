@@ -64,5 +64,7 @@ class CreateMigration extends Controller
         $contents = File::migrationSourceFile($this->getStubVariables(), 'migration');
 
         File::put($this->files, $path, $contents);
+
+        return redirect()->route('success');
     }
 }

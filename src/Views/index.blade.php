@@ -4,16 +4,20 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('grace/assets/css/dist/vuetify.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
     <style>
         /* Helper classes */
-        .basil {
+        .azzurri {
             background-color: #FFFBE6 !important;
         }
 
-        .basil--text {
-            color: #356859 !important;
+        .azzurri--text {
+            color: #0080FF !important;
+        }
+
+        a {
+            text-decoration: none;
         }
     </style>
 </head>
@@ -22,76 +26,51 @@
     <div id="app">
         <template>
             <v-app>
-                <v-card>
-                    <v-card-title class="text-center justify-center py-6">
-                        <a href="{{ route('grace_tables') }}">
-                            <v-btn>Show tables</v-btn>
-                        </a>
-                        <h3 class="font-weight-bold text-h2 basil--text">
-                            GRACE
-                        </h3>
-                    </v-card-title>
-                    <v-tabs v-model="tab" background-color="transparent" grow>
-                        <v-tab>
-                            Create Full Resource
-                        </v-tab>
-                        <v-tab>
-                            Create Migration
-                        </v-tab>
-                        <v-tab>
-                            Create Model
-                        </v-tab>
-                        <v-tab>
-                            Create Controller
-                        </v-tab>
-                        <v-tab>
-                            Create Reauest Class
-                        </v-tab>
-                        <v-tab>
-                            Create Resource Class
-                        </v-tab>
-                    </v-tabs>
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2">
+                            <v-navigation-drawer permanent>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item-title class="text-h6">
+                                            <span class="font-weight-bold text-h4 azzurri--text">
+                                                GRACE
+                                            </span>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list dense nav>
+                                    <v-list-item href="{{ route('factory') }}" link>
+                                        <v-list-item-icon>
+                                            <span class="mdi mdi-factory"></span>
+                                        </v-list-item-icon>
 
-                    <v-tabs-items v-model="tab">
-                        <v-tab-item>
-                            <v-card color="basil" flat>
-                                @include('Grace::includes.fullResource')
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                            <v-card color="basil" flat>
-                                @include('Grace::includes.migration')
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                            <v-card color="basil" flat>
-                                @include('Grace::includes.model')
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                            <v-card color="basil" flat>
-                                @include('Grace::includes.controller')
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                            <v-card color="basil" flat>
-                                @include('Grace::includes.request')
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab-item>
-                            <v-card color="basil" flat>
-                                @include('Grace::includes.resource')
-                            </v-card>
-                        </v-tab-item>
-                    </v-tabs-items>
-                </v-card>
+                                        <v-list-item-content>
+                                            <v-list-item-title>Factory</v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-list-item href="{{ route('grace_tables') }}" link>
+                                        <v-list-item-icon>
+                                            <span class="mdi mdi-table-large"></span>
+                                        </v-list-item-icon>
 
+                                        <v-list-item-content>
+                                            <v-list-item-title>Tables</v-list-item-title>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                </v-list>
+                            </v-navigation-drawer>
+                        </v-col>
+                        <v-col cols="10">
+                            @yield('content')
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-app>
         </template>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="{{ asset('grace/assets/js/dist/vue.js') }}"></script>
+    <script src="{{ asset('grace/assets/js/dist/vuetify.js') }}"></script>
     <script>
         new Vue({
             el: "#app",
@@ -117,8 +96,8 @@
                 fields: [{
                     name: "",
                     time: Date.now(),
-                    isSelect:false,
-                    isRelationType:false
+                    isSelect: false,
+                    isRelationType: false
                 }],
             }),
             methods: {
@@ -127,9 +106,9 @@
                     this.fields.push({
                         name: "",
                         time: Date.now(),
-                        isSelect:false,
-                        isRelationType:false,
-                        input_type_value:''
+                        isSelect: false,
+                        isRelationType: false,
+                        input_type_value: ''
                     });
                 },
                 deleteField(fieldIndex) {
@@ -142,9 +121,9 @@
                         this.fields[index].isSelect = false;
                     }
                 },
-                fieldType(index, event){
-                    if(this.relationsFields.includes(event)){
-                        this.fields[index].input_type_value =  'relation'
+                fieldType(index, event) {
+                    if (this.relationsFields.includes(event)) {
+                        this.fields[index].input_type_value = 'relation'
                         this.fields[index].isRelationType = true
                     } else {
                         this.fields[index].isRelationType = false

@@ -10,8 +10,9 @@ use Hani221b\Grace\Controllers\StubsControllers\CreateRequest;
 use Hani221b\Grace\Controllers\StubsControllers\CreateResource;
 use Illuminate\Support\Facades\Route;
 
-Route::get('grace_cp', [DashboardController::class, 'grace_cp']);
+Route::get('grace_cp', [DashboardController::class, 'grace_cp'])->name('factory');
 Route::get('dashboard', [DashboardController::class, 'get_dashboard']);
+Route::get('success', [DashboardController::class, 'success'])->name('success');
 
 Route::post('create_model', [CreateModel::class, 'makeModelAlive'])->name('makeModelAlive');
 Route::post('create_controller', [CreateController::class, 'makeControllerAlive'])->name('makeControllerAlive');
@@ -21,7 +22,7 @@ Route::post('create_resource', [CreateResource::class, 'makeResourceAlive'])->na
 Route::post('create_full_resource', [CreateFullResource::class, 'makeFullResourceAlive'])->name('makeFullResourceAlive');
 
 //===========================================================
-// Langauges
+// Languages
 //===========================================================
 
 Route::get('dashboard/languages', [DashboardController::class, 'get_languages'])->name('grace.languages');

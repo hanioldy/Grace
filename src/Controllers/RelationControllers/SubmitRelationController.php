@@ -105,16 +105,18 @@ class SubmitRelationController
             $relations_field_in_model .= $string_relation_template,
             $model_content
         );
-        // file_put_contents($model_path, $new_model);
+        file_put_contents($model_path, $new_model);
 
         //append create fields
-        // $this->appendCreateFields();
+        $this->appendCreateFields();
         //append edit fields
-        // $this->appendEditFields("<!--<$this->local_table-form>-->", "<!--</$this->local_table-form>-->", 0);
+        $this->appendEditFields("<!--<$this->local_table-form>-->", "<!--</$this->local_table-form>-->", 0);
           //append translations fields
-        // $this->appendEditFields("<!--<$this->local_table-translations-form>-->", "<!--</$this->local_table-translations-form>-->", "{{ \$index }}");
+        $this->appendEditFields("<!--<$this->local_table-translations-form>-->", "<!--</$this->local_table-translations-form>-->", "{{ \$index }}");
         //append index field
-        // $this->appendIndexFields();
+        $this->appendIndexFields();
+
+        return redirect()->route('success');
 
     }
 

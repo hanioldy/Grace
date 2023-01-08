@@ -51,6 +51,8 @@ class CreateDisk extends Controller
 
         $contents = File::sourceFile($this->getStubVariables(), 'model');
 
-        return File::put($this->files, $path, $contents);
+        File::put($this->files, $path, $contents);
+
+        return redirect()->route('success');
     }
 }

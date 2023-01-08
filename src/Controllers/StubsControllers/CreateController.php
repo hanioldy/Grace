@@ -75,5 +75,7 @@ class CreateController extends Controller
         $controller_contents = File::sourceFile($this->getStubVariables(), 'controller');
 
         File::put($this->files, $controller_path, $controller_contents);
+
+        return redirect()->route('success');
     }
 }

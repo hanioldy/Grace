@@ -53,6 +53,8 @@ class CreateRequest extends Controller
 
         $contents = File::sourceFile($this->getStubVariables(), 'request');
 
-        return  File::put($this->files, $path, $contents);
+        File::put($this->files, $path, $contents);
+
+        return redirect()->route('success');
     }
 }

@@ -15,7 +15,7 @@ class DashboardController
 {
     public function grace_cp()
     {
-        return view('Grace::index');
+        return view('Grace::pages.main');
     }
 
     /**
@@ -39,6 +39,12 @@ class DashboardController
         } catch (Exception $exception) {
             return 'something went wrong. please try again later';
         }
+    }
+    /**
+     * return success page
+     */
+    public function success(){
+        return view('Grace::pages.success');
     }
 
     /**
@@ -65,7 +71,7 @@ class DashboardController
     public function set_language_to_default($id)
     {
         try {
-            // setting default langauge back to non default
+            // setting default language back to non default
             $default_language = Language::where('default', 1)->select('id', 'default')->first();
             $default_language->update(['default' => 0]);
             // setting new default language
@@ -85,7 +91,7 @@ class DashboardController
     {
         try {
             $tables = Table::get();
-            return view('Grace::includes.tables', compact('tables'));
+            return view('Grace::pages.tables', compact('tables'));
         } catch (Exception $exception) {
             return 'something went wrong. please try again later';
         }
@@ -165,22 +171,22 @@ class DashboardController
 
         $table->delete();
 
-        return redirect()->back();
+        return redirect()->route('success');
     }
 
     /**
-     * Adding validation ruls on the fields of spesefic table
+     * Adding validation rules on the fields of specific table
      */
     public function add_validation($id)
     {
         $table = Table::where('id', $id)->first();
         $fields = array_diff(Schema::getColumnListing($table->table_name), ['id', 'translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
         $fields = array_values($fields);
-        return view('Grace::includes.add_validation', compact('fields', 'id'));
+        return view('Grace::pages.validations', compact('fields', 'id'));
     }
 
     /**
-     * Adding validation ruls on the fields of spesefic table
+     * Adding validation rule on the fields of specific table
      */
     public function submit_validation(Request $request)
     {
@@ -213,7 +219,7 @@ class DashboardController
 
         $contents = str_replace('//rules go here [DO NOT REMOVE THIS COMMENT]', $validation_template, $request_file);
         file_put_contents(base_path() . '/' . $table->request . '.php', $contents);
-        return "Validation has been added successfully to file: $table->request.php";
+        return redirect()->route('success');
     }
 
     /**
@@ -238,6 +244,6 @@ class DashboardController
         $db_fields = array_combine($db_tables, $db_fields);
         $fields = array_diff(Schema::getColumnListing($table->table_name), ['translation_lang', 'translation_of', 'status', 'order', 'created_at', 'updated_at', 'deleted_at']);
         $fields = array_values($fields);
-        return view('Grace::includes.relations', compact('fields', 'table', 'db_tables', 'db_fields'));
+        return view('Grace::pages.relations', compact('fields', 'table', 'db_tables', 'db_fields'));
     }
 }

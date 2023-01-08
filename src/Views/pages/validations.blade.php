@@ -11,12 +11,12 @@
     <title>Grace - Add Validation</title>
     <style>
         /* Helper classes */
-        .basil {
+        .azzurri {
             background-color: #FFFBE6 !important;
         }
 
-        .basil--text {
-            color: #356859 !important;
+        .azzurri--text {
+            color: #0080FF !important;
         }
     </style>
 </head>
@@ -25,9 +25,9 @@
     <div id="validation">
         <template>
             <v-app>
-                <v-card>
+                <v-card style="height: 100%">
                     <v-card-title class="text-center justify-center py-6">
-                        <h3 class="font-weight-bold text-h2 basil--text">
+                        <h3 class="font-weight-bold text-h2 azzurri--text">
                             GRACE
                         </h3>
                     </v-card-title>
@@ -37,32 +37,38 @@
                                 <form method="POST" action="{{ route('submit_validation') }}">
                                     @foreach ($fields as $index => $field)
                                         <input type="hidden" name="table_id" value="{{ $id }}">
-                                        <v-card>
+                                        <v-card class="mt-3">
                                             <v-container>
                                                 <v-card-title>
                                                     {{ $field }}
                                                 </v-card-title>
-                                                <v-row v-for="(rule, index) in rules" :key="rule.id">
-                                                    <v-row v-if="rule.field === {{ json_encode($field) }}">
-                                                        <input type="hidden"
-                                                            name="validation[{{ $index }}][field]"
-                                                            value="{{ $field }}">
-                                                        <v-col   cols="5">
-                                                            <v-autocomplete :items="rulesList" outlined
-                                                            label="Rules" name="validation[{{ $index }}][rules][]" v-on:change="addOptions(index, $event)">
-                                                            </v-autocomplete>
-                                                        </v-col>
-                                                        <v-col cols="5">
-                                                            <v-text-field v-show="rule.hasOptions === true" outlined label="Options" :value="null"
-                                                            name="validation[{{ $index }}][options][]">
-                                                        </v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="">
-                                                            <v-btn color="error" v-on:click="deleteRule(index)">Remove
-                                                                Rule</v-btn>
-                                                        </v-col>
+                                                <v-card-text>
+                                                    <v-row v-for="(rule, index) in rules" :key="rule.id">
+                                                        <v-row v-if="rule.field === {{ json_encode($field) }}">
+                                                            <input type="hidden"
+                                                                name="validation[{{ $index }}][field]"
+                                                                value="{{ $field }}">
+                                                            <v-col cols="5">
+                                                                <v-autocomplete :items="rulesList" outlined
+                                                                    label="Rules"
+                                                                    name="validation[{{ $index }}][rules][]"
+                                                                    v-on:change="addOptions(index, $event)">
+                                                                </v-autocomplete>
+                                                            </v-col>
+                                                            <v-col cols="5">
+                                                                <v-text-field v-show="rule.hasOptions === true" outlined
+                                                                    label="Options" :value="null"
+                                                                    name="validation[{{ $index }}][options][]">
+                                                                </v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="">
+                                                                <v-btn color="error" v-on:click="deleteRule(index)">
+                                                                    Remove
+                                                                    Rule</v-btn>
+                                                            </v-col>
+                                                        </v-row>
                                                     </v-row>
-                                                </v-row>
+                                                </v-card-text>
                                                 <v-row>
                                                     <v-col cols="3">
                                                         <v-btn color="success"
@@ -73,7 +79,16 @@
                                             </v-container>
                                         </v-card>
                                     @endforeach
-                                    <v-btn type="submit" color="primary">Make Validation Alive</v-btn>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <hr>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-btn type="submit" color="primary">Make Validations Alive</v-btn>
+                                        </v-col>
+                                    </v-row>
                                 </form>
                             </v-container>
                         </v-form>
@@ -120,25 +135,30 @@
                 this.rules.push({
                     field: field,
                     time: Date.now(),
-                    hasOptions:false
+                    hasOptions: false
                 });
             },
             deleteRule(fieldIndex) {
                 this.rules.splice(fieldIndex, 1)
             },
-            addOptions(index, event){
+            addOptions(index, event) {
                 let rulesWithOptions = [
-                    'accepted_if', 'after','after_or_equal','before','before_or_equal','between','date_equals','date_format',
-                    'declined_if','different','digits','digits_between','ends_with','exclude_if','exclude_unless','exclude_with',
-                    'exclude_without','exists','gt','gte','in','in_array','lt','lte','max','mimetypes','mimes','min','multiple_of',
-                    'not_in','prohibited_if','prohibited_unless','prohibits','regex','required_if','required_unless','required_with',
-                    'required_with_all','required_without','required_without_all','required_array_keys','same','size','starts_with',
+                    'accepted_if', 'after', 'after_or_equal', 'before', 'before_or_equal', 'between',
+                    'date_equals', 'date_format',
+                    'declined_if', 'different', 'digits', 'digits_between', 'ends_with', 'exclude_if',
+                    'exclude_unless', 'exclude_with',
+                    'exclude_without', 'exists', 'gt', 'gte', 'in', 'in_array', 'lt', 'lte', 'max',
+                    'mimetypes', 'mimes', 'min', 'multiple_of',
+                    'not_in', 'prohibited_if', 'prohibited_unless', 'prohibits', 'regex', 'required_if',
+                    'required_unless', 'required_with',
+                    'required_with_all', 'required_without', 'required_without_all', 'required_array_keys',
+                    'same', 'size', 'starts_with',
                     'unique',
-                    ];
-                if(rulesWithOptions.includes(event)){
+                ];
+                if (rulesWithOptions.includes(event)) {
                     this.rules[index].hasOptions = true;
                 } else {
-                this.rules[index].hasOptions = false;
+                    this.rules[index].hasOptions = false;
                 }
             }
         },
@@ -148,7 +168,7 @@
                 this.rules.push({
                     field: value,
                     time: Date.now(),
-                    hasOptions:false
+                    hasOptions: false
                 });
             }
         }

@@ -49,7 +49,7 @@ class CreateFullResource extends Controller
     {
         $this->files = $files;
         $this->table_name = $request->table_name;
-        if($request->table_name != null){
+        if ($request->table_name != null) {
             $this->single_table_name = Str::singular($request->table_name);
         }
         $this->controller_namespace = $request->controller_namespace;
@@ -58,15 +58,15 @@ class CreateFullResource extends Controller
         $this->migration_namespace = $request->migration_namespace;
         $this->resource_namespace = $request->resource_namespace;
         $this->field_names = $request->field_names;
-        $this->files_fields = Core::isFileValues($request->field_names,$request->input_types);
+        $this->files_fields = Core::isFileValues($request->field_names, $request->input_types);
         $this->fillable_files_array = Core::filesFillableArray($this->files_fields);
         //filtering null values
         if ($request->field_types !== null) {
-            $this->field_types = array_filter($request->field_types, fn($value) => !is_null($value) && $value !== '');
+            $this->field_types = array_filter($request->field_types, fn ($value) => !is_null($value) && $value !== '');
         }
         //filtering null values
         if ($request->input_types !== null) {
-            $this->input_types = array_filter($request->input_types, fn($value) => !is_null($value) && $value !== '');
+            $this->input_types = array_filter($request->input_types, fn ($value) => !is_null($value) && $value !== '');
         }
         $this->storage_path = $request->storage_path;
         $this->single_record_table = $request->single_record_table;
@@ -109,26 +109,22 @@ class CreateFullResource extends Controller
         if ($new_table_to_be_registered !== null) {
             return 'Table already exist';
         } else {
-            try {
-                $this->executeFileCreation();
+            $this->executeFileCreation();
 
-                Table::create([
-                    'table_name' => $this->table_name,
-                    'controller' => $this->controller_namespace . '/' . GraceStr::singularClass($this->table_name) . 'Controller',
-                    'model' => $this->model_namespace . '/' . GraceStr::singularClass($this->table_name),
-                    'request' => $this->request_namespace . '/' . GraceStr::singularClass($this->table_name) . 'Request',
-                    'resource' => $this->resource_namespace . '/' . GraceStr::singularClass($this->table_name) . "Resource",
-                    'migration' => $this->migration_namespace . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
+            Table::create([
+                'table_name' => $this->table_name,
+                'controller' => $this->controller_namespace . '/' . GraceStr::singularClass($this->table_name) . 'Controller',
+                'model' => $this->model_namespace . '/' . GraceStr::singularClass($this->table_name),
+                'request' => $this->request_namespace . '/' . GraceStr::singularClass($this->table_name) . 'Request',
+                'resource' => $this->resource_namespace . '/' . GraceStr::singularClass($this->table_name) . "Resource",
+                'migration' => $this->migration_namespace . '/' . date("Y_m_d") . "_" . $_SERVER['REQUEST_TIME']
                     . "_create_" . GraceStr::pluralLower($this->table_name) . "_table",
-                    'views' => config('grace.views_folder_name') . '/' . $this->table_name,
-                ]);
+                'views' => config('grace.views_folder_name') . '/' . $this->table_name,
+            ]);
 
-                Artisan::call('optimize');
+            Artisan::call('optimize');
 
-                return 'Resource has been created successfully';
-            } catch (Exception $exception) {
-                return 'Something went wrong please try again later!';
-            }
+            return redirect()->route('success');
         }
     }
 
@@ -219,7 +215,7 @@ class CreateFullResource extends Controller
             'table_name' => $this->table_name,
             'controller_name' => GraceStr::singularClass($this->table_name) . "Controller",
             'controller_namespace' => GraceStr::namespaceCorrection($this->controller_namespace),
-           ];
+        ];
     }
 
     /**
@@ -260,7 +256,7 @@ class CreateFullResource extends Controller
             'input_types' => $this->input_types,
             'table_name' => $this->table_name,
             'key' => Str::singular($this->table_name),
-            'url' => "{{ route('grace.$this->table_name.update', " . "$$this->single_table_name"."->id) }}",
+            'url' => "{{ route('grace.$this->table_name.update', " . "$$this->single_table_name" . "->id) }}",
             'select_options' => $this->select_options,
         ];
     }
@@ -402,7 +398,7 @@ class CreateFullResource extends Controller
 
     public function makeDisk()
     {
-         Factory::appendDisk($this->getDiskVariables());
+        Factory::appendDisk($this->getDiskVariables());
     }
 
     /**

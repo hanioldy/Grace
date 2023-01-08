@@ -80,5 +80,7 @@ class CreateModel extends Controller
         $model_contents = File::modelSourceFile($this->getStubVariables(), 'model');
 
         File::put($this->files, $model_path, $model_contents);
+
+        return redirect()->route('success');
     }
 }

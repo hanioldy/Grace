@@ -55,6 +55,8 @@ class CreateResource extends Controller
 
         $contents = File::sourceFile($this->getStubVariables(), 'resource');
 
-        return  File::put($this->files, $path, $contents);
+        File::put($this->files, $path, $contents);
+
+        return redirect()->route('success');
     }
 }
