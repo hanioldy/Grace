@@ -22,10 +22,10 @@ class Factory
         ";
 
         $filename = base_path() . '/config/filesystems.php';
-        $line_i_am_looking_for = 57;
-        $lines = file($filename, FILE_IGNORE_NEW_LINES);
-        $lines[$line_i_am_looking_for] = "\n" . $disk;
-        file_put_contents($filename, implode("\n", $lines));
+        $file_content = file_get_contents($filename);
+        $file_content = str_replace("'disks' => [",
+            " 'disks' => [ \r\n". $disk, $file_content);
+        file_put_contents($filename, $file_content);
     }
 
         /**
